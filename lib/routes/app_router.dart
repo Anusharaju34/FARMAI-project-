@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../screens/language_selection_screen.dart';
 import '../screens/auth/splash_screen.dart';
 import '../screens/auth/onboarding_screen.dart';
 import '../screens/auth/login_screen.dart';
@@ -22,7 +21,6 @@ import '../screens/settings/settings_screen.dart';
 import '../widgets/common/main_scaffold.dart';
 
 class AppRoutes {
-  static const String language = '/language';
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
@@ -43,13 +41,12 @@ class AppRoutes {
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: AppRoutes.language,
+    initialLocation: AppRoutes.splash,
     redirect: (context, state) {
       final session = Supabase.instance.client.auth.currentSession;
       final isLoggedIn = session != null;
 
       final isAuthRoute =
-          state.matchedLocation == AppRoutes.language ||
           state.matchedLocation == AppRoutes.splash ||
           state.matchedLocation == AppRoutes.onboarding ||
           state.matchedLocation == AppRoutes.login ||
@@ -63,10 +60,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: AppRoutes.language,
-        builder: (context, state) => const LanguageSelectionScreen(),
-      ),
       GoRoute(
         path: AppRoutes.splash,
         builder: (context, state) => const SplashScreen(),
