@@ -1,0 +1,61 @@
+name: farmai
+description: FARMAI – Smart Farming Assistant powered by AI
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Supabase
+  supabase_flutter: ^2.3.0
+
+  # State Management
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # UI
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  lottie: ^3.1.0
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
+  fl_chart: ^0.67.0
+  
+  # Image
+  image_picker: ^1.0.7
+  permission_handler: ^11.3.0
+
+  # Utils
+  intl: ^0.19.0
+  shared_preferences: ^2.2.2
+  connectivity_plus: ^6.0.3
+  url_launcher: ^6.2.5
+  dio: ^5.4.1
+  flutter_dotenv: ^5.1.0
+  uuid: ^4.4.0
+
+  # Icons
+  flutter_svg: ^2.0.10+1
+  hugeicons: ^0.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.3.9
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - .env
