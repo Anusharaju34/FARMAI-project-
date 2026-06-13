@@ -1,12 +1,17 @@
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:farmai/services/storage_adapter.dart';
 import '../models/models.dart';
 import '../core/constants/app_constants.dart';
 
 class SupabaseService {
-  static final SupabaseClient _client = Supabase.instance.client;
+  static SupabaseClient get client => Supabase.instance.client;
+  static SupabaseClient get _client => client;
 
-  static SupabaseClient get client => _client;
+  // Storage adapter is injected here to allow tests to mock storage behavior.
+  static StorageAdapter _storageAdapter = SupabaseStorageAdapter();
+
+  static set storageAdapter(StorageAdapter adapter) => _storageAdapter = adapter;
 
   // ============================================================
   // AUTH
@@ -86,8 +91,8 @@ class SupabaseService {
     required String bucket,
     required String path,
   }) async {
-    await _client.storage.from(bucket).upload(path, file);
-    return _client.storage.from(bucket).getPublicUrl(path);
+    // Delegate to adapter for testability.
+    return await _storageAdapter.uploadImage(file: file, bucket: bucket, path: path);
   }
 
   // ============================================================

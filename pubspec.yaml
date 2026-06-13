@@ -51,6 +51,8 @@ dev_dependencies:
   flutter_lints: ^3.0.1
   build_runner: ^2.4.8
   riverpod_generator: ^2.3.9
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

@@ -11,7 +11,16 @@ import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
 
 class DiseaseDetectionScreen extends ConsumerStatefulWidget {
-  const DiseaseDetectionScreen({super.key});
+  // Test helpers: provide an initial image path and optionally disable saving
+  // predictions to Supabase during tests.
+  final String? testImagePath;
+  final bool testDisableSave;
+
+  const DiseaseDetectionScreen({
+    super.key,
+    this.testImagePath,
+    this.testDisableSave = false,
+  });
 
   @override
   ConsumerState<DiseaseDetectionScreen> createState() =>
@@ -24,6 +33,15 @@ class _DiseaseDetectionScreenState
   bool _isAnalyzing = false;
   Map<String, dynamic>? _result;
   final _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    // If a test image path is provided, initialize selectedImage for tests.
+    if (widget.testImagePath != null) {
+      _selectedImage = File(widget.testImagePath!);
+    }
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final picked = await _picker.pickImage(
@@ -77,8 +95,9 @@ class _DiseaseDetectionScreenState
         ],
       };
 
-      // Save to Supabase
-      await SupabaseService.saveDiseasePrediction({
+      // Save to Supabase (skip during tests if requested)
+      if (!widget.testDisableSave) {
+        await SupabaseService.saveDiseasePrediction({
         'user_id': userId,
         'image_url': imageUrl,
         'disease_name': mockResult['disease_name'],
@@ -87,7 +106,8 @@ class _DiseaseDetectionScreenState
         'severity': mockResult['severity'],
         'treatment_suggestions': mockResult['treatment_suggestions'],
         'created_at': DateTime.now().toIso8601String(),
-      });
+        });
+      }
 
       setState(() => _result = mockResult);
     } catch (e) {
@@ -225,10 +245,12 @@ class _DiseaseDetectionScreenState
                              _selectedImage!.path,
                               fit: BoxFit.cover,
                                )
-                              : Image.file(
-                              _selectedImage!,
-                               fit: BoxFit.cover,
-                               ),
+                              : Platform.environment.containsKey('FLUTTER_TEST')
+                               ? const Placeholder(color: Colors.grey)
+                               : Image.file(
+                               _selectedImage!,
+                                fit: BoxFit.cover,
+                                ),
                             Positioned(
                               top: 8,
                               right: 8,

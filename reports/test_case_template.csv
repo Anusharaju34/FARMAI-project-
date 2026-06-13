@@ -1,0 +1,2 @@
+Test Case ID,Module,Test Scenario,Test Steps,Test Data,Expected Result,Actual Result,Status,Priority,Testing Type,Tool Used
+TC-001,Auth,Login with valid creds,"1. Open app; 2. Enter creds; 3. Tap Login",user@example.com/password,User is logged in,,Not Run,High,Functional,Flutter Test

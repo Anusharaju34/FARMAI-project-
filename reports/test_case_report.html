@@ -1,0 +1,214 @@
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Test Case ID</th>
+      <th>Module</th>
+      <th>Test Scenario</th>
+      <th>Test Steps</th>
+      <th>Test Data</th>
+      <th>Expected Result</th>
+      <th>Actual Result</th>
+      <th>Status</th>
+      <th>Priority</th>
+      <th>Testing Type</th>
+      <th>Tool Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TC-LOG-001</td>
+      <td>Login</td>
+      <td>Login with valid credentials</td>
+      <td>1. Navigate to Login Page\n2. Enter valid email 'farmer@example.com'\n3. Enter valid password 'password123'\n4. Tap 'Sign In' button</td>
+      <td>Email: farmer@example.com, Pass: password123</td>
+      <td>User is successfully logged in and routed to Dashboard screen.</td>
+      <td>Successfully navigated to HomeScreen and user profile loaded.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Functional / Widget</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-LOG-002</td>
+      <td>Login</td>
+      <td>Login with invalid email fails validation</td>
+      <td>1. Open Login Page\n2. Enter invalid email 'bad-email'\n3. Tap 'Sign In' button</td>
+      <td>Email: bad-email</td>
+      <td>Screen shows validation error 'Enter a valid email' and blocks form submission.</td>
+      <td>Validation error displayed, form submission blocked.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Unit / Validation</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-REG-001</td>
+      <td>Register</td>
+      <td>Create new farmer account</td>
+      <td>1. Open Register Page\n2. Enter Name 'Ravi Kumar'\n3. Enter valid email\n4. Enter matching passwords\n5. Tap 'Create Account'</td>
+      <td>Name: Ravi Kumar, Email: ravi@farmai.com</td>
+      <td>Success snackbar shows 'Account created!' and routes to login.</td>
+      <td>Snackbar appeared, routed to LoginScreen.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Functional / Widget</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-DASH-001</td>
+      <td>Dashboard</td>
+      <td>Dashboard details loading</td>
+      <td>1. Access HomeScreen\n2. Verify presence of AppBar logo\n3. Verify quick action icons render</td>
+      <td>None</td>
+      <td>AppBar displays 'FARMAI', shows quick action widgets.</td>
+      <td>Verified all tiles exist and display correct titles.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-DISEASE-001</td>
+      <td>Disease Detection Image Upload</td>
+      <td>Analyze uploaded leaf image for Leaf Blight</td>
+      <td>1. Navigate to Disease Detection Screen\n2. Select test image from system\n3. Tap 'Analyze Disease' button</td>
+      <td>File: white1.png (2.5 Hectares)</td>
+      <td>Mock upload success, result card shows 'Leaf Blight (Xanthomonas oryzae)' with 92% confidence.</td>
+      <td>Analysis result card displayed containing Leaf Blight details and treatment suggestions.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>E2E Integration</td>
+      <td>Flutter Test Config</td>
+    </tr>
+    <tr>
+      <td>TC-WEATHER-001</td>
+      <td>Weather Alerts</td>
+      <td>Display local temperature and farming advisory warnings</td>
+      <td>1. Navigate to Weather Screen\n2. Verify current temperature and forecast tiles load\n3. Check Advisory block text</td>
+      <td>Location: Salem, India</td>
+      <td>Temperature is displayed, 5-day forecast loads, and high UV Index advisory triggers.</td>
+      <td>Current Salem temperature shown, UV advisory verified.</td>
+      <td>Passed</td>
+      <td>Medium</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-MARKET-001</td>
+      <td>Market Prices</td>
+      <td>Fetch current crops pricing updates and indicators</td>
+      <td>1. Navigate to Market Screen\n2. Verify crop name 'Rice' and trend percentages</td>
+      <td>Salem APMC prices</td>
+      <td>Rice price loads at 2450 INR with positive percentage trend (+2.0%).</td>
+      <td>Crop price verified at ₹2,450 / quintal.</td>
+      <td>Passed</td>
+      <td>Medium</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-IRR-001</td>
+      <td>Smart Irrigation</td>
+      <td>Calculate daily and weekly water requirements</td>
+      <td>1. Navigate to Irrigation Screen\n2. Select crop 'Rice' and Soil 'Clay'\n3. Set area to 2.0 hectares\n4. Tap 'Calculate'</td>
+      <td>Crop: Rice, Soil: Clay, Area: 2.0</td>
+      <td>Daily water requirement is calculated to be 12.8m³ and schedule is 'Every 4-5 days'.</td>
+      <td>Result calculated 12.8m³ daily, 89.6m³ weekly total.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Unit / Business Logic</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-FORUM-001</td>
+      <td>Community Forum</td>
+      <td>Render forum posts and user metadata</td>
+      <td>1. Navigate to Forum Screen\n2. Verify loading of posts feed\n3. Check author tag visibility</td>
+      <td>Feed page</td>
+      <td>Verified rendering of post 'Best organic fertilizer for Tomato crop?' by 'Anil Kumar'.</td>
+      <td>Post displayed author name, likes count, and content.</td>
+      <td>Passed</td>
+      <td>Low</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-EXP-001</td>
+      <td>Expert Support</td>
+      <td>Access query history and expert recommendations</td>
+      <td>1. Navigate to Expert Helpline\n2. Locate query 'Yellow spots on Rice leaves'\n3. Verify status shows 'ANSWERED'</td>
+      <td>General Query</td>
+      <td>Status is 'ANSWERED' and expert recommendation text contains 'Apply Hexaconazole'.</td>
+      <td>Verified status and expert response details on card.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-PROF-001</td>
+      <td>Profile</td>
+      <td>Render profile detail screen</td>
+      <td>1. Navigate to Profile Screen\n2. Verify User details show name 'Ravi Kumar'</td>
+      <td>User Profile Info</td>
+      <td>Shows farmer full name, location, and farm details.</td>
+      <td>Verified profile data matching Salem location constraints.</td>
+      <td>Passed</td>
+      <td>Medium</td>
+      <td>Widget / UI</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-NOTIF-001</td>
+      <td>Notifications</td>
+      <td>Display unread notifications and alerts</td>
+      <td>1. Navigate to Notifications page\n2. Verify unread badge visibility\n3. Tap notification mark read</td>
+      <td>Notif: 💧 Irrigation Reminder</td>
+      <td>Verified unread badge displays, and notification switches state on click.</td>
+      <td>Zebra item highlighted, unread icon toggled read.</td>
+      <td>Passed</td>
+      <td>Medium</td>
+      <td>Functional / Widget</td>
+      <td>Flutter Test</td>
+    </tr>
+    <tr>
+      <td>TC-SEC-001</td>
+      <td>Supabase Security Constraints</td>
+      <td>Anonymous database write operations are blocked</td>
+      <td>1. Send unauthorized REST insert to users table\n2. Check REST status response code</td>
+      <td>Table: users, Auth: Anonymous</td>
+      <td>REST request is rejected with status 401/403 (Unauthorized / Row Level Security active).</td>
+      <td>PostgrestException thrown as expected by RLS policies.</td>
+      <td>Passed</td>
+      <td>Critical</td>
+      <td>Security / Rest API</td>
+      <td>Supabase Rest / http</td>
+    </tr>
+    <tr>
+      <td>TC-WEB-001</td>
+      <td>Flutter Web E2E (Chrome)</td>
+      <td>Smoke test E2E login flow in Headless Chrome</td>
+      <td>1. Open headless Chrome driver\n2. Navigate to screen list\n3. Click Login and locate form fields</td>
+      <td>URL: http://localhost:8080/#/screen-list</td>
+      <td>Login button navigates to screen, inputs accept text inputs.</td>
+      <td>Automated click and field verification completed.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>End-to-End E2E</td>
+      <td>Selenium Web Driver</td>
+    </tr>
+    <tr>
+      <td>TC-MOB-001</td>
+      <td>Appium Android E2E</td>
+      <td>Verify mobile form fields on Android Emulator</td>
+      <td>1. Initialize UiAutomator2 driver\n2. Launch application package\n3. Click Login screen button</td>
+      <td>Pkg: com.example.farmai</td>
+      <td>Android elements are clickable, and email/password fields are focused.</td>
+      <td>Elements selected and values inputted successfully.</td>
+      <td>Passed</td>
+      <td>High</td>
+      <td>Mobile E2E</td>
+      <td>Appium Server</td>
+    </tr>
+  </tbody>
+</table>
