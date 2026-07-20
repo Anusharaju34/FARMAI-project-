@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/models.dart';
 import '../../providers/providers.dart';
 import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../routes/app_router.dart';
 
 class CommunityForumScreen extends ConsumerStatefulWidget {
   const CommunityForumScreen({super.key});
@@ -99,7 +101,7 @@ class _CommunityForumScreenState
         actions: [
           IconButton(
             icon: const Icon(Icons.create_rounded),
-            onPressed: () => _showCreatePost(context),
+            onPressed: () => context.push(AppRoutes.createForumPost),
             tooltip: 'Create Post',
           ),
         ],
@@ -328,9 +330,11 @@ class _PostCard extends StatelessWidget {
     final createdAt = DateTime.parse(post['created_at'] as String);
     final timeAgo = _timeAgo(createdAt);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.forumPostDetail),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -474,8 +478,9 @@ class _PostCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   String _timeAgo(DateTime dt) {
     final diff = DateTime.now().difference(dt);

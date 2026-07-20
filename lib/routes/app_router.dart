@@ -20,6 +20,22 @@ import '../screens/profile/profile_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../widgets/common/main_scaffold.dart';
 
+// New screen imports
+import '../screens/weather/weather_detail_screen.dart';
+import '../screens/market/market_product_detail_screen.dart';
+import '../screens/market/create_market_listing_screen.dart';
+import '../screens/forum/forum_post_detail_screen.dart';
+import '../screens/forum/create_forum_post_screen.dart';
+import '../screens/expert/expert_chat_screen.dart';
+import '../screens/disease/disease_history_screen.dart';
+import '../screens/irrigation/irrigation_schedule_screen.dart';
+import '../screens/soil/soil_health_screen.dart';
+import '../screens/farm/farm_management_screen.dart';
+import '../screens/calendar/crop_calendar_screen.dart';
+import '../screens/settings/notification_settings_screen.dart';
+import '../screens/settings/language_selection_screen.dart';
+import '../screens/settings/help_support_screen.dart';
+
 class AppRoutes {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
@@ -37,6 +53,22 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String profile = '/profile';
   static const String settings = '/settings';
+
+  // New screens
+  static const String weatherDetail = '/weather-detail';
+  static const String marketProductDetail = '/market-product-detail';
+  static const String createMarketListing = '/create-market-listing';
+  static const String forumPostDetail = '/forum-post-detail';
+  static const String createForumPost = '/create-forum-post';
+  static const String expertChat = '/expert-chat';
+  static const String diseaseHistory = '/disease-history';
+  static const String irrigationSchedule = '/irrigation-schedule';
+  static const String soilHealth = '/soil-health';
+  static const String farmManagement = '/farm-management';
+  static const String cropCalendar = '/crop-calendar';
+  static const String notificationSettings = '/settings-notifications';
+  static const String languageSelection = '/settings-language';
+  static const String helpSupport = '/settings-help-support';
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -126,6 +158,63 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.settings,
             builder: (context, state) => const SettingsScreen(),
+          ),
+          // New screens
+          GoRoute(
+            path: AppRoutes.weatherDetail,
+            builder: (context, state) => const WeatherDetailScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.marketProductDetail,
+            builder: (context, state) => const MarketProductDetailScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.createMarketListing,
+            builder: (context, state) => const CreateMarketListingScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.forumPostDetail,
+            builder: (context, state) => const ForumPostDetailScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.createForumPost,
+            builder: (context, state) => const CreateForumPostScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.expertChat,
+            builder: (context, state) => const ExpertChatScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.diseaseHistory,
+            builder: (context, state) => const DiseaseHistoryScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.irrigationSchedule,
+            builder: (context, state) => const IrrigationScheduleScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.soilHealth,
+            builder: (context, state) => const SoilHealthScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.farmManagement,
+            builder: (context, state) => const FarmManagementScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.cropCalendar,
+            builder: (context, state) => const CropCalendarScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.notificationSettings,
+            builder: (context, state) => const NotificationSettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.languageSelection,
+            builder: (context, state) => const LanguageSelectionScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.helpSupport,
+            builder: (context, state) => const HelpSupportScreen(),
           ),
         ],
       ),

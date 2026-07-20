@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/providers.dart';
 import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../routes/app_router.dart';
 
 class ExpertHelplineScreen extends ConsumerStatefulWidget {
   const ExpertHelplineScreen({super.key});
@@ -445,8 +447,10 @@ class _ExpertCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final available = expert['available'] as bool;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.expertChat),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -533,6 +537,7 @@ class _ExpertCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

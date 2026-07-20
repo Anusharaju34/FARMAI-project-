@@ -89,9 +89,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           const SizedBox(height: 16),
 
-          // Appearance
+          // Appearance & Preferences
           _SettingsSection(
-            title: 'Appearance',
+            title: 'Preferences',
             icon: Icons.palette_rounded,
             color: AppTheme.primaryGreen,
             children: [
@@ -101,11 +101,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 value: _darkMode,
                 onChanged: (v) => setState(() => _darkMode = v),
               ),
-              _DropdownTile(
-                label: 'Language',
-                value: _language,
-                items: _languages,
-                onChanged: (v) => setState(() => _language = v!),
+              _NavTile(
+                label: 'Language Selection',
+                icon: Icons.language_rounded,
+                onTap: () => context.push(AppRoutes.languageSelection),
+              ),
+              _NavTile(
+                label: 'Custom Alerts',
+                icon: Icons.notifications_active_rounded,
+                onTap: () => context.push(AppRoutes.notificationSettings),
               ),
             ],
           ).animate(delay: 200.ms).fadeIn(),
@@ -186,7 +190,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               _NavTile(
                 label: 'Contact Support',
                 icon: Icons.support_agent_rounded,
-                onTap: () {},
+                onTap: () => context.push(AppRoutes.helpSupport),
               ),
             ],
           ).animate(delay: 500.ms).fadeIn(),

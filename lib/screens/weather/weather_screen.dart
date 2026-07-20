@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/models.dart';
 import '../../providers/providers.dart';
+import '../../routes/app_router.dart';
 
 class WeatherScreen extends ConsumerWidget {
   const WeatherScreen({super.key});
@@ -112,11 +114,20 @@ class _WeatherContent extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Forecast
-                Text(
-                  '5-Day Forecast',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '5-Day Forecast',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    TextButton(
+                      onPressed: () => context.push(AppRoutes.weatherDetail),
+                      child: const Text('Detailed Forecast', style: TextStyle(color: AppTheme.primaryGreen)),
+                    ),
+                  ],
                 ).animate().fadeIn(delay: 200.ms),
                 const SizedBox(height: 12),
                 _ForecastList(forecast: weather.forecast)

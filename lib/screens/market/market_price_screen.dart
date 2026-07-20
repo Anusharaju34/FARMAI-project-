@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../routes/app_router.dart';
 
 class MarketPriceScreen extends StatefulWidget {
   const MarketPriceScreen({super.key});
@@ -104,7 +106,15 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
     final isUp = data['isUp'] as bool;
 
     return Scaffold(
-      appBar: const FarmAIAppBar(title: 'Market Prices'),
+      appBar: FarmAIAppBar(
+        title: 'Market Prices',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_business_rounded, color: AppTheme.primaryGreen),
+            onPressed: () => context.push(AppRoutes.createMarketListing),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           // Crop Selector
@@ -587,17 +597,19 @@ class _AllCropsTable extends StatelessWidget {
         const SizedBox(height: 12),
         ...crops.entries.map((e) {
           final isUp = e.value['isUp'] as bool;
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.08),
+          return GestureDetector(
+            onTap: () => context.push(AppRoutes.marketProductDetail),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.08),
+                ),
               ),
-            ),
-            child: Row(
+              child: Row(
               children: [
                 Container(
                   width: 32,
@@ -642,8 +654,9 @@ class _AllCropsTable extends StatelessWidget {
                 ),
               ],
             ),
-          );
-        }).toList(),
+          ),
+        );
+      }).toList(),
       ],
     );
   }

@@ -251,22 +251,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title: 'Farm & Crops',
                     items: [
                       _MenuItem(
-                        icon: Icons.grass_rounded,
-                        label: 'My Crops',
+                        icon: Icons.landscape_rounded,
+                        label: 'My Farms',
                         color: AppTheme.primaryGreen,
-                        onTap: () {},
+                        onTap: () => context.push(AppRoutes.farmManagement),
+                      ),
+                      _MenuItem(
+                        icon: Icons.science_rounded,
+                        label: 'Soil Health',
+                        color: AppTheme.soilBrown,
+                        onTap: () => context.push(AppRoutes.soilHealth),
+                      ),
+                      _MenuItem(
+                        icon: Icons.calendar_today_rounded,
+                        label: 'Crop Calendar',
+                        color: AppTheme.warningOrange,
+                        onTap: () => context.push(AppRoutes.cropCalendar),
                       ),
                       _MenuItem(
                         icon: Icons.history_rounded,
                         label: 'Diagnosis History',
                         color: AppTheme.skyBlue,
-                        onTap: () {},
-                      ),
-                      _MenuItem(
-                        icon: Icons.water_drop_rounded,
-                        label: 'Irrigation Records',
-                        color: const Color(0xFF0277BD),
-                        onTap: () {},
+                        onTap: () => context.push(AppRoutes.diseaseHistory),
                       ),
                     ],
                   ).animate(delay: 300.ms).fadeIn(),
@@ -286,7 +292,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         icon: Icons.help_outline_rounded,
                         label: 'Help & Support',
                         color: AppTheme.warningOrange,
-                        onTap: () {},
+                        onTap: () => context.push(AppRoutes.helpSupport),
                       ),
                       _MenuItem(
                         icon: Icons.logout_rounded,

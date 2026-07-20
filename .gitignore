@@ -58,3 +58,8 @@ out/
 # Supabase local
 supabase/.temp/
 supabase/config.toml
+
+# Excel temporary lock files
+~$*
+*.tmp
+

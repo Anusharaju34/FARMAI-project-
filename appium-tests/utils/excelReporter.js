@@ -144,61 +144,9 @@ async function generateReport(results = []) {
 
 
   // ==========================================
-  // PRE-DEFINED LIST OF ALL 51 TEST CASES
+  // LOAD THE 300 TEST CASES DATABASE
   // ==========================================
-  const rawTestCases = [
-    { id: "APM-01", module: "Splash Screen", scenario: "Verify App Logo display", steps: "1. Launch FARMAI mobile app.\n2. Observe splash interface.", expected: "App logo assets/images/logo.png renders clearly in center.", actual: "Logo displayed successfully.", status: "PASS", remarks: "N/A" },
-    { id: "APM-02", module: "Splash Screen", scenario: "Verify App Title branding", steps: "1. Observe splash screen title text.", expected: "Branding text 'FARMAI' displays in bold dark green.", actual: "Title renders correctly.", status: "PASS", remarks: "N/A" },
-    { id: "APM-03", module: "Splash Screen", scenario: "Verify Tagline loading", steps: "1. Check tagline text below the app title.", expected: "'Smart Farming Assistant' tagline is visible.", actual: "Tagline text verified.", status: "PASS", remarks: "N/A" },
-    { id: "APM-04", module: "Splash Screen", scenario: "Verify Auto-Transition delay", steps: "1. Wait on splash screen for 3 seconds.", expected: "Screen automatically redirects to Onboarding or Login.", actual: "Redirected to Onboarding screen.", status: "PASS", remarks: "N/A" },
-    { id: "APM-05", module: "Onboarding Screen", scenario: "Verify Onboarding slide details", steps: "1. Transition to onboarding screen.\n2. Verify background & title details.", expected: "Premium design cards with agricultural motifs load.", actual: "Design cards render correctly.", status: "PASS", remarks: "N/A" },
-    { id: "APM-06", module: "Onboarding Screen", scenario: "Verify Skip Button redirection", steps: "1. Tap on the 'Skip' button on slide 1.", expected: "Instantly navigates to the Login screen.", actual: "Navigated to Login screen.", status: "PASS", remarks: "N/A" },
-    { id: "APM-07", module: "Onboarding Screen", scenario: "Verify Next Button clicks", steps: "1. Tap 'Next' button on slide 1.\n2. Observe transition to slide 2.", expected: "App swipingly transitions to slide 2 details.", actual: "Slide transitioned smoothly.", status: "PASS", remarks: "N/A" },
-    { id: "APM-08", module: "Onboarding Screen", scenario: "Verify Swipe Gesture navigation", steps: "1. Swipe left across the screen.", expected: "Slide advances smoothly to the next card.", actual: "Swipe advances cards successfully.", status: "PASS", remarks: "N/A" },
-    { id: "APM-09", module: "Onboarding Screen", scenario: "Verify Get Started Button on last slide", steps: "1. Navigate to final onboarding slide.\n2. Tap 'Get Started'.", expected: "Navigates to Login Screen.", actual: "Navigated to Login.", status: "PASS", remarks: "N/A" },
-    { id: "APM-10", module: "Login Screen", scenario: "Verify form UI elements presence", steps: "1. Open Login Screen.\n2. Inspect input fields.", expected: "Email, Password inputs and 'Sign In' button are visible.", actual: "All fields are present.", status: "PASS", remarks: "N/A" },
-    { id: "APM-11", module: "Login Screen", scenario: "Verify password field masking", steps: "1. Enter password 'secret123'.", expected: "Input characters are masked as dots for security.", actual: "Characters masked by default.", status: "PASS", remarks: "N/A" },
-    { id: "APM-12", module: "Login Screen", scenario: "Verify password visibility toggle", steps: "1. Tap on the visibility eye icon.", expected: "Password characters reveal in clear text.", actual: "Text visible after toggle tap.", status: "PASS", remarks: "N/A" },
-    { id: "APM-13", module: "Login Screen", scenario: "Empty field submit validation", steps: "1. Leave fields empty.\n2. Tap 'Sign In'.", expected: "Validation triggers: 'Enter your email', 'Enter a password'.", actual: "Errors displayed under text fields.", status: "PASS", remarks: "N/A" },
-    { id: "APM-14", module: "Login Screen", scenario: "Invalid Email format check", steps: "1. Enter 'invalidemail'.\n2. Tap 'Sign In'.", expected: "Validation error: 'Enter a valid email address'.", actual: "Email error shown.", status: "PASS", remarks: "N/A" },
-    { id: "APM-15", module: "Login Screen", scenario: "Short password length check", steps: "1. Enter '123'.\n2. Tap 'Sign In'.", expected: "Validation error: 'Password must be at least 6 characters'.", actual: "Password error shown.", status: "PASS", remarks: "N/A" },
-    { id: "APM-16", module: "Login Screen", scenario: "Invalid credential rejection", steps: "1. Enter 'wrong@email.com' and 'wrongpass'.\n2. Tap 'Sign In'.", expected: "Alert Snack-bar shows: 'Invalid email or password'.", actual: "Alert popup displayed at bottom.", status: "FAIL", remarks: "Failed because mock auth returned success instead of invalid rejection." },
-    { id: "APM-17", module: "Login Screen", scenario: "Navigate to Register page", steps: "1. Tap 'Don\\'t have an account? Register'.", expected: "App redirects to the Registration Screen.", actual: "Registration screen loaded.", status: "PASS", remarks: "N/A" },
-    { id: "APM-18", module: "Login Screen", scenario: "Successful Login execution", steps: "1. Enter valid 'farmer@example.com' and 'password123'.\n2. Tap 'Sign In'.", expected: "App logs in and redirects to the Dashboard/Home screen.", actual: "Successfully redirected to Home Dashboard.", status: "PASS", remarks: "N/A" },
-    { id: "APM-19", module: "Register Screen", scenario: "Verify form UI elements", steps: "1. Open Register Screen.", expected: "Full Name, Email, Password, Confirm Password inputs are present.", actual: "All 4 inputs visible.", status: "PASS", remarks: "N/A" },
-    { id: "APM-20", module: "Register Screen", scenario: "Empty registration validate", steps: "1. Keep all fields empty.\n2. Tap 'Create Account'.", expected: "Validation errors shown for name, email, password.", actual: "Form validation rules fired.", status: "PASS", remarks: "N/A" },
-    { id: "APM-21", module: "Register Screen", scenario: "Password match validation", steps: "1. Enter 'pass123' and 'pass456'.\n2. Tap 'Create Account'.", expected: "Validation error: 'Passwords do not match'.", actual: "Error message displayed.", status: "PASS", remarks: "N/A" },
-    { id: "APM-22", module: "Register Screen", scenario: "Successful Registration mock", steps: "1. Enter 'Ravi Kumar', 'new@email.com', 'password123', 'password123'.\n2. Tap 'Create Account'.", expected: "Signs up successfully and navigates to the Dashboard.", actual: "Successfully signed up and loaded Dashboard.", status: "PASS", remarks: "N/A" },
-    { id: "APM-23", module: "Register Screen", scenario: "Back to Login link check", steps: "1. Tap 'Already have an account? Login'.", expected: "Redirection goes back to the Login Screen.", actual: "Returned to Login.", status: "PASS", remarks: "N/A" },
-    { id: "APM-24", module: "Register Screen", scenario: "Validate Name field rules", steps: "1. Enter only spaces in Full Name.\n2. Tap Register.", expected: "Error: 'Enter your full name'.", actual: "Validation caught blank name.", status: "PASS", remarks: "N/A" },
-    { id: "APM-25", module: "Dashboard", scenario: "Validate screen load title", steps: "1. Log in to dashboard.\n2. Check header branding.", expected: "Displays 'FARMAI' logo and notification bells.", actual: "Branding elements rendered.", status: "PASS", remarks: "N/A" },
-    { id: "APM-26", module: "Dashboard", scenario: "Verify User Welcome name", steps: "1. Read greeting text in header.", expected: "Shows 'Good morning, farmer' dynamically.", actual: "Displays 'farmer' extracted from email.", status: "PASS", remarks: "N/A" },
-    { id: "APM-27", module: "Dashboard", scenario: "Verify Weather Card status", steps: "1. Inspect weather card loading.", expected: "Loads Salem APMC temperature (e.g. 32°C, Sunny).", actual: "Mock weather data loaded correctly.", status: "PASS", remarks: "N/A" },
-    { id: "APM-28", module: "Dashboard", scenario: "Verify Quick Actions grid", steps: "1. Check four actions cards.", expected: "Cards: Disease Detection, Weather, Market, Irrigation exist.", actual: "All 4 cards loaded and responsive.", status: "PASS", remarks: "N/A" },
-    { id: "APM-29", module: "Dashboard", scenario: "Verify Market snapshot list", steps: "1. Scroll to recent market prices.", expected: "Loads snapshot for Rice and Tomato with price levels.", actual: "Rice (₹2340) and Tomato (₹890) displayed.", status: "PASS", remarks: "N/A" },
-    { id: "APM-30", module: "Dashboard", scenario: "Verify Bottom Navigation items", steps: "1. Observe bottom bar icons.", expected: "Contains Home, Forum, Helpline, and Profile links.", actual: "Navigation bar matches options.", status: "PASS", remarks: "N/A" },
-    { id: "APM-31: Drawer", module: "Dashboard", scenario: "Verify Sidebar Navigation drawer", steps: "1. Tap on drawer menu trigger.\n2. Verify list options.", expected: "Drawer slideout contains Profile, Settings, History.", actual: "Sidebar list displays correctly.", status: "PASS", remarks: "N/A" },
-    { id: "APM-32", module: "Crop Disease Prediction", scenario: "Verify screen routing", steps: "1. Tap 'Disease Detection' card.", expected: "Navigates to Disease Detection UI screen.", actual: "Disease Screen loaded.", status: "PASS", remarks: "N/A" },
-    { id: "APM-33", module: "Crop Disease Prediction", scenario: "Verify Image Upload option", steps: "1. Tap on upload box container.", expected: "Presents dialog option: Camera or Gallery.", actual: "Image source selector modal opened.", status: "PASS", remarks: "N/A" },
-    { id: "APM-34", module: "Crop Disease Prediction", scenario: "Verify Analysis delay state", steps: "1. Select image.\n2. Tap 'Analyze Disease'.", expected: "Button shows Loading indicator, blocks interaction.", actual: "Loading spinner verifies busy state.", status: "PASS", remarks: "N/A" },
-    { id: "APM-35", module: "Crop Disease Prediction", scenario: "Verify Diagnosis outputs", steps: "1. Wait for completion of analysis.", expected: "Displays result card: 'Leaf Blight (Xanthomonas oryzae)'.", actual: "Bacterial leaf blight result loaded.", status: "PASS", remarks: "N/A" },
-    { id: "APM-36", module: "Crop Disease Prediction", scenario: "Verify Treatment recommendations", steps: "1. Scroll down disease result card.", expected: "Lists specific treatment suggestions like copper bactericides.", actual: "Recommendations are fully readable.", status: "PASS", remarks: "N/A" },
-    { id: "APM-37", module: "Weather Alerts", scenario: "Verify screen routing", steps: "1. Tap 'Weather Alerts' card.", expected: "Navigates to full Weather Details page.", actual: "Weather Details page loaded.", status: "PASS", remarks: "N/A" },
-    { id: "APM-38", module: "Weather Alerts", scenario: "Verify temperature stats", steps: "1. Inspect current temperature.", expected: "Shows Salem weather stats: 32° temperature.", actual: "Salem values verified.", status: "PASS", remarks: "N/A" },
-    { id: "APM-39", module: "Weather Alerts", scenario: "Verify 5-Day Forecast list scroll", steps: "1. Scroll vertically through forecast lists.", expected: "Smooth vertical scrolling, displays daily forecast details.", actual: "Scrolling verified.", status: "PASS", remarks: "N/A" },
-    { id: "APM-40", module: "Weather Alerts", scenario: "Verify Farming Advisories", steps: "1. Scroll to Farming Advisory card.", expected: "Renders advisory details containing seasonal action tips.", actual: "Advisory block rendered.", status: "PASS", remarks: "N/A" },
-    { id: "APM-41", module: "Market Price Prediction", scenario: "Verify crop detail filter tabs", steps: "1. Navigate to Market page.\n2. Tap 'Wheat' pill.", expected: "Prices update to display wheat trends.", actual: "Wheat prices and graph updated.", status: "PASS", remarks: "N/A" },
-    { id: "APM-42", module: "Market Price Prediction", scenario: "Verify price prediction graph", steps: "1. Check price trend charts.", expected: "Graph renders curve representing actual vs predicted prices.", actual: "Interactive chart rendered.", status: "PASS", remarks: "N/A" },
-    { id: "APM-43", module: "Market Price Prediction", scenario: "Verify AI Market Advisory", steps: "1. Check advisory advice card details.", expected: "Displays advisory text warning/advising about market movements.", actual: "Advisory tips loaded successfully.", status: "PASS", remarks: "N/A" },
-    { id: "APM-44", module: "Smart Irrigation", scenario: "Verify calculate water requirement", steps: "1. Open Irrigation screen.\n2. Select Rice, Loamy soil, 2 Acres.\n3. Tap calculate.", expected: "Calculates correct recommended volume (e.g. 30m³).", actual: "Result shown on advice screen.", status: "PASS", remarks: "N/A" },
-    { id: "APM-45", module: "Smart Irrigation", scenario: "Verify history record save", steps: "1. Complete calculation.\n2. Check history records list.", expected: "New record added containing calculation inputs & date.", actual: "New item appears in list.", status: "PASS", remarks: "N/A" },
-    { id: "APM-46", module: "Community Forum", scenario: "Verify lists discussions list", steps: "1. Navigate to Forum page.", expected: "Loads list of discussions cards with user avatars.", actual: "Forum list fully populated.", status: "PASS", remarks: "N/A" },
-    { id: "APM-47", module: "Community Forum", scenario: "Verify toggle like post", steps: "1. Tap on heart icon on post 1.", expected: "Likes counter increments, color changes to red.", actual: "Like count toggled.", status: "PASS", remarks: "N/A" },
-    { id: "APM-48", module: "Expert Support", scenario: "Verify experts list online badge", steps: "1. Navigate to Expert Helpline.\n2. Tap 'Our Experts' tab.", expected: "List displays online/away badges on expert profile pics.", actual: "Experts online indicators rendered.", status: "PASS", remarks: "N/A" },
-    { id: "APM-49", module: "Notifications", scenario: "Verify listing items and badges", steps: "1. Tap notification bell.", expected: "Opens notifications page showing reminders list.", actual: "Notifications items visible.", status: "PASS", remarks: "N/A" },
-    { id: "APM-50", module: "Profile", scenario: "Verify edit credentials validation", steps: "1. Navigate to Profile.\n2. Tap 'Edit', clear Full Name.\n3. Tap 'Save'.", expected: "App displays profile update validation error.", actual: "Saving profile with blank name rejected.", status: "FAIL", remarks: "Failed because blank name profile save bypassed validation and executed upload." },
-    { id: "APM-51", module: "Profile", scenario: "Verify logout confirmation dialog", steps: "1. Tap 'Logout' menu tile.\n2. Observe popup.", expected: "Displays AlertDialog: 'Are you sure you want to logout?'.", actual: "Confirmation dialog shown.", status: "FAIL", remarks: "Dialog appeared but tapping logout button threw router exception." }
-  ];
+  const rawTestCases = require('./test_cases_data.json');
 
   // Overwrite statuses with any run results passed in
   results.forEach(res => {
@@ -218,7 +166,7 @@ async function generateReport(results = []) {
   casesSheet.views = [{ showGridLines: true }];
 
   casesSheet.getRow(1).values = [
-    'Test Case ID', 'Module', 'Test Scenario', 'Test Steps', 'Expected Result', 'Actual Result', 'Status', 'Date Verified', 'Remarks'
+    'Test Case ID', 'Module', 'Test Scenario', 'Test Steps', 'Expected Result', 'Actual Result', 'Status', 'Execution Date', 'Remarks'
   ];
   casesSheet.getRow(1).height = 28;
   casesSheet.getRow(1).eachCell(cell => {
@@ -276,7 +224,7 @@ async function generateReport(results = []) {
   const passSheet = workbook.addWorksheet('Pass Test Results');
   passSheet.views = [{ showGridLines: true }];
   passSheet.getRow(1).values = [
-    'Test Case ID', 'Module', 'Test Scenario', 'Expected Result', 'Actual Result', 'Date Verified'
+    'Test Case ID', 'Module', 'Test Scenario', 'Expected Result', 'Actual Result', 'Execution Date'
   ];
   passSheet.getRow(1).height = 28;
   passSheet.getRow(1).eachCell(cell => {
@@ -316,7 +264,7 @@ async function generateReport(results = []) {
   const failSheet = workbook.addWorksheet('Fail Test Results');
   failSheet.views = [{ showGridLines: true }];
   failSheet.getRow(1).values = [
-    'Test Case ID', 'Module', 'Test Scenario', 'Expected Result', 'Actual Result', 'Remarks / Failure Reason', 'Date Verified'
+    'Test Case ID', 'Module', 'Test Scenario', 'Expected Result', 'Actual Result', 'Remarks / Failure Reason', 'Execution Date'
   ];
   failSheet.getRow(1).height = 28;
   failSheet.getRow(1).eachCell(cell => {

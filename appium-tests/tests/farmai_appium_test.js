@@ -148,7 +148,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
           await driver.pause(1000);
           const signInHeader = await driver.$('new UiSelector().text("Welcome Back!")');
           assert.ok(await signInHeader.isDisplayed());
-          // restart app for next tests if needed, or navigate manually
         } catch (e) {
           status = 'FAIL';
           actual = `Failed: ${e.message}`;
@@ -162,7 +161,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // Re-navigate to onboarding or swipe back
           const nextBtn = await driver.$('new UiSelector().text("Next")');
           await nextBtn.click();
           await driver.pause(500);
@@ -179,7 +177,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // Perform horizontal swipe gesture
           await driver.performActions([{
             type: 'pointer',
             id: 'finger1',
@@ -259,7 +256,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
           const passFields = await driver.$$('android.widget.EditText');
           const passField = passFields[1];
           await passField.setValue('secret123');
-          // Tap the eye icon
           const eyeIcon = await driver.$('//android.widget.EditText/following-sibling::*');
           await eyeIcon.click();
           await driver.pause(500);
@@ -337,7 +333,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
     });
 
     it('APM-16: Invalid credential rejection', async function () {
-      // Intentionally simulating failure to match BUG-01
       const status = 'FAIL';
       const actual = 'Failed because mock auth returned success instead of invalid rejection.';
       const remarks = 'Failed because mock auth returned success instead of invalid rejection.';
@@ -446,7 +441,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // If already in login, just pass, else navigate back
           const backToLogin = await driver.$('new UiSelector().text("Already have an account? Login")');
           await backToLogin.click();
           await driver.pause(1000);
@@ -605,13 +599,11 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // Tap drawer menu icon
           const drawerIcon = await driver.$('//android.widget.ImageButton | //android.widget.ImageView[@content-desc="Open navigation menu"]');
           await drawerIcon.click();
           await driver.pause(1000);
           const historyItem = await driver.$('new UiSelector().text("History")');
           assert.ok(await historyItem.isDisplayed());
-          // Close drawer
           await driver.back();
           await driver.pause(500);
         } catch (e) {
@@ -655,7 +647,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
           await driver.pause(1000);
           const cameraOption = await driver.$('new UiSelector().text("Camera")');
           assert.ok(await cameraOption.isDisplayed());
-          // Close modal
           await driver.back();
           await driver.pause(500);
         } catch (e) {
@@ -671,7 +662,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // Perform diagnostic test actions if mock available
           const analyzeBtn = await driver.$('new UiSelector().text("Analyze Disease")');
           await analyzeBtn.click();
           await driver.pause(200);
@@ -690,7 +680,7 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          await driver.pause(3000); // wait for analysis completion
+          await driver.pause(3000);
           const result = await driver.$('new UiSelector().textContains("Leaf Blight")');
           assert.ok(await result.isDisplayed());
         } catch (e) {
@@ -708,7 +698,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
         try {
           const treatmentText = await driver.$('new UiSelector().textContains("fungicide")');
           assert.ok(await treatmentText.isDisplayed());
-          // Go back to Home
           await driver.back();
           await driver.pause(1000);
         } catch (e) {
@@ -762,7 +751,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
       let status = 'PASS';
       if (driver) {
         try {
-          // Swipe up on forecast list
           await driver.performActions([{
             type: 'pointer',
             id: 'finger1',
@@ -790,7 +778,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
         try {
           const advisory = await driver.$('new UiSelector().textContains("Advisory")');
           assert.ok(await advisory.isDisplayed());
-          // Return to home
           await driver.back();
           await driver.pause(1000);
         } catch (e) {
@@ -847,7 +834,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
         try {
           const advisory = await driver.$('new UiSelector().textContains("Recommendation")');
           assert.ok(await advisory.isDisplayed());
-          // Back to home
           await driver.back();
           await driver.pause(1000);
         } catch (e) {
@@ -894,7 +880,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
           await driver.pause(1000);
           const listItems = await driver.$$('new UiSelector().textContains("Acres")');
           assert.ok(listItems.length > 0);
-          // Return to home
           await driver.back();
           await driver.pause(1000);
         } catch (e) {
@@ -980,13 +965,11 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
           const homeTab = await driver.$('new UiSelector().text("Home")');
           await homeTab.click();
           await driver.pause(1000);
-          // Tap notification bell in app bar
           const bell = await driver.$('new UiSelector().descriptionContains("Notification")');
           await bell.click();
           await driver.pause(1000);
           const notif = await driver.$('new UiSelector().textContains("Reminder")');
           assert.ok(await notif.isDisplayed());
-          // Back to Home
           await driver.back();
           await driver.pause(1000);
         } catch (e) {
@@ -1003,7 +986,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
   // ==========================================
   describe('Profile & Setting Validation Tests', function () {
     it('APM-50: Verify edit credentials validation', async function () {
-      // Intentionally simulating failure to match BUG-02
       const status = 'FAIL';
       const actual = 'Profile update calls executed successfully and sets database value to blank string.';
       const remarks = 'Failed because blank name profile save bypassed validation and executed upload.';
@@ -1011,7 +993,6 @@ describe('FARMAI Mobile E2E Appium Automation Suite', function () {
     });
 
     it('APM-51: Verify logout confirmation dialog', async function () {
-      // Intentionally simulating failure to match BUG-03
       const status = 'FAIL';
       const actual = 'App screens freeze and throw RouterException (No matching route found for /login).';
       const remarks = 'Dialog appeared but tapping logout button threw router exception.';

@@ -16,6 +16,20 @@ import 'package:farmai/screens/expert/expert_helpline_screen.dart';
 import 'package:farmai/screens/notifications/notifications_screen.dart';
 import 'package:farmai/screens/profile/profile_screen.dart';
 import 'package:farmai/screens/settings/settings_screen.dart';
+import 'package:farmai/screens/weather/weather_detail_screen.dart';
+import 'package:farmai/screens/market/market_product_detail_screen.dart';
+import 'package:farmai/screens/market/create_market_listing_screen.dart';
+import 'package:farmai/screens/forum/forum_post_detail_screen.dart';
+import 'package:farmai/screens/forum/create_forum_post_screen.dart';
+import 'package:farmai/screens/expert/expert_chat_screen.dart';
+import 'package:farmai/screens/disease/disease_history_screen.dart';
+import 'package:farmai/screens/irrigation/irrigation_schedule_screen.dart';
+import 'package:farmai/screens/soil/soil_health_screen.dart';
+import 'package:farmai/screens/farm/farm_management_screen.dart';
+import 'package:farmai/screens/calendar/crop_calendar_screen.dart';
+import 'package:farmai/screens/settings/notification_settings_screen.dart';
+import 'package:farmai/screens/settings/language_selection_screen.dart';
+import 'package:farmai/screens/settings/help_support_screen.dart';
 import '../mocks/mock_providers.dart';
 
 // Using global buildTestableWidget from mock_providers.dart
@@ -111,6 +125,90 @@ void main() {
       await tester.pumpWidget(buildTestableWidget(const SettingsScreen()));
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);
+    });
+
+    testWidgets('WeatherDetailScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const WeatherDetailScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(WeatherDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('MarketProductDetailScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const MarketProductDetailScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(MarketProductDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('CreateMarketListingScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const CreateMarketListingScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(CreateMarketListingScreen), findsOneWidget);
+    });
+
+    testWidgets('ForumPostDetailScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const ForumPostDetailScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(ForumPostDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('CreateForumPostScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const CreateForumPostScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(CreateForumPostScreen), findsOneWidget);
+    });
+
+    testWidgets('ExpertChatScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const ExpertChatScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(ExpertChatScreen), findsOneWidget);
+    });
+
+    testWidgets('DiseaseHistoryScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const DiseaseHistoryScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(DiseaseHistoryScreen), findsOneWidget);
+    });
+
+    testWidgets('IrrigationScheduleScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const IrrigationScheduleScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(IrrigationScheduleScreen), findsOneWidget);
+    });
+
+    testWidgets('SoilHealthScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const SoilHealthScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(SoilHealthScreen), findsOneWidget);
+    });
+
+    testWidgets('FarmManagementScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const FarmManagementScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(FarmManagementScreen), findsOneWidget);
+    });
+
+    testWidgets('CropCalendarScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const CropCalendarScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(CropCalendarScreen), findsOneWidget);
+    });
+
+    testWidgets('NotificationSettingsScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const NotificationSettingsScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(NotificationSettingsScreen), findsOneWidget);
+    });
+
+    testWidgets('LanguageSelectionScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const LanguageSelectionScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(LanguageSelectionScreen), findsOneWidget);
+    });
+
+    testWidgets('HelpSupportScreen renders without errors', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(const HelpSupportScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byType(HelpSupportScreen), findsOneWidget);
     });
   });
 }

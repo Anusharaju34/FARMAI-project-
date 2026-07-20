@@ -2,9 +2,9 @@
   "name": "farmai-appium-tests",
   "version": "1.0.0",
   "description": "Appium E2E Automation test suite for FARMAI Android App",
-  "main": "tests/farmai_app.test.js",
+  "main": "tests/farmai_appium_test.js",
   "scripts": {
-    "test": "mocha tests/farmai_app.test.js --timeout 120000",
+    "test": "mocha tests/farmai_appium_test.js --timeout 120000",
     "generate-report": "node utils/excelReporter.js"
   },
   "dependencies": {

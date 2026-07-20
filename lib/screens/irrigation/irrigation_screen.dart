@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme.dart';
 import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../routes/app_router.dart';
 
 class IrrigationScreen extends ConsumerStatefulWidget {
   const IrrigationScreen({super.key});
@@ -115,7 +117,15 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const FarmAIAppBar(title: 'Irrigation Advisor'),
+      appBar: FarmAIAppBar(
+        title: 'Irrigation Advisor',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_month_rounded, color: Color(0xFF0277BD)),
+            onPressed: () => context.push(AppRoutes.irrigationSchedule),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

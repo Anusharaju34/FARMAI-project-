@@ -6,9 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../routes/app_router.dart';
 
 class DiseaseDetectionScreen extends ConsumerStatefulWidget {
   // Test helpers: provide an initial image path and optionally disable saving
@@ -122,7 +124,15 @@ class _DiseaseDetectionScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const FarmAIAppBar(title: 'Disease Detection'),
+      appBar: FarmAIAppBar(
+        title: 'Disease Detection',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history_rounded, color: AppTheme.primaryGreen),
+            onPressed: () => context.push(AppRoutes.diseaseHistory),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
