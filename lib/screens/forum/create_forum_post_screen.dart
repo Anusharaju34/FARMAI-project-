@@ -70,7 +70,8 @@ class _CreateForumPostScreenState extends State<CreateForumPostScreen> {
                 label: 'Question Title',
                 hint: 'Be specific, e.g. White powder on grape leaves?',
                 prefixIcon: Icons.help_outline_rounded,
-                validator: (val) => val == null || val.isEmpty ? 'Please enter a title' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Please enter a title' : null,
               ).animate().fadeIn(delay: 100.ms),
 
               const SizedBox(height: 16),
@@ -79,10 +80,13 @@ class _CreateForumPostScreenState extends State<CreateForumPostScreen> {
               FarmTextField(
                 controller: _contentCtrl,
                 label: 'Describe your query',
-                hint: 'Describe your crop symptoms, recent weather changes, soil type, and anything else that helps other farmers and experts diagnose the issue.',
+                hint:
+                    'Describe your crop symptoms, recent weather changes, soil type, and anything else that helps other farmers and experts diagnose the issue.',
                 maxLines: 6,
                 prefixIcon: Icons.description_outlined,
-                validator: (val) => val == null || val.isEmpty ? 'Please describe your query' : null,
+                validator: (val) => val == null || val.isEmpty
+                    ? 'Please describe your query'
+                    : null,
               ).animate().fadeIn(delay: 200.ms),
 
               const SizedBox(height: 16),
@@ -106,16 +110,21 @@ class _CreateForumPostScreenState extends State<CreateForumPostScreen> {
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceLight,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+                    border: Border.all(
+                        color: AppTheme.primaryGreen.withOpacity(0.3)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.add_photo_alternate_rounded, color: AppTheme.primaryGreen, size: 32),
+                      const Icon(Icons.add_photo_alternate_rounded,
+                          color: AppTheme.primaryGreen, size: 32),
                       const SizedBox(height: 8),
                       Text(
                         'Attach Plant Photo (Optional)',
-                        style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.w600, fontSize: 13),
+                        style: TextStyle(
+                            color: AppTheme.primaryGreen,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13),
                       ),
                     ],
                   ),

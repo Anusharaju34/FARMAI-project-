@@ -13,70 +13,86 @@ class NotificationsScreen extends ConsumerStatefulWidget {
       _NotificationsScreenState();
 }
 
-class _NotificationsScreenState
-    extends ConsumerState<NotificationsScreen> {
+class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   final List<Map<String, dynamic>> _notifications = [
     {
       'id': 'n1',
       'title': '🌧️ Heavy Rain Alert',
-      'body': 'Heavy rainfall (65mm) expected in your area tomorrow. Ensure proper drainage in paddy fields.',
+      'body':
+          'Heavy rainfall (65mm) expected in your area tomorrow. Ensure proper drainage in paddy fields.',
       'type': 'weather',
       'is_read': false,
-      'created_at': DateTime.now().subtract(const Duration(minutes: 30)).toIso8601String(),
+      'created_at': DateTime.now()
+          .subtract(const Duration(minutes: 30))
+          .toIso8601String(),
     },
     {
       'id': 'n2',
       'title': '🐛 Pest Alert: Brown Planthopper',
-      'body': 'High BPH activity reported in Kanchipuram district. Monitor your rice crop basal area.',
+      'body':
+          'High BPH activity reported in Kanchipuram district. Monitor your rice crop basal area.',
       'type': 'pest',
       'is_read': false,
-      'created_at': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
     },
     {
       'id': 'n3',
       'title': '📈 Tomato Price Rise',
-      'body': 'Tomato prices up 12% today at Koyambedu market (₹890/quintal). Good time to sell.',
+      'body':
+          'Tomato prices up 12% today at Koyambedu market (₹890/quintal). Good time to sell.',
       'type': 'market',
       'is_read': false,
-      'created_at': DateTime.now().subtract(const Duration(hours: 5)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 5)).toIso8601String(),
     },
     {
       'id': 'n4',
       'title': '💊 Disease Detection Complete',
-      'body': 'Your crop image analysis is ready. Leaf Blight detected with 92% confidence. View treatment plan.',
+      'body':
+          'Your crop image analysis is ready. Leaf Blight detected with 92% confidence. View treatment plan.',
       'type': 'disease',
       'is_read': true,
-      'created_at': DateTime.now().subtract(const Duration(hours: 8)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 8)).toIso8601String(),
     },
     {
       'id': 'n5',
       'title': '👨‍🌾 Expert Replied',
-      'body': 'Dr. Krishnaswamy answered your question about wheat leaf yellowing. Tap to read.',
+      'body':
+          'Dr. Krishnaswamy answered your question about wheat leaf yellowing. Tap to read.',
       'type': 'expert',
       'is_read': true,
-      'created_at': DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
     },
     {
       'id': 'n6',
       'title': '💧 Irrigation Reminder',
-      'body': 'Today is scheduled irrigation day for your Cotton field. Recommended: 2.4m³ water.',
+      'body':
+          'Today is scheduled irrigation day for your Cotton field. Recommended: 2.4m³ water.',
       'type': 'irrigation',
       'is_read': true,
-      'created_at': DateTime.now().subtract(const Duration(days: 1, hours: 6)).toIso8601String(),
+      'created_at': DateTime.now()
+          .subtract(const Duration(days: 1, hours: 6))
+          .toIso8601String(),
     },
     {
       'id': 'n7',
       'title': '🌡️ Heat Stress Warning',
-      'body': 'Temperature expected to exceed 40°C this week. Protect crops with shade nets or mulching.',
+      'body':
+          'Temperature expected to exceed 40°C this week. Protect crops with shade nets or mulching.',
       'type': 'weather',
       'is_read': true,
-      'created_at': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    final unread = _notifications.where((n) => !(n['is_read'] as bool)).toList();
+    final unread =
+        _notifications.where((n) => !(n['is_read'] as bool)).toList();
     final read = _notifications.where((n) => n['is_read'] as bool).toList();
 
     return Scaffold(
@@ -110,15 +126,19 @@ class _NotificationsScreenState
               padding: const EdgeInsets.all(16),
               children: [
                 if (unread.isNotEmpty) ...[
-                  _SectionLabel(
-                      label: 'New (${unread.length})').animate().fadeIn(),
+                  _SectionLabel(label: 'New (${unread.length})')
+                      .animate()
+                      .fadeIn(),
                   const SizedBox(height: 8),
                   ...unread.asMap().entries.map(
                         (e) => _NotifCard(
                           notif: e.value,
-                          onTap: () => setState(
-                              () => e.value['is_read'] = true),
-                        ).animate(delay: Duration(milliseconds: 60 * e.key)).fadeIn().slideX(begin: -0.05),
+                          onTap: () =>
+                              setState(() => e.value['is_read'] = true),
+                        )
+                            .animate(delay: Duration(milliseconds: 60 * e.key))
+                            .fadeIn()
+                            .slideX(begin: -0.05),
                       ),
                   const SizedBox(height: 16),
                 ],
@@ -224,7 +244,8 @@ class _NotifCard extends StatelessWidget {
                         child: Text(
                           notif['title'] as String,
                           style: TextStyle(
-                            fontWeight: isRead ? FontWeight.w600 : FontWeight.w700,
+                            fontWeight:
+                                isRead ? FontWeight.w600 : FontWeight.w700,
                             fontSize: 13,
                           ),
                         ),

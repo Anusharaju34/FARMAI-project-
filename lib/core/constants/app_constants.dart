@@ -46,13 +46,31 @@ class AppConstants {
 
   // Crop Types
   static const List<String> cropTypes = [
-    'Rice', 'Wheat', 'Maize', 'Cotton', 'Sugarcane',
-    'Soybean', 'Tomato', 'Potato', 'Onion', 'Chili',
-    'Groundnut', 'Sunflower', 'Mustard', 'Turmeric', 'Ginger',
+    'Rice',
+    'Wheat',
+    'Maize',
+    'Cotton',
+    'Sugarcane',
+    'Soybean',
+    'Tomato',
+    'Potato',
+    'Onion',
+    'Chili',
+    'Groundnut',
+    'Sunflower',
+    'Mustard',
+    'Turmeric',
+    'Ginger',
   ];
 
   // Soil Types
   static const List<String> soilTypes = [
-    'Clay', 'Sandy', 'Loamy', 'Silty', 'Peaty', 'Chalky', 'Black Cotton',
+    'Clay',
+    'Sandy',
+    'Loamy',
+    'Silty',
+    'Peaty',
+    'Chalky',
+    'Black Cotton',
   ];
 }

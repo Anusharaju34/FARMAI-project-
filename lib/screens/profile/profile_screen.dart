@@ -139,8 +139,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               decoration: BoxDecoration(
                                 color: AppTheme.sunYellow,
                                 shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Colors.white, width: 2),
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
                               ),
                               child: const Icon(
                                 Icons.camera_alt_rounded,
@@ -209,8 +209,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   children: [
                     const Text(
                       'Personal Information',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                     ),
                     const SizedBox(height: 16),
                     FarmTextField(
@@ -276,9 +276,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ).animate(delay: 300.ms).fadeIn(),
-
                   const SizedBox(height: 16),
-
                   _MenuSection(
                     title: 'Account',
                     items: [
@@ -302,9 +300,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ).animate(delay: 400.ms).fadeIn(),
-
                   const SizedBox(height: 32),
-
                   Text(
                     'FARMAI v1.0.0 · Smart Farming Assistant',
                     style: TextStyle(
@@ -355,8 +351,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               await ref.read(authNotifierProvider.notifier).signOut();
               if (context.mounted) context.go(AppRoutes.login);
             },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.alertRed),
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
             child: const Text('Logout'),
           ),
         ],
@@ -391,8 +386,7 @@ class _ProfileStat extends StatelessWidget {
         ),
         Text(
           label,
-          style:
-              TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
+          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
         ),
       ],
     );
@@ -470,8 +464,7 @@ class _MenuItemTile extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               item.label,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: 14),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
             const Spacer(),
             Icon(Icons.chevron_right_rounded,

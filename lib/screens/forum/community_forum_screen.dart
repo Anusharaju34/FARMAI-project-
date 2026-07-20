@@ -18,8 +18,7 @@ class CommunityForumScreen extends ConsumerStatefulWidget {
       _CommunityForumScreenState();
 }
 
-class _CommunityForumScreenState
-    extends ConsumerState<CommunityForumScreen> {
+class _CommunityForumScreenState extends ConsumerState<CommunityForumScreen> {
   final _searchCtrl = TextEditingController();
   final List<Map<String, dynamic>> _mockPosts = [
     {
@@ -27,60 +26,70 @@ class _CommunityForumScreenState
       'user_id': 'u1',
       'user_full_name': 'Ravi Kumar',
       'title': 'Best practices for Rice cultivation in Kharif season?',
-      'content': 'Looking for advice on managing water levels and fertilizer application for high-yield rice cultivation. Has anyone tried SRI method?',
+      'content':
+          'Looking for advice on managing water levels and fertilizer application for high-yield rice cultivation. Has anyone tried SRI method?',
       'likes_count': 24,
       'comments_count': 12,
       'is_liked': false,
       'tags': ['Rice', 'Kharif', 'Irrigation'],
-      'created_at': DateTime.now().subtract(const Duration(hours: 3)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 3)).toIso8601String(),
     },
     {
       'id': '2',
       'user_id': 'u2',
       'user_full_name': 'Priya Devi',
       'title': 'Tomato leaf curl virus – how to control it effectively?',
-      'content': 'My tomato crop is showing severe leaf curl symptoms. Tried neem oil spray but minimal effect. Looking for tested solutions.',
+      'content':
+          'My tomato crop is showing severe leaf curl symptoms. Tried neem oil spray but minimal effect. Looking for tested solutions.',
       'likes_count': 38,
       'comments_count': 19,
       'is_liked': true,
       'tags': ['Tomato', 'Disease', 'Virus'],
-      'created_at': DateTime.now().subtract(const Duration(hours: 8)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 8)).toIso8601String(),
     },
     {
       'id': '3',
       'user_id': 'u3',
       'user_full_name': 'Suresh Patel',
       'title': 'Which drip irrigation brand is best for cotton fields?',
-      'content': 'Planning to switch from flood to drip irrigation for my 5-acre cotton farm. Budget is around ₹80,000. Any recommendations?',
+      'content':
+          'Planning to switch from flood to drip irrigation for my 5-acre cotton farm. Budget is around ₹80,000. Any recommendations?',
       'likes_count': 15,
       'comments_count': 7,
       'is_liked': false,
       'tags': ['Cotton', 'Irrigation', 'Equipment'],
-      'created_at': DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
     },
     {
       'id': '4',
       'user_id': 'u4',
       'user_full_name': 'Anita Singh',
       'title': 'Organic fertilizer vs chemical – share your experiences',
-      'content': 'I have been doing organic farming for 3 years now. Initial yields were lower but soil health improved drastically. Happy to share my compost recipe!',
+      'content':
+          'I have been doing organic farming for 3 years now. Initial yields were lower but soil health improved drastically. Happy to share my compost recipe!',
       'likes_count': 67,
       'comments_count': 34,
       'is_liked': false,
       'tags': ['Organic', 'Fertilizer', 'Soil Health'],
-      'created_at': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
     },
     {
       'id': '5',
       'user_id': 'u5',
       'user_full_name': 'Mohan Das',
       'title': 'PM Kisan 17th installment – when to expect?',
-      'content': "Anyone received the 17th installment of PM-Kisan yet? I submitted my eKYC but still waiting. What's the process to check status?",
+      'content':
+          "Anyone received the 17th installment of PM-Kisan yet? I submitted my eKYC but still waiting. What's the process to check status?",
       'likes_count': 91,
       'comments_count': 45,
       'is_liked': true,
       'tags': ['Government Scheme', 'PM-Kisan'],
-      'created_at': DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
     },
   ];
 
@@ -146,9 +155,7 @@ class _CommunityForumScreenState
                     label: 'Discussions'),
                 const SizedBox(width: 12),
                 _QuickStat(
-                    icon: Icons.help_rounded,
-                    value: '98%',
-                    label: 'Answered'),
+                    icon: Icons.help_rounded, value: '98%', label: 'Answered'),
               ],
             ),
           ).animate(delay: 100.ms).fadeIn(),
@@ -205,8 +212,8 @@ class _CommunityForumScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('New Discussion',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 16)),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                   IconButton(
                     icon: const Icon(Icons.close_rounded),
                     onPressed: () => Navigator.pop(ctx2),
@@ -238,7 +245,8 @@ class _CommunityForumScreenState
                   onPressed: () async {
                     if (titleCtrl.text.isEmpty) return;
                     setModal(() => posting = true);
-                    final userId = Supabase.instance.client.auth.currentUser?.id;
+                    final userId =
+                        Supabase.instance.client.auth.currentUser?.id;
                     await SupabaseService.createForumPost({
                       'user_id': userId,
                       'user_full_name': 'You',
@@ -306,8 +314,7 @@ class _QuickStat extends StatelessWidget {
                     style: const TextStyle(
                         fontWeight: FontWeight.w700, fontSize: 13)),
                 Text(label,
-                    style:
-                        TextStyle(fontSize: 11, color: Colors.grey[600])),
+                    style: TextStyle(fontSize: 11, color: Colors.grey[600])),
               ],
             ),
           ],
@@ -335,152 +342,152 @@ class _PostCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Author & Time
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundColor: AppTheme.primaryGreen.withOpacity(0.15),
-                child: Text(
-                  (post['user_full_name'] as String)[0].toUpperCase(),
-                  style: const TextStyle(
-                    color: AppTheme.primaryGreen,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      post['user_full_name'] as String,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 13),
-                    ),
-                    Text(timeAgo,
-                        style: TextStyle(
-                            color: Colors.grey[500], fontSize: 11)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-
-          // Title
-          Text(
-            post['title'] as String,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
-          ),
-          const SizedBox(height: 6),
-
-          // Content Preview
-          Text(
-            post['content'] as String,
-            style: TextStyle(
-                color: Colors.grey[600], fontSize: 13, height: 1.4),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-
-          if (tags.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 6,
-              runSpacing: 4,
-              children: tags
-                  .map(
-                    (t) => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryGreen.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        '#$t',
-                        style: const TextStyle(
-                          color: AppTheme.primaryGreen,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
           ],
-
-          const Divider(height: 16),
-
-          // Actions
-          Row(
-            children: [
-              GestureDetector(
-                onTap: onLike,
-                child: Row(
-                  children: [
-                    Icon(
-                      isLiked
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      color: isLiked ? AppTheme.alertRed : Colors.grey,
-                      size: 18,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Author & Time
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: AppTheme.primaryGreen.withOpacity(0.15),
+                  child: Text(
+                    (post['user_full_name'] as String)[0].toUpperCase(),
+                    style: const TextStyle(
+                      color: AppTheme.primaryGreen,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
                     ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post['user_full_name'] as String,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 13),
+                      ),
+                      Text(timeAgo,
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 11)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            // Title
+            Text(
+              post['title'] as String,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+            ),
+            const SizedBox(height: 6),
+
+            // Content Preview
+            Text(
+              post['content'] as String,
+              style:
+                  TextStyle(color: Colors.grey[600], fontSize: 13, height: 1.4),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            if (tags.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: tags
+                    .map(
+                      (t) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryGreen.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '#$t',
+                          style: const TextStyle(
+                            color: AppTheme.primaryGreen,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+
+            const Divider(height: 16),
+
+            // Actions
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: onLike,
+                  child: Row(
+                    children: [
+                      Icon(
+                        isLiked
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: isLiked ? AppTheme.alertRed : Colors.grey,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${post['likes_count']}',
+                        style: TextStyle(
+                          color: isLiked ? AppTheme.alertRed : Colors.grey[600],
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Row(
+                  children: [
+                    const Icon(Icons.chat_bubble_outline_rounded,
+                        size: 18, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
-                      '${post['likes_count']}',
+                      '${post['comments_count']} replies',
                       style: TextStyle(
-                        color: isLiked ? AppTheme.alertRed : Colors.grey[600],
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                      ),
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 20),
-              Row(
-                children: [
-                  const Icon(Icons.chat_bubble_outline_rounded,
-                      size: 18, color: Colors.grey),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${post['comments_count']} replies',
-                    style: TextStyle(
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Icon(Icons.bookmark_border_rounded,
-                  size: 18, color: Colors.grey[400]),
-            ],
-          ),
-        ],
+                const Spacer(),
+                Icon(Icons.bookmark_border_rounded,
+                    size: 18, color: Colors.grey[400]),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   String _timeAgo(DateTime dt) {
     final diff = DateTime.now().difference(dt);

@@ -141,13 +141,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 children: [
                   // Weather Card
-                  weather.when(
-                    data: (w) => w != null
-                        ? _WeatherCard(weather: w)
-                        : const SizedBox.shrink(),
-                    loading: () => _ShimmerCard(height: 100),
-                    error: (_, __) => const SizedBox.shrink(),
-                  ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2),
+                  weather
+                      .when(
+                        data: (w) => w != null
+                            ? _WeatherCard(weather: w)
+                            : const SizedBox.shrink(),
+                        loading: () => _ShimmerCard(height: 100),
+                        error: (_, __) => const SizedBox.shrink(),
+                      )
+                      .animate()
+                      .fadeIn(delay: 100.ms)
+                      .slideY(begin: 0.2),
 
                   const SizedBox(height: 20),
 
@@ -567,8 +571,7 @@ class _MarketSnapshot extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
                   color: (isUp ? AppTheme.primaryGreen : AppTheme.alertRed)
                       .withOpacity(0.1),
@@ -588,8 +591,7 @@ class _MarketSnapshot extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color:
-                            isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
+                        color: isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
                       ),
                     ),
                   ],

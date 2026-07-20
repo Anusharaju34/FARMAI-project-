@@ -28,7 +28,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     setState(() => _isCalculating = true);
     await Future.delayed(const Duration(milliseconds: 1200));
 
-    final advice = _getIrrigationAdvice(_selectedCrop, _selectedSoil, _farmArea);
+    final advice =
+        _getIrrigationAdvice(_selectedCrop, _selectedSoil, _farmArea);
     final userId = Supabase.instance.client.auth.currentUser?.id;
 
     if (userId != null) {
@@ -53,15 +54,27 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
       String crop, String soil, double area) {
     // Crop base water requirement (mm/day)
     final cropWater = {
-      'Rice': 8.0, 'Wheat': 5.5, 'Maize': 6.0, 'Cotton': 7.0,
-      'Sugarcane': 9.0, 'Tomato': 5.0, 'Potato': 4.5, 'Onion': 4.0,
-      'Soybean': 5.5, 'Groundnut': 5.0,
+      'Rice': 8.0,
+      'Wheat': 5.5,
+      'Maize': 6.0,
+      'Cotton': 7.0,
+      'Sugarcane': 9.0,
+      'Tomato': 5.0,
+      'Potato': 4.5,
+      'Onion': 4.0,
+      'Soybean': 5.5,
+      'Groundnut': 5.0,
     };
 
     // Soil moisture retention factor
     final soilFactor = {
-      'Clay': 0.8, 'Sandy': 1.4, 'Loamy': 1.0, 'Silty': 0.9,
-      'Peaty': 0.7, 'Chalky': 1.1, 'Black Cotton': 0.75,
+      'Clay': 0.8,
+      'Sandy': 1.4,
+      'Loamy': 1.0,
+      'Silty': 0.9,
+      'Peaty': 0.7,
+      'Chalky': 1.1,
+      'Black Cotton': 0.75,
     };
 
     final baseWater = cropWater[crop] ?? 5.5;
@@ -81,9 +94,12 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
         'Mulch the soil to retain moisture for longer periods',
         'Monitor leaf color – pale yellow indicates water stress',
         'Check soil at 10 cm depth – irrigate when dry to touch',
-        if (soil == 'Sandy') 'Sandy soil drains fast – increase irrigation frequency',
-        if (soil == 'Clay') 'Clay soil retains water – avoid overwatering to prevent root rot',
-        if (crop == 'Rice') 'Maintain 5 cm standing water during critical growth stages',
+        if (soil == 'Sandy')
+          'Sandy soil drains fast – increase irrigation frequency',
+        if (soil == 'Clay')
+          'Clay soil retains water – avoid overwatering to prevent root rot',
+        if (crop == 'Rice')
+          'Maintain 5 cm standing water during critical growth stages',
       ],
       'weeklySchedule': _getWeeklySchedule(crop),
     };
@@ -107,9 +123,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     final highWater = ['Rice', 'Sugarcane', 'Cotton'];
     return days.asMap().entries.map((e) {
-      final irrigate = highWater.contains(crop)
-          ? e.key % 2 == 0
-          : e.key % 3 == 0;
+      final irrigate =
+          highWater.contains(crop) ? e.key % 2 == 0 : e.key % 3 == 0;
       return {'day': e.value, 'irrigate': irrigate};
     }).toList();
   }
@@ -121,7 +136,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
         title: 'Irrigation Advisor',
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month_rounded, color: Color(0xFF0277BD)),
+            icon: const Icon(Icons.calendar_month_rounded,
+                color: Color(0xFF0277BD)),
             onPressed: () => context.push(AppRoutes.irrigationSchedule),
           ),
         ],
@@ -342,13 +358,15 @@ class _IrrigationResult extends StatelessWidget {
             children: [
               _StatBox(
                 label: 'Daily Water',
-                value: '${(schedule['waterRequired'] as double).toStringAsFixed(1)}m³',
+                value:
+                    '${(schedule['waterRequired'] as double).toStringAsFixed(1)}m³',
                 icon: Icons.water_drop_rounded,
               ),
               _vDivider(),
               _StatBox(
                 label: 'Weekly Total',
-                value: '${(schedule['weeklyTotal'] as double).toStringAsFixed(0)}m³',
+                value:
+                    '${(schedule['weeklyTotal'] as double).toStringAsFixed(0)}m³',
                 icon: Icons.local_drink_rounded,
               ),
               _vDivider(),
@@ -415,8 +433,7 @@ class _IrrigationResult extends StatelessWidget {
                   Text(
                     'Recommendations',
                     style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.darkGreen),
+                        fontWeight: FontWeight.w700, color: AppTheme.darkGreen),
                   ),
                 ],
               ),
@@ -432,8 +449,7 @@ class _IrrigationResult extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(r,
-                            style: const TextStyle(
-                                fontSize: 13, height: 1.4)),
+                            style: const TextStyle(fontSize: 13, height: 1.4)),
                       ),
                     ],
                   ),
@@ -475,8 +491,8 @@ class _StatBox extends StatelessWidget {
                   fontSize: 14),
               textAlign: TextAlign.center),
           Text(label,
-              style: TextStyle(
-                  color: Colors.white.withOpacity(0.7), fontSize: 11),
+              style:
+                  TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 11),
               textAlign: TextAlign.center),
         ],
       ),
@@ -526,8 +542,7 @@ class _WeeklyScheduleWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Weekly Schedule',
-              style:
-                  TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -539,9 +554,8 @@ class _WeeklyScheduleWidget extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: irrigate
-                          ? const Color(0xFF0277BD)
-                          : Colors.grey[200],
+                      color:
+                          irrigate ? const Color(0xFF0277BD) : Colors.grey[200],
                       shape: BoxShape.circle,
                     ),
                     child: Icon(

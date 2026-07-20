@@ -25,8 +25,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   String _location = 'Chennai, Tamil Nadu';
 
   final List<String> _languages = [
-    'English', 'Tamil', 'Telugu', 'Hindi', 'Kannada',
-    'Malayalam', 'Marathi', 'Gujarati', 'Bengali', 'Punjabi',
+    'English',
+    'Tamil',
+    'Telugu',
+    'Hindi',
+    'Kannada',
+    'Malayalam',
+    'Marathi',
+    'Gujarati',
+    'Bengali',
+    'Punjabi',
   ];
 
   @override
@@ -230,8 +238,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               setState(() => _location = ctrl.text);
@@ -253,11 +260,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             'This will permanently delete your account and all data. This action cannot be undone.'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           ElevatedButton(
-            style:
-                ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Delete'),
           ),
@@ -274,8 +279,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(ctx);
@@ -419,8 +423,8 @@ class _InfoTile extends StatelessWidget {
     return ListTile(
       title: Text(label,
           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-      subtitle: Text(value,
-          style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+      subtitle:
+          Text(value, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
       trailing: Icon(icon, size: 18, color: Colors.grey[400]),
       onTap: onTap,
       dense: true,
@@ -450,8 +454,8 @@ class _DropdownTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w600)),
+              style:
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           DropdownButton<String>(
             value: value,
             underline: const SizedBox.shrink(),

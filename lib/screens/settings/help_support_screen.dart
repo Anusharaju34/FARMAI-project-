@@ -17,15 +17,18 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   final List<Map<String, String>> _faqs = [
     {
       'q': 'How does the AI disease detection work?',
-      'a': 'You take or upload a photo of your infected crop leaf. Our artificial intelligence models scan the lesions, compare them with thousands of indexed disease datasets, and return the most probable disease along with organic and chemical treatment instructions.',
+      'a':
+          'You take or upload a photo of your infected crop leaf. Our artificial intelligence models scan the lesions, compare them with thousands of indexed disease datasets, and return the most probable disease along with organic and chemical treatment instructions.',
     },
     {
       'q': 'Are the market crop prices updated in real-time?',
-      'a': 'Yes, crop prices are fetched directly from central and state government APMC database feeds every morning to give you the most accurate regional selling prices.',
+      'a':
+          'Yes, crop prices are fetched directly from central and state government APMC database feeds every morning to give you the most accurate regional selling prices.',
     },
     {
       'q': 'How can I schedule a consult with a live agronomist?',
-      'a': 'Navigate to the "Expert Helpline" page from the bottom bar, select "Diseases" or "Soil Queries", type your question, and one of our online partner agronomists will initiate a chat or call with you.',
+      'a':
+          'Navigate to the "Expert Helpline" page from the bottom bar, select "Diseases" or "Soil Queries", type your question, and one of our online partner agronomists will initiate a chat or call with you.',
     },
   ];
 
@@ -45,7 +48,8 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
       setState(() => _isSubmitting = false);
       _msgCtrl.clear();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Support ticket created! We will contact you soon.')),
+        const SnackBar(
+            content: Text('Support ticket created! We will contact you soon.')),
       );
     }
   }
@@ -63,7 +67,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // FAQs
-            const SectionHeader(title: 'Frequently Asked Questions').animate().fadeIn(),
+            const SectionHeader(title: 'Frequently Asked Questions')
+                .animate()
+                .fadeIn(),
             const SizedBox(height: 12),
 
             Card(
@@ -78,14 +84,20 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     return ExpansionTile(
                       title: Text(
                         faq['q']!,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.darkGreen),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            color: AppTheme.darkGreen),
                       ),
                       children: [
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                           child: Text(
                             faq['a']!,
-                            style: TextStyle(fontSize: 12, height: 1.5, color: Colors.grey[700]),
+                            style: TextStyle(
+                                fontSize: 12,
+                                height: 1.5,
+                                color: Colors.grey[700]),
                           ),
                         ),
                       ],
@@ -98,7 +110,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
             const SizedBox(height: 24),
 
             // Help Contact Cards
-            const SectionHeader(title: 'Direct Support Channel').animate().fadeIn(delay: 200.ms),
+            const SectionHeader(title: 'Direct Support Channel')
+                .animate()
+                .fadeIn(delay: 200.ms),
             const SizedBox(height: 12),
 
             Row(
@@ -128,7 +142,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
             const SizedBox(height: 24),
 
             // Submit Ticket Form
-            const SectionHeader(title: 'Submit Support Ticket').animate().fadeIn(delay: 400.ms),
+            const SectionHeader(title: 'Submit Support Ticket')
+                .animate()
+                .fadeIn(delay: 400.ms),
             const SizedBox(height: 12),
 
             Container(

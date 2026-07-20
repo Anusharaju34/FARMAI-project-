@@ -61,7 +61,8 @@ class SoilHealthScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
@@ -98,7 +99,9 @@ class SoilHealthScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // NPK Metrics Section
-            const SectionHeader(title: 'Nutrient Analysis (NPK)').animate().fadeIn(delay: 100.ms),
+            const SectionHeader(title: 'Nutrient Analysis (NPK)')
+                .animate()
+                .fadeIn(delay: 100.ms),
             const SizedBox(height: 12),
             Card(
               child: Padding(
@@ -136,7 +139,9 @@ class SoilHealthScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Soil Parameters
-            const SectionHeader(title: 'Soil Properties').animate().fadeIn(delay: 300.ms),
+            const SectionHeader(title: 'Soil Properties')
+                .animate()
+                .fadeIn(delay: 300.ms),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -189,21 +194,25 @@ class SoilHealthScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Crop Recommendation Section
-            const SectionHeader(title: 'Recommended Fertilizers & Action').animate().fadeIn(delay: 600.ms),
+            const SectionHeader(title: 'Recommended Fertilizers & Action')
+                .animate()
+                .fadeIn(delay: 600.ms),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceLight,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
+                border:
+                    Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.lightbulb_outline_rounded, color: AppTheme.primaryGreen),
+                      Icon(Icons.lightbulb_outline_rounded,
+                          color: AppTheme.primaryGreen),
                       SizedBox(width: 8),
                       Text(
                         'Expert Advice',
@@ -266,7 +275,8 @@ class _NutrientBar extends StatelessWidget {
               children: [
                 Text(
                   percentageText,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 13),
                 ),
                 const SizedBox(width: 8),
                 StatusBadge(label: status, color: color),

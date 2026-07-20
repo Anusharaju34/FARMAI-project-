@@ -9,23 +9,93 @@ class WeatherDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> hourly = [
-      {'time': 'Now', 'temp': '31°C', 'icon': Icons.wb_sunny_rounded, 'rain': '0%'},
-      {'time': '3 PM', 'temp': '32°C', 'icon': Icons.wb_sunny_rounded, 'rain': '0%'},
-      {'time': '4 PM', 'temp': '31°C', 'icon': Icons.wb_sunny_rounded, 'rain': '10%'},
-      {'time': '5 PM', 'temp': '30°C', 'icon': Icons.cloud_rounded, 'rain': '20%'},
-      {'time': '6 PM', 'temp': '29°C', 'icon': Icons.cloud_rounded, 'rain': '35%'},
-      {'time': '7 PM', 'temp': '28°C', 'icon': Icons.cloud_queue_rounded, 'rain': '40%'},
-      {'time': '8 PM', 'temp': '27°C', 'icon': Icons.thunderstorm_rounded, 'rain': '80%'},
+      {
+        'time': 'Now',
+        'temp': '31°C',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '0%'
+      },
+      {
+        'time': '3 PM',
+        'temp': '32°C',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '0%'
+      },
+      {
+        'time': '4 PM',
+        'temp': '31°C',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '10%'
+      },
+      {
+        'time': '5 PM',
+        'temp': '30°C',
+        'icon': Icons.cloud_rounded,
+        'rain': '20%'
+      },
+      {
+        'time': '6 PM',
+        'temp': '29°C',
+        'icon': Icons.cloud_rounded,
+        'rain': '35%'
+      },
+      {
+        'time': '7 PM',
+        'temp': '28°C',
+        'icon': Icons.cloud_queue_rounded,
+        'rain': '40%'
+      },
+      {
+        'time': '8 PM',
+        'temp': '27°C',
+        'icon': Icons.thunderstorm_rounded,
+        'rain': '80%'
+      },
     ];
 
     final List<Map<String, dynamic>> forecast = [
-      {'day': 'Today', 'temp': '33° / 25°', 'icon': Icons.wb_sunny_rounded, 'rain': '10%'},
-      {'day': 'Wednesday', 'temp': '32° / 26°', 'icon': Icons.cloud_rounded, 'rain': '30%'},
-      {'day': 'Thursday', 'temp': '30° / 24°', 'icon': Icons.thunderstorm_rounded, 'rain': '80%'},
-      {'day': 'Friday', 'temp': '29° / 23°', 'icon': Icons.thunderstorm_rounded, 'rain': '90%'},
-      {'day': 'Saturday', 'temp': '31° / 24°', 'icon': Icons.cloud_queue_rounded, 'rain': '40%'},
-      {'day': 'Sunday', 'temp': '32° / 25°', 'icon': Icons.wb_sunny_rounded, 'rain': '20%'},
-      {'day': 'Monday', 'temp': '33° / 26°', 'icon': Icons.wb_sunny_rounded, 'rain': '10%'},
+      {
+        'day': 'Today',
+        'temp': '33° / 25°',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '10%'
+      },
+      {
+        'day': 'Wednesday',
+        'temp': '32° / 26°',
+        'icon': Icons.cloud_rounded,
+        'rain': '30%'
+      },
+      {
+        'day': 'Thursday',
+        'temp': '30° / 24°',
+        'icon': Icons.thunderstorm_rounded,
+        'rain': '80%'
+      },
+      {
+        'day': 'Friday',
+        'temp': '29° / 23°',
+        'icon': Icons.thunderstorm_rounded,
+        'rain': '90%'
+      },
+      {
+        'day': 'Saturday',
+        'temp': '31° / 24°',
+        'icon': Icons.cloud_queue_rounded,
+        'rain': '40%'
+      },
+      {
+        'day': 'Sunday',
+        'temp': '32° / 25°',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '20%'
+      },
+      {
+        'day': 'Monday',
+        'temp': '33° / 26°',
+        'icon': Icons.wb_sunny_rounded,
+        'rain': '10%'
+      },
     ];
 
     return Scaffold(
@@ -56,17 +126,26 @@ class WeatherDetailScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Chennai, India',
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
                       ),
                       SizedBox(height: 2),
                       Text(
                         'Heavy Rain Forecasted Tonight',
-                        style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: 12),
                       Text(
                         '31.5°C',
-                        style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 48,
+                            fontWeight: FontWeight.w800),
                       ),
                       Text(
                         'Feels like 34.0°C · Humidity 65%',
@@ -75,7 +154,8 @@ class WeatherDetailScreen extends StatelessWidget {
                     ],
                   ),
                   Spacer(),
-                  Icon(Icons.thunderstorm_rounded, size: 72, color: Colors.white),
+                  Icon(Icons.thunderstorm_rounded,
+                      size: 72, color: Colors.white),
                 ],
               ),
             ).animate().fadeIn().slideY(begin: 0.1),
@@ -83,7 +163,9 @@ class WeatherDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Hourly Forecast
-            const SectionHeader(title: 'Hourly Forecast').animate().fadeIn(delay: 100.ms),
+            const SectionHeader(title: 'Hourly Forecast')
+                .animate()
+                .fadeIn(delay: 100.ms),
             const SizedBox(height: 12),
             SizedBox(
               height: 110,
@@ -106,16 +188,24 @@ class WeatherDetailScreen extends StatelessWidget {
                       children: [
                         Text(
                           h['time'] as String,
-                          style: TextStyle(color: Colors.grey[600], fontSize: 12, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
                         ),
-                        Icon(h['icon'] as IconData, color: AppTheme.skyBlue, size: 24),
+                        Icon(h['icon'] as IconData,
+                            color: AppTheme.skyBlue, size: 24),
                         Text(
                           h['temp'] as String,
-                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 13),
                         ),
                         Text(
                           h['rain'] as String,
-                          style: const TextStyle(color: Colors.blue, fontSize: 10, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -127,11 +217,14 @@ class WeatherDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // 7-Day Forecast
-            const SectionHeader(title: '7-Day Forecast').animate().fadeIn(delay: 300.ms),
+            const SectionHeader(title: '7-Day Forecast')
+                .animate()
+                .fadeIn(delay: 300.ms),
             const SizedBox(height: 12),
             Card(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -146,25 +239,31 @@ class WeatherDetailScreen extends StatelessWidget {
                             flex: 3,
                             child: Text(
                               f['day'] as String,
-                              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 13),
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Row(
                               children: [
-                                Icon(f['icon'] as IconData, color: AppTheme.skyBlue, size: 18),
+                                Icon(f['icon'] as IconData,
+                                    color: AppTheme.skyBlue, size: 18),
                                 const SizedBox(width: 8),
                                 Text(
                                   f['rain'] as String,
-                                  style: const TextStyle(color: Colors.blue, fontSize: 11, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
                           ),
                           Text(
                             f['temp'] as String,
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 13),
                           ),
                         ],
                       ),
@@ -182,16 +281,19 @@ class WeatherDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.surfaceLight,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
+                border:
+                    Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.lightbulb_outline_rounded, color: AppTheme.primaryGreen),
+                  Icon(Icons.lightbulb_outline_rounded,
+                      color: AppTheme.primaryGreen),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'Farming Alert: Suspend spraying of pesticides and liquid fertilizers today due to the high likelihood of rain wash-off this evening.',
-                      style: TextStyle(fontSize: 12, height: 1.4, color: Colors.black87),
+                      style: TextStyle(
+                          fontSize: 12, height: 1.4, color: Colors.black87),
                     ),
                   ),
                 ],

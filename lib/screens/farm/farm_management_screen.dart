@@ -58,7 +58,10 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
           children: [
             const Text(
               'Add New Farm Plot',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: AppTheme.darkGreen),
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: AppTheme.darkGreen),
             ),
             const SizedBox(height: 16),
             const TextField(
@@ -129,7 +132,8 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
               decoration: BoxDecoration(
                 color: AppTheme.surfaceLight,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
+                border:
+                    Border.all(color: AppTheme.primaryGreen.withOpacity(0.2)),
               ),
               child: const Row(
                 children: [
@@ -138,7 +142,10 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
                     children: [
                       Text(
                         'Total Managed Land',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey),
                       ),
                       SizedBox(height: 4),
                       Text(
@@ -152,12 +159,16 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
                       SizedBox(height: 4),
                       Text(
                         '3 Active Plots',
-                        style: TextStyle(fontSize: 12, color: AppTheme.primaryGreen, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.primaryGreen,
+                            fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                   Spacer(),
-                  Icon(Icons.landscape_rounded, size: 54, color: AppTheme.primaryGreen),
+                  Icon(Icons.landscape_rounded,
+                      size: 54, color: AppTheme.primaryGreen),
                 ],
               ),
             ).animate().fadeIn().slideY(begin: 0.1),
@@ -201,7 +212,8 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
                           color: (p['color'] as Color).withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.terrain_rounded, color: p['color'] as Color, size: 24),
+                        child: Icon(Icons.terrain_rounded,
+                            color: p['color'] as Color, size: 24),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -210,16 +222,19 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
                           children: [
                             Text(
                               p['name'] as String,
-                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 14),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'Crop: ${p['crop']}',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.grey[600]),
                             ),
                             Text(
                               'Planted: ${p['plantedDate']}',
-                              style: TextStyle(fontSize: 11, color: Colors.grey[400]),
+                              style: TextStyle(
+                                  fontSize: 11, color: Colors.grey[400]),
                             ),
                           ],
                         ),
@@ -227,11 +242,14 @@ class _FarmManagementScreenState extends State<FarmManagementScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          StatusBadge(label: p['status'] as String, color: p['color'] as Color),
+                          StatusBadge(
+                              label: p['status'] as String,
+                              color: p['color'] as Color),
                           const SizedBox(height: 8),
                           Text(
                             p['area'] as String,
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
                           ),
                         ],
                       ),

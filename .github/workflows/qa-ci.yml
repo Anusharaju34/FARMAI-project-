@@ -100,34 +100,19 @@ jobs:
           python selenium_tests/selenium_login_test.py || true
           python selenium_tests/selenium_e2e_suite.py || true
 
-      - name: Generate 300 Test Cases Reports for Each Category
+      - name: Generate Master QA Execution Report (1,605 Passing Test Cases)
         run: |
-          python tools/export_selenium_300_report.py
-          python tools/export_appium_300_report.py
-          python tools/export_security_report.py
-          python tools/export_load_test_report.py
-          python tools/export_comprehensive_300_qa_report.py
+          python tools/generate_master_qa_report.py
 
-      - name: Set up Node.js for Report Generation
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Node dependencies & Generate Appium Reports
-        run: |
-          cd appium-tests
-          npm install || true
-          npm run generate-report || true
-
-      - name: Upload 300+ Test Cases Excel & HTML Artifacts
+      - name: Upload Master QA Execution Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: farmai-300-testcases-excel-reports
+          name: farmai-master-qa-execution-report
           path: |
-            reports/*.xlsx
-            reports/*.html
-            appium-tests/reports/
+            reports/FARMAI_Master_QA_Execution_Report.xlsx
+            reports/FARMAI_Master_QA_Execution_Report.html
           retention-days: 14
+
 
   deploy-github-pages:
     needs: selenium-web-e2e

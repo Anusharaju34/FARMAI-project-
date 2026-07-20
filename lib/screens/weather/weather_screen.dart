@@ -101,7 +101,6 @@ class _WeatherContent extends StatelessWidget {
             ),
           ),
         ),
-
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -109,7 +108,10 @@ class _WeatherContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Stats Row
-                _StatsRow(weather: weather).animate().fadeIn().slideY(begin: 0.2),
+                _StatsRow(weather: weather)
+                    .animate()
+                    .fadeIn()
+                    .slideY(begin: 0.2),
 
                 const SizedBox(height: 20),
 
@@ -125,7 +127,8 @@ class _WeatherContent extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () => context.push(AppRoutes.weatherDetail),
-                      child: const Text('Detailed Forecast', style: TextStyle(color: AppTheme.primaryGreen)),
+                      child: const Text('Detailed Forecast',
+                          style: TextStyle(color: AppTheme.primaryGreen)),
                     ),
                   ],
                 ).animate().fadeIn(delay: 200.ms),
@@ -137,7 +140,9 @@ class _WeatherContent extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Farming Advisory
-                _FarmingAdvisory(weather: weather).animate().fadeIn(delay: 400.ms),
+                _FarmingAdvisory(weather: weather)
+                    .animate()
+                    .fadeIn(delay: 400.ms),
 
                 const SizedBox(height: 80),
               ],
@@ -249,11 +254,41 @@ class _ForecastList extends StatelessWidget {
     if (forecast.isEmpty) {
       // Show mock forecast
       final mockForecast = [
-        {'day': 'Mon', 'max': 32, 'min': 24, 'icon': Icons.wb_sunny_rounded, 'rain': '10%'},
-        {'day': 'Tue', 'max': 29, 'min': 22, 'icon': Icons.cloud_rounded, 'rain': '40%'},
-        {'day': 'Wed', 'max': 27, 'min': 21, 'icon': Icons.water_rounded, 'rain': '80%'},
-        {'day': 'Thu', 'max': 30, 'min': 23, 'icon': Icons.wb_cloudy_rounded, 'rain': '20%'},
-        {'day': 'Fri', 'max': 33, 'min': 25, 'icon': Icons.wb_sunny_rounded, 'rain': '5%'},
+        {
+          'day': 'Mon',
+          'max': 32,
+          'min': 24,
+          'icon': Icons.wb_sunny_rounded,
+          'rain': '10%'
+        },
+        {
+          'day': 'Tue',
+          'max': 29,
+          'min': 22,
+          'icon': Icons.cloud_rounded,
+          'rain': '40%'
+        },
+        {
+          'day': 'Wed',
+          'max': 27,
+          'min': 21,
+          'icon': Icons.water_rounded,
+          'rain': '80%'
+        },
+        {
+          'day': 'Thu',
+          'max': 30,
+          'min': 23,
+          'icon': Icons.wb_cloudy_rounded,
+          'rain': '20%'
+        },
+        {
+          'day': 'Fri',
+          'max': 33,
+          'min': 25,
+          'icon': Icons.wb_sunny_rounded,
+          'rain': '5%'
+        },
       ];
       return Column(
         children: mockForecast
@@ -402,18 +437,23 @@ class _FarmingAdvisory extends StatelessWidget {
   List<String> _getAdvisories(WeatherData w) {
     final advisories = <String>[];
     if (w.humidity > 80) {
-      advisories.add('High humidity: Monitor crops for fungal diseases. Consider preventive fungicide application.');
+      advisories.add(
+          'High humidity: Monitor crops for fungal diseases. Consider preventive fungicide application.');
     }
     if (w.temperature > 35) {
-      advisories.add('High temperature alert: Schedule irrigation in early morning or evening to reduce evaporation losses.');
+      advisories.add(
+          'High temperature alert: Schedule irrigation in early morning or evening to reduce evaporation losses.');
     }
     if (w.uvIndex > 7) {
-      advisories.add('High UV Index: Avoid pesticide spraying during 10 AM - 3 PM to prevent phytotoxicity.');
+      advisories.add(
+          'High UV Index: Avoid pesticide spraying during 10 AM - 3 PM to prevent phytotoxicity.');
     }
     if (w.windSpeed > 20) {
-      advisories.add('Strong winds: Avoid spray operations. Support tall crops with stakes to prevent lodging.');
+      advisories.add(
+          'Strong winds: Avoid spray operations. Support tall crops with stakes to prevent lodging.');
     }
-    advisories.add('Current conditions are suitable for field operations in the morning hours.');
+    advisories.add(
+        'Current conditions are suitable for field operations in the morning hours.');
     return advisories;
   }
 }

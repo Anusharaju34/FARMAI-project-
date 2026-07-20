@@ -75,14 +75,16 @@ class DiseasePrediction {
     required this.createdAt,
   });
 
-  factory DiseasePrediction.fromJson(Map<String, dynamic> json) => DiseasePrediction(
+  factory DiseasePrediction.fromJson(Map<String, dynamic> json) =>
+      DiseasePrediction(
         id: json['id'] as String,
         userId: json['user_id'] as String,
         imageUrl: json['image_url'] as String,
         diseaseName: json['disease_name'] as String,
         confidenceScore: (json['confidence_score'] as num).toDouble(),
         cropType: json['crop_type'] as String,
-        treatmentSuggestions: (json['treatment_suggestions'] as List<dynamic>).cast<String>(),
+        treatmentSuggestions:
+            (json['treatment_suggestions'] as List<dynamic>).cast<String>(),
         severity: json['severity'] as String,
         createdAt: DateTime.parse(json['created_at'] as String),
       );
@@ -120,7 +122,8 @@ class PestDetection {
         confidenceScore: (json['confidence_score'] as num).toDouble(),
         severityLevel: json['severity_level'] as String,
         preventionRecommendations:
-            (json['prevention_recommendations'] as List<dynamic>).cast<String>(),
+            (json['prevention_recommendations'] as List<dynamic>)
+                .cast<String>(),
         createdAt: DateTime.parse(json['created_at'] as String),
       );
 }
@@ -255,14 +258,16 @@ class IrrigationRecord {
     required this.createdAt,
   });
 
-  factory IrrigationRecord.fromJson(Map<String, dynamic> json) => IrrigationRecord(
+  factory IrrigationRecord.fromJson(Map<String, dynamic> json) =>
+      IrrigationRecord(
         id: json['id'] as String,
         userId: json['user_id'] as String,
         cropType: json['crop_type'] as String,
         soilType: json['soil_type'] as String,
         waterRequired: (json['water_required'] as num).toDouble(),
         schedule: json['schedule'] as String,
-        recommendations: (json['recommendations'] as List<dynamic>).cast<String>(),
+        recommendations:
+            (json['recommendations'] as List<dynamic>).cast<String>(),
         createdAt: DateTime.parse(json['created_at'] as String),
       );
 }
@@ -378,7 +383,8 @@ class AppNotification {
     required this.createdAt,
   });
 
-  factory AppNotification.fromJson(Map<String, dynamic> json) => AppNotification(
+  factory AppNotification.fromJson(Map<String, dynamic> json) =>
+      AppNotification(
         id: json['id'] as String,
         userId: json['user_id'] as String,
         title: json['title'] as String,

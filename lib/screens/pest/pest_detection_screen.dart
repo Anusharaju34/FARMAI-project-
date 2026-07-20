@@ -23,8 +23,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
   final _picker = ImagePicker();
 
   Future<void> _pickImage(ImageSource source) async {
-    final picked =
-        await _picker.pickImage(source: source, imageQuality: 85, maxWidth: 1024);
+    final picked = await _picker.pickImage(
+        source: source, imageQuality: 85, maxWidth: 1024);
     if (picked != null) {
       setState(() {
         _selectedImage = picked;
@@ -105,7 +105,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                       ],
                     ),
                   ),
-                  Icon(Icons.pest_control_rounded, color: Colors.white, size: 40),
+                  Icon(Icons.pest_control_rounded,
+                      color: Colors.white, size: 40),
                 ],
               ),
             ).animate().fadeIn().slideY(begin: -0.1),
@@ -150,16 +151,17 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                           SizedBox(height: 4),
                           Text(
                             'Camera or Gallery',
-                            style:
-                                TextStyle(color: Colors.brown, fontSize: 12),
+                            style: TextStyle(color: Colors.brown, fontSize: 12),
                           ),
                         ],
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: kIsWeb
-                           ? Image.network(_selectedImage!.path, fit: BoxFit.cover)
-                           : Image.file(File(_selectedImage!.path), fit: BoxFit.cover),
+                            ? Image.network(_selectedImage!.path,
+                                fit: BoxFit.cover)
+                            : Image.file(File(_selectedImage!.path),
+                                fit: BoxFit.cover),
                       ),
               ),
             ).animate().fadeIn(delay: 200.ms),
@@ -177,7 +179,10 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                 ),
               ).animate().fadeIn(),
 
-            if (_result != null) _PestResultCard(result: _result!).animate().fadeIn(duration: 500.ms),
+            if (_result != null)
+              _PestResultCard(result: _result!)
+                  .animate()
+                  .fadeIn(duration: 500.ms),
 
             const SizedBox(height: 80),
           ],
@@ -409,8 +414,7 @@ class _PestResultCard extends StatelessWidget {
                   const SizedBox(width: 6),
                   const Text(
                     'Economic Threshold: ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 12),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
                   ),
                   Expanded(
                     child: Text(

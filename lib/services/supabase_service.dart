@@ -11,7 +11,8 @@ class SupabaseService {
   // Storage adapter is injected here to allow tests to mock storage behavior.
   static StorageAdapter _storageAdapter = SupabaseStorageAdapter();
 
-  static set storageAdapter(StorageAdapter adapter) => _storageAdapter = adapter;
+  static set storageAdapter(StorageAdapter adapter) =>
+      _storageAdapter = adapter;
 
   // ============================================================
   // AUTH
@@ -58,7 +59,8 @@ class SupabaseService {
 
   static User? get currentUser => _client.auth.currentUser;
 
-  static Stream<AuthState> get authStateStream => _client.auth.onAuthStateChange;
+  static Stream<AuthState> get authStateStream =>
+      _client.auth.onAuthStateChange;
 
   // ============================================================
   // USER PROFILE
@@ -76,10 +78,7 @@ class SupabaseService {
 
   static Future<void> updateUserProfile(
       String userId, Map<String, dynamic> data) async {
-    await _client
-        .from(AppConstants.usersTable)
-        .update(data)
-        .eq('id', userId);
+    await _client.from(AppConstants.usersTable).update(data).eq('id', userId);
   }
 
   // ============================================================
@@ -92,7 +91,8 @@ class SupabaseService {
     required String path,
   }) async {
     // Delegate to adapter for testability.
-    return await _storageAdapter.uploadImage(file: file, bucket: bucket, path: path);
+    return await _storageAdapter.uploadImage(
+        file: file, bucket: bucket, path: path);
   }
 
   // ============================================================
@@ -106,11 +106,12 @@ class SupabaseService {
         .select()
         .eq('user_id', userId)
         .order('created_at', ascending: false);
-    return (response as List).map((e) => DiseasePrediction.fromJson(e)).toList();
+    return (response as List)
+        .map((e) => DiseasePrediction.fromJson(e))
+        .toList();
   }
 
-  static Future<void> saveDiseasePrediction(
-      Map<String, dynamic> data) async {
+  static Future<void> saveDiseasePrediction(Map<String, dynamic> data) async {
     await _client.from(AppConstants.diseasePredictionsTable).insert(data);
   }
 
@@ -198,8 +199,7 @@ class SupabaseService {
   static Future<void> markNotificationRead(String notificationId) async {
     await _client
         .from(AppConstants.notificationsTable)
-        .update({'is_read': true})
-        .eq('id', notificationId);
+        .update({'is_read': true}).eq('id', notificationId);
   }
 
   static RealtimeChannel subscribeToNotifications(
@@ -236,8 +236,6 @@ class SupabaseService {
         .eq('user_id', userId)
         .order('created_at', ascending: false)
         .limit(10);
-    return (response as List)
-        .map((e) => IrrigationRecord.fromJson(e))
-        .toList();
+    return (response as List).map((e) => IrrigationRecord.fromJson(e)).toList();
   }
 }

@@ -187,9 +187,7 @@ class _OnboardingPage extends StatelessWidget {
                 curve: Curves.elasticOut,
               )
               .fadeIn(),
-
           const SizedBox(height: 48),
-
           Text(
             item.title,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -201,9 +199,7 @@ class _OnboardingPage extends StatelessWidget {
               .animate(key: ValueKey('title_$index'), delay: 200.ms)
               .fadeIn()
               .slideY(begin: 0.2, end: 0),
-
           const SizedBox(height: 16),
-
           Text(
             item.subtitle,
             style: Theme.of(context)

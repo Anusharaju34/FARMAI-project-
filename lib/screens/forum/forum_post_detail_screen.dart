@@ -19,7 +19,8 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     {
       'author': 'Dr. Ramesh (Agronomist)',
       'role': 'Expert',
-      'content': 'You can apply well-decomposed Neem Cake at 250 kg/acre. It acts as both a nutrient source and helps control soil nematodes.',
+      'content':
+          'You can apply well-decomposed Neem Cake at 250 kg/acre. It acts as both a nutrient source and helps control soil nematodes.',
       'likes': 8,
       'time': '1d ago',
       'isExpert': true,
@@ -27,7 +28,8 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     {
       'author': 'Sanjay Patel',
       'role': 'Farmer',
-      'content': 'Vermicompost has worked wonders for my tomatoes. Apply about 2-3 kg per plant and water immediately.',
+      'content':
+          'Vermicompost has worked wonders for my tomatoes. Apply about 2-3 kg per plant and water immediately.',
       'likes': 3,
       'time': '18h ago',
       'isExpert': false,
@@ -35,7 +37,8 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
     {
       'author': 'Gita Rao',
       'role': 'Farmer',
-      'content': 'Make sure you also check the soil pH before applying heavy compost. Tomatoes do best around 6.0 to 6.8 pH.',
+      'content':
+          'Make sure you also check the soil pH before applying heavy compost. Tomatoes do best around 6.0 to 6.8 pH.',
       'likes': 1,
       'time': '4h ago',
       'isExpert': false,
@@ -94,7 +97,10 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                           children: [
                             const CircleAvatar(
                               backgroundColor: AppTheme.primaryGreen,
-                              child: Text('AK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              child: Text('AK',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
                             ),
                             const SizedBox(width: 12),
                             Column(
@@ -102,11 +108,14 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                               children: [
                                 const Text(
                                   'Anil Kumar',
-                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13),
                                 ),
                                 Text(
                                   'Salem, Tamil Nadu · 2d ago',
-                                  style: TextStyle(fontSize: 11, color: Colors.grey[400]),
+                                  style: TextStyle(
+                                      fontSize: 11, color: Colors.grey[400]),
                                 ),
                               ],
                             ),
@@ -124,21 +133,38 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                         const SizedBox(height: 8),
                         Text(
                           'Suggest good organic options to improve yield. Soil is loamy and nitrogen levels seem slightly low. Looking for home-made or easily accessible market alternatives.',
-                          style: TextStyle(fontSize: 13, height: 1.5, color: Colors.grey[800]),
+                          style: TextStyle(
+                              fontSize: 13,
+                              height: 1.5,
+                              color: Colors.grey[800]),
                         ),
                         const SizedBox(height: 12),
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: AppTheme.surfaceLight, borderRadius: BorderRadius.circular(8)),
-                              child: const Text('Tomato', style: TextStyle(fontSize: 11, color: AppTheme.primaryGreen, fontWeight: FontWeight.w600)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: AppTheme.surfaceLight,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: const Text('Tomato',
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppTheme.primaryGreen,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: AppTheme.surfaceLight, borderRadius: BorderRadius.circular(8)),
-                              child: const Text('Fertilizer', style: TextStyle(fontSize: 11, color: AppTheme.primaryGreen, fontWeight: FontWeight.w600)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: AppTheme.surfaceLight,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: const Text('Fertilizer',
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppTheme.primaryGreen,
+                                      fontWeight: FontWeight.w600)),
                             ),
                           ],
                         ),
@@ -159,8 +185,12 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    _isLiked ? Icons.thumb_up_rounded : Icons.thumb_up_outlined,
-                                    color: _isLiked ? AppTheme.primaryGreen : Colors.grey,
+                                    _isLiked
+                                        ? Icons.thumb_up_rounded
+                                        : Icons.thumb_up_outlined,
+                                    color: _isLiked
+                                        ? AppTheme.primaryGreen
+                                        : Colors.grey,
                                     size: 16,
                                   ),
                                   const SizedBox(width: 6),
@@ -169,18 +199,24 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: _isLiked ? AppTheme.primaryGreen : Colors.grey[600],
+                                      color: _isLiked
+                                          ? AppTheme.primaryGreen
+                                          : Colors.grey[600],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             const SizedBox(width: 24),
-                            Icon(Icons.comment_rounded, color: Colors.grey[400], size: 16),
+                            Icon(Icons.comment_rounded,
+                                color: Colors.grey[400], size: 16),
                             const SizedBox(width: 6),
                             Text(
                               '${_replies.length} Replies',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey[600]),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[600]),
                             ),
                           ],
                         ),
@@ -189,7 +225,9 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                   ).animate().fadeIn(),
 
                   const SizedBox(height: 24),
-                  const SectionHeader(title: 'Replies & Solutions').animate().fadeIn(delay: 100.ms),
+                  const SectionHeader(title: 'Replies & Solutions')
+                      .animate()
+                      .fadeIn(delay: 100.ms),
                   const SizedBox(height: 12),
 
                   // Replies List
@@ -205,10 +243,14 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: isExpert ? AppTheme.primaryGreen.withOpacity(0.04) : Colors.white,
+                          color: isExpert
+                              ? AppTheme.primaryGreen.withOpacity(0.04)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: isExpert ? AppTheme.primaryGreen.withOpacity(0.2) : Colors.grey[200]!,
+                            color: isExpert
+                                ? AppTheme.primaryGreen.withOpacity(0.2)
+                                : Colors.grey[200]!,
                           ),
                         ),
                         child: Column(
@@ -221,20 +263,30 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 12,
-                                    color: isExpert ? AppTheme.primaryGreen : Colors.black87,
+                                    color: isExpert
+                                        ? AppTheme.primaryGreen
+                                        : Colors.black87,
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 if (isExpert)
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(color: AppTheme.primaryGreen, borderRadius: BorderRadius.circular(4)),
-                                    child: const Text('EXPERT', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w800)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                        color: AppTheme.primaryGreen,
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: const Text('EXPERT',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w800)),
                                   ),
                                 const Spacer(),
                                 Text(
                                   r['time'] as String,
-                                  style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey[400]),
                                 ),
                               ],
                             ),
@@ -275,14 +327,16 @@ class _ForumPostDetailScreenState extends State<ForumPostDetailScreen> {
                       hintText: 'Add an answer or comment...',
                       filled: true,
                       fillColor: AppTheme.surfaceLight,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
                   onPressed: _addComment,
-                  icon: const Icon(Icons.send_rounded, color: AppTheme.primaryGreen),
+                  icon: const Icon(Icons.send_rounded,
+                      color: AppTheme.primaryGreen),
                 ),
               ],
             ),

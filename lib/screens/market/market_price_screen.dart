@@ -19,8 +19,16 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
   late TabController _tabController;
 
   final List<String> _crops = [
-    'Rice', 'Wheat', 'Maize', 'Cotton', 'Tomato',
-    'Onion', 'Potato', 'Sugarcane', 'Soybean', 'Groundnut',
+    'Rice',
+    'Wheat',
+    'Maize',
+    'Cotton',
+    'Tomato',
+    'Onion',
+    'Potato',
+    'Sugarcane',
+    'Soybean',
+    'Groundnut',
   ];
 
   final Map<String, Map<String, dynamic>> _cropData = {
@@ -33,7 +41,8 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
       'market': 'APMC Mumbai',
       'history': [2100.0, 2180.0, 2250.0, 2200.0, 2300.0, 2340.0],
       'prediction': [2340.0, 2380.0, 2420.0, 2460.0, 2480.0],
-      'advice': 'Good time to sell. Prices expected to rise 6% over next 2 weeks due to export demand.',
+      'advice':
+          'Good time to sell. Prices expected to rise 6% over next 2 weeks due to export demand.',
     },
     'Wheat': {
       'current': 1890.0,
@@ -44,7 +53,8 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
       'market': 'APMC Delhi',
       'history': [1950.0, 1930.0, 1910.0, 1900.0, 1905.0, 1890.0],
       'prediction': [1890.0, 1870.0, 1850.0, 1830.0, 1820.0],
-      'advice': 'Consider holding stock. Prices expected to stabilize in 3 weeks post harvest season.',
+      'advice':
+          'Consider holding stock. Prices expected to stabilize in 3 weeks post harvest season.',
     },
     'Tomato': {
       'current': 890.0,
@@ -55,7 +65,8 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
       'market': 'APMC Bangalore',
       'history': [650.0, 700.0, 780.0, 820.0, 860.0, 890.0],
       'prediction': [890.0, 950.0, 1020.0, 1080.0, 1100.0],
-      'advice': 'Strong upward trend. Excellent selling opportunity. Short supply due to rainfall damage.',
+      'advice':
+          'Strong upward trend. Excellent selling opportunity. Short supply due to rainfall damage.',
     },
     'Maize': {
       'current': 1780.0,
@@ -79,11 +90,63 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
       'prediction': [6450.0, 6520.0, 6580.0, 6640.0, 6700.0],
       'advice': 'Mill demand strong. Prices supported by lower Kharif acreage.',
     },
-    'Onion': {'current': 1240.0, 'predicted': 1050.0, 'unit': '₹/quintal', 'change': -3.2, 'isUp': false, 'market': 'Lasalgaon APMC', 'history': [1500.0, 1450.0, 1380.0, 1320.0, 1270.0, 1240.0], 'prediction': [1240.0, 1180.0, 1120.0, 1080.0, 1050.0], 'advice': 'Prices declining. Sell current stock soon before new arrivals flood market.'},
-    'Potato': {'current': 980.0, 'predicted': 1050.0, 'unit': '₹/quintal', 'change': 0.5, 'isUp': true, 'market': 'Agra Market', 'history': [900.0, 920.0, 940.0, 960.0, 975.0, 980.0], 'prediction': [980.0, 1000.0, 1020.0, 1040.0, 1050.0], 'advice': 'Cold storage demand keeping prices stable with mild upward bias.'},
-    'Sugarcane': {'current': 315.0, 'predicted': 320.0, 'unit': '₹/quintal', 'change': 0.3, 'isUp': true, 'market': 'UP State Price', 'history': [305.0, 308.0, 310.0, 312.0, 314.0, 315.0], 'prediction': [315.0, 316.0, 317.0, 318.0, 320.0], 'advice': 'Government SAP (State Advised Price) provides price stability.'},
-    'Soybean': {'current': 4120.0, 'predicted': 4350.0, 'unit': '₹/quintal', 'change': 3.4, 'isUp': true, 'market': 'Indore APMC', 'history': [3800.0, 3900.0, 4000.0, 4050.0, 4100.0, 4120.0], 'prediction': [4120.0, 4200.0, 4260.0, 4310.0, 4350.0], 'advice': 'Oilmeal exports boosting demand. Good time to sell.'},
-    'Groundnut': {'current': 5890.0, 'predicted': 6100.0, 'unit': '₹/quintal', 'change': 2.1, 'isUp': true, 'market': 'Junagadh Market', 'history': [5600.0, 5680.0, 5750.0, 5810.0, 5860.0, 5890.0], 'prediction': [5890.0, 5940.0, 6000.0, 6060.0, 6100.0], 'advice': 'Oil demand strong. Favorable for sellers.'},
+    'Onion': {
+      'current': 1240.0,
+      'predicted': 1050.0,
+      'unit': '₹/quintal',
+      'change': -3.2,
+      'isUp': false,
+      'market': 'Lasalgaon APMC',
+      'history': [1500.0, 1450.0, 1380.0, 1320.0, 1270.0, 1240.0],
+      'prediction': [1240.0, 1180.0, 1120.0, 1080.0, 1050.0],
+      'advice':
+          'Prices declining. Sell current stock soon before new arrivals flood market.'
+    },
+    'Potato': {
+      'current': 980.0,
+      'predicted': 1050.0,
+      'unit': '₹/quintal',
+      'change': 0.5,
+      'isUp': true,
+      'market': 'Agra Market',
+      'history': [900.0, 920.0, 940.0, 960.0, 975.0, 980.0],
+      'prediction': [980.0, 1000.0, 1020.0, 1040.0, 1050.0],
+      'advice':
+          'Cold storage demand keeping prices stable with mild upward bias.'
+    },
+    'Sugarcane': {
+      'current': 315.0,
+      'predicted': 320.0,
+      'unit': '₹/quintal',
+      'change': 0.3,
+      'isUp': true,
+      'market': 'UP State Price',
+      'history': [305.0, 308.0, 310.0, 312.0, 314.0, 315.0],
+      'prediction': [315.0, 316.0, 317.0, 318.0, 320.0],
+      'advice': 'Government SAP (State Advised Price) provides price stability.'
+    },
+    'Soybean': {
+      'current': 4120.0,
+      'predicted': 4350.0,
+      'unit': '₹/quintal',
+      'change': 3.4,
+      'isUp': true,
+      'market': 'Indore APMC',
+      'history': [3800.0, 3900.0, 4000.0, 4050.0, 4100.0, 4120.0],
+      'prediction': [4120.0, 4200.0, 4260.0, 4310.0, 4350.0],
+      'advice': 'Oilmeal exports boosting demand. Good time to sell.'
+    },
+    'Groundnut': {
+      'current': 5890.0,
+      'predicted': 6100.0,
+      'unit': '₹/quintal',
+      'change': 2.1,
+      'isUp': true,
+      'market': 'Junagadh Market',
+      'history': [5600.0, 5680.0, 5750.0, 5810.0, 5860.0, 5890.0],
+      'prediction': [5890.0, 5940.0, 6000.0, 6060.0, 6100.0],
+      'advice': 'Oil demand strong. Favorable for sellers.'
+    },
   };
 
   @override
@@ -110,7 +173,8 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
         title: 'Market Prices',
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_business_rounded, color: AppTheme.primaryGreen),
+            icon: const Icon(Icons.add_business_rounded,
+                color: AppTheme.primaryGreen),
             onPressed: () => context.push(AppRoutes.createMarketListing),
           ),
         ],
@@ -132,16 +196,20 @@ class _MarketPriceScreenState extends State<MarketPriceScreen>
                   child: AnimatedContainer(
                     duration: 200.ms,
                     margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     decoration: BoxDecoration(
-                      color: selected ? AppTheme.primaryGreen : AppTheme.surfaceLight,
+                      color: selected
+                          ? AppTheme.primaryGreen
+                          : AppTheme.surfaceLight,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       crop,
                       style: TextStyle(
                         color: selected ? Colors.white : Colors.grey[700],
-                        fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight:
+                            selected ? FontWeight.w700 : FontWeight.w500,
                         fontSize: 13,
                       ),
                     ),
@@ -255,7 +323,8 @@ class _PriceCard extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20),
@@ -263,7 +332,9 @@ class _PriceCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      isUp ? Icons.trending_up_rounded : Icons.trending_down_rounded,
+                      isUp
+                          ? Icons.trending_up_rounded
+                          : Icons.trending_down_rounded,
                       color: Colors.white,
                       size: 16,
                     ),
@@ -331,7 +402,8 @@ class _PriceCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(8),
@@ -406,8 +478,7 @@ class _PriceChart extends StatelessWidget {
               const Spacer(),
               _LegendDot(color: lineColor, label: 'Actual'),
               const SizedBox(width: 12),
-              _LegendDot(
-                  color: lineColor.withOpacity(0.5), label: 'Predicted'),
+              _LegendDot(color: lineColor.withOpacity(0.5), label: 'Predicted'),
             ],
           ),
           const SizedBox(height: 16),
@@ -446,20 +517,34 @@ class _PriceChart extends StatelessWidget {
                       showTitles: true,
                       reservedSize: 22,
                       getTitlesWidget: (val, _) {
-                        final labels = ['-5w', '-4w', '-3w', '-2w', '-1w', 'Now', '+1w', '+2w', '+3w', '+4w'];
+                        final labels = [
+                          '-5w',
+                          '-4w',
+                          '-3w',
+                          '-2w',
+                          '-1w',
+                          'Now',
+                          '+1w',
+                          '+2w',
+                          '+3w',
+                          '+4w'
+                        ];
                         final idx = val.round();
                         if (idx >= 0 && idx < labels.length) {
                           return Text(
                             labels[idx],
-                            style: TextStyle(fontSize: 9, color: Colors.grey[400]),
+                            style:
+                                TextStyle(fontSize: 9, color: Colors.grey[400]),
                           );
                         }
                         return const SizedBox.shrink();
                       },
                     ),
                   ),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false)),
                 ),
                 lineBarsData: [
                   // Historical
@@ -606,57 +691,58 @@ class _AllCropsTable extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.08),
+                  color:
+                      Theme.of(context).colorScheme.outline.withOpacity(0.08),
                 ),
               ),
               child: Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: AppTheme.surfaceLight,
-                    borderRadius: BorderRadius.circular(8),
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceLight,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.grass_rounded,
+                        size: 16, color: AppTheme.primaryGreen),
                   ),
-                  child: const Icon(Icons.grass_rounded,
-                      size: 16, color: AppTheme.primaryGreen),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    e.key,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                ),
-                Text(
-                  '${e.value['unit'].toString().split('/').first}${(e.value['current'] as double).toStringAsFixed(0)}',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 14),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  decoration: BoxDecoration(
-                    color:
-                        (isUp ? AppTheme.primaryGreen : AppTheme.alertRed)
-                            .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    '${isUp ? "+" : ""}${e.value['change']}%',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      e.key,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
-                ),
-              ],
+                  Text(
+                    '${e.value['unit'].toString().split('/').first}${(e.value['current'] as double).toStringAsFixed(0)}',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: (isUp ? AppTheme.primaryGreen : AppTheme.alertRed)
+                          .withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      '${isUp ? "+" : ""}${e.value['change']}%',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
       ],
     );
   }

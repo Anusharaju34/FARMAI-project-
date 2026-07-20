@@ -101,7 +101,8 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: alertRed),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         labelStyle: GoogleFonts.plusJakartaSans(color: Colors.grey[600]),
         hintStyle: GoogleFonts.plusJakartaSans(color: Colors.grey[400]),
       ),
@@ -142,7 +143,7 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-        cardTheme: CardThemeData(
+      cardTheme: CardThemeData(
         color: cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -175,30 +176,47 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: lightGreen, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
 
   static TextTheme _buildTextTheme(Brightness brightness) {
-    final color = brightness == Brightness.light ? Colors.black87 : Colors.white;
+    final color =
+        brightness == Brightness.light ? Colors.black87 : Colors.white;
     return GoogleFonts.plusJakartaSansTextTheme(
       TextTheme(
-        displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.w700, color: color),
-        displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.w700, color: color),
-        displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.w600, color: color),
-        headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: color),
-        headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: color),
-        headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: color),
-        titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: color),
-        titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
-        titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
-        bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: color),
-        bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color),
-        bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: color),
-        labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
-        labelMedium: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: color),
-        labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: color),
+        displayLarge:
+            TextStyle(fontSize: 57, fontWeight: FontWeight.w700, color: color),
+        displayMedium:
+            TextStyle(fontSize: 45, fontWeight: FontWeight.w700, color: color),
+        displaySmall:
+            TextStyle(fontSize: 36, fontWeight: FontWeight.w600, color: color),
+        headlineLarge:
+            TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: color),
+        headlineMedium:
+            TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: color),
+        headlineSmall:
+            TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: color),
+        titleLarge:
+            TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: color),
+        titleMedium:
+            TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
+        titleSmall:
+            TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+        bodyLarge:
+            TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: color),
+        bodyMedium:
+            TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color),
+        bodySmall:
+            TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: color),
+        labelLarge:
+            TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+        labelMedium:
+            TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: color),
+        labelSmall:
+            TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: color),
       ),
     );
   }

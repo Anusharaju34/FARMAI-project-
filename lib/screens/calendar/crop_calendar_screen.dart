@@ -90,7 +90,8 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final currentTasks = _tasks[_selectedCrop] ?? [];
-    final completedCount = currentTasks.where((t) => t['isDone'] as bool).length;
+    final completedCount =
+        currentTasks.where((t) => t['isDone'] as bool).length;
     final totalCount = currentTasks.length;
     final progress = totalCount > 0 ? completedCount / totalCount : 0.0;
 
@@ -127,17 +128,22 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                             margin: const EdgeInsets.only(right: 8),
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
-                              color: isSelected ? AppTheme.primaryGreen : AppTheme.surfaceLight,
+                              color: isSelected
+                                  ? AppTheme.primaryGreen
+                                  : AppTheme.surfaceLight,
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: isSelected ? Colors.transparent : Colors.grey[300]!,
+                                color: isSelected
+                                    ? Colors.transparent
+                                    : Colors.grey[300]!,
                               ),
                             ),
                             alignment: Alignment.center,
                             child: Text(
                               crop,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black87,
+                                color:
+                                    isSelected ? Colors.white : Colors.black87,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 13,
                               ),
@@ -176,7 +182,8 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                           children: [
                             const Text(
                               'Weekly Progress',
-                              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 14),
                             ),
                             Text(
                               '$completedCount/$totalCount Tasks Done',
@@ -195,7 +202,8 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                             value: progress,
                             minHeight: 8,
                             backgroundColor: Colors.grey[200],
-                            valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryGreen),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                AppTheme.primaryGreen),
                           ),
                         ),
                       ],
@@ -205,14 +213,17 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                   const SizedBox(height: 24),
 
                   // Tasks Timeline
-                  const SectionHeader(title: 'Timeline Tasks').animate().fadeIn(delay: 100.ms),
+                  const SectionHeader(title: 'Timeline Tasks')
+                      .animate()
+                      .fadeIn(delay: 100.ms),
                   const SizedBox(height: 12),
 
                   if (currentTasks.isEmpty)
                     const EmptyStateWidget(
                       icon: Icons.calendar_today_rounded,
                       title: 'No Tasks Scheduled',
-                      subtitle: 'There are no active tasks for this crop in the upcoming calendar.',
+                      subtitle:
+                          'There are no active tasks for this crop in the upcoming calendar.',
                     )
                   else
                     ListView.builder(
@@ -235,17 +246,25 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       color: isDone
-                                          ? AppTheme.primaryGreen.withOpacity(0.12)
-                                          : (t['color'] as Color).withOpacity(0.08),
+                                          ? AppTheme.primaryGreen
+                                              .withOpacity(0.12)
+                                          : (t['color'] as Color)
+                                              .withOpacity(0.08),
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: isDone ? AppTheme.primaryGreen : t['color'] as Color,
+                                        color: isDone
+                                            ? AppTheme.primaryGreen
+                                            : t['color'] as Color,
                                         width: 1.5,
                                       ),
                                     ),
                                     child: Icon(
-                                      isDone ? Icons.check_rounded : t['icon'] as IconData,
-                                      color: isDone ? AppTheme.primaryGreen : t['color'] as Color,
+                                      isDone
+                                          ? Icons.check_rounded
+                                          : t['icon'] as IconData,
+                                      color: isDone
+                                          ? AppTheme.primaryGreen
+                                          : t['color'] as Color,
                                       size: 18,
                                     ),
                                   ),
@@ -263,14 +282,20 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
-                                    color: isDone ? AppTheme.surfaceLight.withOpacity(0.3) : Colors.white,
+                                    color: isDone
+                                        ? AppTheme.surfaceLight.withOpacity(0.3)
+                                        : Colors.white,
                                     borderRadius: BorderRadius.circular(14),
                                     border: Border.all(
-                                      color: isDone ? AppTheme.primaryGreen.withOpacity(0.2) : Colors.grey[200]!,
+                                      color: isDone
+                                          ? AppTheme.primaryGreen
+                                              .withOpacity(0.2)
+                                          : Colors.grey[200]!,
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -280,8 +305,12 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 13,
-                                                decoration: isDone ? TextDecoration.lineThrough : null,
-                                                color: isDone ? Colors.grey : Colors.black87,
+                                                decoration: isDone
+                                                    ? TextDecoration.lineThrough
+                                                    : null,
+                                                color: isDone
+                                                    ? Colors.grey
+                                                    : Colors.black87,
                                               ),
                                             ),
                                           ),
@@ -302,7 +331,9 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                                         style: TextStyle(
                                           fontSize: 12,
                                           height: 1.4,
-                                          color: isDone ? Colors.grey[400] : Colors.grey[600],
+                                          color: isDone
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -311,7 +342,9 @@ class _CropCalendarScreenState extends State<CropCalendarScreen> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
-                                          color: isDone ? Colors.grey[400] : AppTheme.primaryGreen,
+                                          color: isDone
+                                              ? Colors.grey[400]
+                                              : AppTheme.primaryGreen,
                                         ),
                                       ),
                                     ],

@@ -80,12 +80,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(height: 12),
                       Text(
                         'FARMAI',
-                        style:
-                            Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  color: AppTheme.darkGreen,
-                                  letterSpacing: 2,
-                                ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppTheme.darkGreen,
+                              letterSpacing: 2,
+                            ),
                       ),
                     ],
                   ),

@@ -15,8 +15,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
       _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState
-    extends ConsumerState<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _emailCtrl = TextEditingController();
   bool _sent = false;
   bool _loading = false;
@@ -46,11 +45,13 @@ class _ForgotPasswordScreenState
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: _sent ? _SuccessView() : _FormView(
-          emailCtrl: _emailCtrl,
-          loading: _loading,
-          onSend: _send,
-        ),
+        child: _sent
+            ? _SuccessView()
+            : _FormView(
+                emailCtrl: _emailCtrl,
+                loading: _loading,
+                onSend: _send,
+              ),
       ),
     );
   }

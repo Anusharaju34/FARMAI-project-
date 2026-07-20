@@ -86,7 +86,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         fontWeight: FontWeight.w800,
                       ),
                 ).animate().fadeIn().slideX(begin: -0.2),
-
                 const SizedBox(height: 4),
                 Text(
                   'Join FARMAI – your smart farming partner',
@@ -95,9 +94,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       .bodyMedium
                       ?.copyWith(color: Colors.grey[600]),
                 ).animate(delay: 100.ms).fadeIn(),
-
                 const SizedBox(height: 32),
-
                 FarmTextField(
                   controller: _nameCtrl,
                   label: 'Full Name',
@@ -106,9 +103,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   validator: (v) =>
                       v == null || v.isEmpty ? 'Enter your full name' : null,
                 ).animate(delay: 200.ms).fadeIn().slideY(begin: 0.2),
-
                 const SizedBox(height: 16),
-
                 FarmTextField(
                   controller: _emailCtrl,
                   label: 'Email Address',
@@ -121,9 +116,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     return null;
                   },
                 ).animate(delay: 300.ms).fadeIn().slideY(begin: 0.2),
-
                 const SizedBox(height: 16),
-
                 FarmTextField(
                   controller: _passwordCtrl,
                   label: 'Password',
@@ -145,9 +138,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     return null;
                   },
                 ).animate(delay: 400.ms).fadeIn().slideY(begin: 0.2),
-
                 const SizedBox(height: 16),
-
                 FarmTextField(
                   controller: _confirmCtrl,
                   label: 'Confirm Password',
@@ -164,13 +155,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     onPressed: () => setState(() => _obscure2 = !_obscure2),
                   ),
                   validator: (v) {
-                    if (v != _passwordCtrl.text) return 'Passwords do not match';
+                    if (v != _passwordCtrl.text)
+                      return 'Passwords do not match';
                     return null;
                   },
                 ).animate(delay: 500.ms).fadeIn().slideY(begin: 0.2),
-
                 const SizedBox(height: 32),
-
                 SizedBox(
                   width: double.infinity,
                   child: LoadingButton(
@@ -179,9 +169,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     label: 'Create Account',
                   ),
                 ).animate(delay: 600.ms).fadeIn().slideY(begin: 0.3),
-
                 const SizedBox(height: 24),
-
                 Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

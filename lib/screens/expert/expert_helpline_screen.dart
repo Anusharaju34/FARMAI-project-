@@ -17,8 +17,7 @@ class ExpertHelplineScreen extends ConsumerStatefulWidget {
       _ExpertHelplineScreenState();
 }
 
-class _ExpertHelplineScreenState
-    extends ConsumerState<ExpertHelplineScreen>
+class _ExpertHelplineScreenState extends ConsumerState<ExpertHelplineScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -26,21 +25,27 @@ class _ExpertHelplineScreenState
     {
       'id': 'q1',
       'subject': 'Yellowing leaves in Wheat crop',
-      'question': 'My wheat leaves are turning yellow from the bottom. Applied urea last week. Is this nitrogen deficiency or disease?',
+      'question':
+          'My wheat leaves are turning yellow from the bottom. Applied urea last week. Is this nitrogen deficiency or disease?',
       'status': 'answered',
       'category': 'Crop Disease',
-      'expert_reply': 'Based on your description, this appears to be nitrogen deficiency (chlorosis). The upward progression from lower leaves is a classic sign. Recommendation: Apply split dose of urea (20 kg/acre) immediately. Ensure proper irrigation after application. If yellowing continues after 7 days, consider micronutrient foliar spray (ZnSO4 @ 0.5%).',
-      'created_at': DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
-      'replied_at': DateTime.now().subtract(const Duration(hours: 12)).toIso8601String(),
+      'expert_reply':
+          'Based on your description, this appears to be nitrogen deficiency (chlorosis). The upward progression from lower leaves is a classic sign. Recommendation: Apply split dose of urea (20 kg/acre) immediately. Ensure proper irrigation after application. If yellowing continues after 7 days, consider micronutrient foliar spray (ZnSO4 @ 0.5%).',
+      'created_at':
+          DateTime.now().subtract(const Duration(days: 2)).toIso8601String(),
+      'replied_at':
+          DateTime.now().subtract(const Duration(hours: 12)).toIso8601String(),
     },
     {
       'id': 'q2',
       'subject': 'Best time to apply Potash for Cotton',
-      'question': 'When should I apply potash (MOP) for Cotton? My crop is at 45 days stage. What quantity is recommended?',
+      'question':
+          'When should I apply potash (MOP) for Cotton? My crop is at 45 days stage. What quantity is recommended?',
       'status': 'pending',
       'category': 'Crop Nutrition',
       'expert_reply': null,
-      'created_at': DateTime.now().subtract(const Duration(hours: 6)).toIso8601String(),
+      'created_at':
+          DateTime.now().subtract(const Duration(hours: 6)).toIso8601String(),
       'replied_at': null,
     },
   ];
@@ -131,8 +136,14 @@ class _ExpertHelplineScreenState
     bool posting = false;
 
     final categories = [
-      'General', 'Crop Disease', 'Pest Control', 'Crop Nutrition',
-      'Irrigation', 'Seeds & Varieties', 'Government Schemes', 'Market',
+      'General',
+      'Crop Disease',
+      'Pest Control',
+      'Crop Nutrition',
+      'Irrigation',
+      'Seeds & Varieties',
+      'Government Schemes',
+      'Market',
     ];
 
     showModalBottomSheet(
@@ -144,7 +155,9 @@ class _ExpertHelplineScreenState
       builder: (ctx) => StatefulBuilder(
         builder: (ctx2, setModal) => Padding(
           padding: EdgeInsets.only(
-            left: 20, right: 20, top: 20,
+            left: 20,
+            right: 20,
+            top: 20,
             bottom: MediaQuery.of(ctx2).viewInsets.bottom + 20,
           ),
           child: Column(
@@ -155,8 +168,8 @@ class _ExpertHelplineScreenState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Ask an Expert',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 18)),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
                   IconButton(
                     icon: const Icon(Icons.close_rounded),
                     onPressed: () => Navigator.pop(ctx2),
@@ -196,10 +209,11 @@ class _ExpertHelplineScreenState
                 child: LoadingButton(
                   isLoading: posting,
                   onPressed: () async {
-                    if (subjectCtrl.text.isEmpty ||
-                        questionCtrl.text.isEmpty) return;
+                    if (subjectCtrl.text.isEmpty || questionCtrl.text.isEmpty)
+                      return;
                     setModal(() => posting = true);
-                    final userId = Supabase.instance.client.auth.currentUser?.id;
+                    final userId =
+                        Supabase.instance.client.auth.currentUser?.id;
                     await SupabaseService.submitExpertQuery({
                       'user_id': userId,
                       'subject': subjectCtrl.text,
@@ -259,8 +273,10 @@ class _QueriesTab extends StatelessWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: queries.length,
-      itemBuilder: (_, i) =>
-          _QueryCard(query: queries[i]).animate(delay: Duration(milliseconds: 80 * i)).fadeIn().slideY(begin: 0.1),
+      itemBuilder: (_, i) => _QueryCard(query: queries[i])
+          .animate(delay: Duration(milliseconds: 80 * i))
+          .fadeIn()
+          .slideY(begin: 0.1),
     );
   }
 }
@@ -273,7 +289,8 @@ class _QueryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = query['status'] as String;
     final isAnswered = status == 'answered';
-    final statusColor = isAnswered ? AppTheme.primaryGreen : AppTheme.warningOrange;
+    final statusColor =
+        isAnswered ? AppTheme.primaryGreen : AppTheme.warningOrange;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -292,8 +309,8 @@ class _QueryCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: statusColor.withOpacity(0.06),
-              borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
               children: [
@@ -350,7 +367,6 @@ class _QueryCard extends StatelessWidget {
                   query['question'] as String,
                   style: const TextStyle(fontSize: 13, height: 1.5),
                 ),
-
                 if (isAnswered && query['expert_reply'] != null) ...[
                   const SizedBox(height: 12),
                   Container(
@@ -382,14 +398,12 @@ class _QueryCard extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           query['expert_reply'] as String,
-                          style: const TextStyle(
-                              fontSize: 13, height: 1.5),
+                          style: const TextStyle(fontSize: 13, height: 1.5),
                         ),
                       ],
                     ),
                   ),
                 ],
-
                 if (!isAnswered) ...[
                   const SizedBox(height: 12),
                   Container(
@@ -433,8 +447,9 @@ class _ExpertsTab extends StatelessWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: experts.length,
-      itemBuilder: (_, i) =>
-          _ExpertCard(expert: experts[i]).animate(delay: Duration(milliseconds: 80 * i)).fadeIn(),
+      itemBuilder: (_, i) => _ExpertCard(expert: experts[i])
+          .animate(delay: Duration(milliseconds: 80 * i))
+          .fadeIn(),
     );
   }
 }
@@ -451,93 +466,93 @@ class _ExpertCard extends StatelessWidget {
       onTap: () => context.push(AppRoutes.expertChat),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 28,
-                backgroundColor: AppTheme.primaryGreen.withOpacity(0.12),
-                child: Text(
-                  (expert['name'] as String).split(' ').last[0],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
-                    color: AppTheme.primaryGreen,
-                  ),
-                ),
-              ),
-              if (available)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryGreen,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Stack(
               children: [
-                Text(
-                  expert['name'] as String,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 14),
-                ),
-                Text(
-                  expert['specialty'] as String,
-                  style: const TextStyle(
-                    color: AppTheme.primaryGreen,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: AppTheme.primaryGreen.withOpacity(0.12),
+                  child: Text(
+                    (expert['name'] as String).split(' ').last[0],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: AppTheme.primaryGreen,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.star_rounded,
-                        color: AppTheme.sunYellow, size: 14),
-                    Text(
-                      ' ${expert['rating']} · ',
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w600),
+                if (available)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryGreen,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
                     ),
-                    Text(
-                      '${expert['totalAnswered']} answers · ${expert['experience']}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                    ),
-                  ],
-                ),
+                  ),
               ],
             ),
-          ),
-          StatusBadge(
-            label: available ? 'Online' : 'Away',
-            color: available ? AppTheme.primaryGreen : Colors.grey,
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    expert['name'] as String,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                  Text(
+                    expert['specialty'] as String,
+                    style: const TextStyle(
+                      color: AppTheme.primaryGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.star_rounded,
+                          color: AppTheme.sunYellow, size: 14),
+                      Text(
+                        ' ${expert['rating']} · ',
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        '${expert['totalAnswered']} answers · ${expert['experience']}',
+                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            StatusBadge(
+              label: available ? 'Online' : 'Away',
+              color: available ? AppTheme.primaryGreen : Colors.grey,
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

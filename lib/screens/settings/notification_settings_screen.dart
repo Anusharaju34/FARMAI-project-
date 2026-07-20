@@ -7,10 +7,12 @@ class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
 
   @override
-  State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
+  State<NotificationSettingsScreen> createState() =>
+      _NotificationSettingsScreenState();
 }
 
-class _NotificationSettingsScreenState extends State<NotificationSettingsScreen> {
+class _NotificationSettingsScreenState
+    extends State<NotificationSettingsScreen> {
   bool _weatherAlerts = true;
   bool _pestAlerts = true;
   bool _priceAlerts = false;
@@ -30,7 +32,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           // Header Intro
           Text(
             'Customize your notifications to receive immediate alerts for crops and fields.',
-            style: TextStyle(color: Colors.grey[600], fontSize: 13, height: 1.4),
+            style:
+                TextStyle(color: Colors.grey[600], fontSize: 13, height: 1.4),
           ).animate().fadeIn(),
           const SizedBox(height: 20),
 
@@ -74,14 +77,17 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1),
 
           const SizedBox(height: 24),
-          const SectionHeader(title: 'Alternative Delivery Channel').animate().fadeIn(delay: 200.ms),
+          const SectionHeader(title: 'Alternative Delivery Channel')
+              .animate()
+              .fadeIn(delay: 200.ms),
           const SizedBox(height: 12),
 
           Card(
             child: _SwitchListTile(
               icon: Icons.sms_outlined,
               title: 'SMS Status Updates',
-              subtitle: 'Receive severe alerts on your registered mobile number',
+              subtitle:
+                  'Receive severe alerts on your registered mobile number',
               value: _smsUpdates,
               onChanged: (v) => setState(() => _smsUpdates = v),
             ),
@@ -92,7 +98,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           ElevatedButton(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Preferences saved successfully!')),
+                const SnackBar(
+                    content: Text('Preferences saved successfully!')),
               );
               Navigator.pop(context);
             },
@@ -130,8 +137,10 @@ class _SwitchListTile extends StatelessWidget {
         ),
         child: Icon(icon, color: AppTheme.primaryGreen, size: 20),
       ),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[500], fontSize: 11)),
+      title: Text(title,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+      subtitle: Text(subtitle,
+          style: TextStyle(color: Colors.grey[500], fontSize: 11)),
       value: value,
       onChanged: onChanged,
       activeColor: AppTheme.primaryGreen,

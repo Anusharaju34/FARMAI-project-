@@ -7,7 +7,8 @@ class IrrigationScheduleScreen extends StatefulWidget {
   const IrrigationScheduleScreen({super.key});
 
   @override
-  State<IrrigationScheduleScreen> createState() => _IrrigationScheduleScreenState();
+  State<IrrigationScheduleScreen> createState() =>
+      _IrrigationScheduleScreenState();
 }
 
 class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
@@ -15,9 +16,27 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
   String _wateringMode = 'Automatic';
 
   final List<Map<String, dynamic>> _schedule = [
-    {'time': '06:00 AM', 'duration': '15 mins', 'volume': '12 m³', 'status': 'Completed', 'color': AppTheme.primaryGreen},
-    {'time': '12:00 PM', 'duration': '10 mins', 'volume': '8 m³', 'status': 'Skipped (Rain)', 'color': Colors.orange},
-    {'time': '06:00 PM', 'duration': '15 mins', 'volume': '12 m³', 'status': 'Scheduled', 'color': Colors.blue},
+    {
+      'time': '06:00 AM',
+      'duration': '15 mins',
+      'volume': '12 m³',
+      'status': 'Completed',
+      'color': AppTheme.primaryGreen
+    },
+    {
+      'time': '12:00 PM',
+      'duration': '10 mins',
+      'volume': '8 m³',
+      'status': 'Skipped (Rain)',
+      'color': Colors.orange
+    },
+    {
+      'time': '06:00 PM',
+      'duration': '15 mins',
+      'volume': '12 m³',
+      'status': 'Scheduled',
+      'color': Colors.blue
+    },
   ];
 
   @override
@@ -60,12 +79,18 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
                         children: [
                           Text(
                             'Smart Valve #1 Status',
-                            style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                           ),
                           SizedBox(height: 2),
                           Text(
                             'North Plot Sprinklers',
-                            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
@@ -78,7 +103,10 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
                         onChanged: (v) {
                           setState(() => _valveState = v);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(_valveState ? 'Sprinklers turned ON' : 'Sprinklers turned OFF')),
+                            SnackBar(
+                                content: Text(_valveState
+                                    ? 'Sprinklers turned ON'
+                                    : 'Sprinklers turned OFF')),
                           );
                         },
                       ),
@@ -90,7 +118,10 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
                     children: [
                       const Text(
                         'Moisture Level: 42% (Optimal)',
-                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
                       ),
                       Text(
                         _valveState ? 'IRRIGATING NOW' : 'VALVE CLOSED',
@@ -110,7 +141,9 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
             const SizedBox(height: 24),
 
             // Mode Selector
-            const SectionHeader(title: 'Irrigation Mode').animate().fadeIn(delay: 100.ms),
+            const SectionHeader(title: 'Irrigation Mode')
+                .animate()
+                .fadeIn(delay: 100.ms),
             const SizedBox(height: 12),
 
             Row(
@@ -138,12 +171,15 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
             const SizedBox(height: 24),
 
             // Timetable Schedule
-            const SectionHeader(title: 'Today\'s Watering Timeline').animate().fadeIn(delay: 300.ms),
+            const SectionHeader(title: 'Today\'s Watering Timeline')
+                .animate()
+                .fadeIn(delay: 300.ms),
             const SizedBox(height: 12),
 
             Card(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -161,21 +197,25 @@ class _IrrigationScheduleScreenState extends State<IrrigationScheduleScreen> {
                             children: [
                               Text(
                                 item['time'] as String,
-                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 14),
                               ),
                               Text(
                                 'Volume: ${item['volume']}',
-                                style: TextStyle(color: Colors.grey[500], fontSize: 11),
+                                style: TextStyle(
+                                    color: Colors.grey[500], fontSize: 11),
                               ),
                             ],
                           ),
                           const Spacer(),
                           Text(
                             item['duration'] as String,
-                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 13),
                           ),
                           const SizedBox(width: 16),
-                          StatusBadge(label: item['status'] as String, color: color),
+                          StatusBadge(
+                              label: item['status'] as String, color: color),
                         ],
                       ),
                     );
@@ -211,7 +251,9 @@ class _ModeButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryGreen.withOpacity(0.04) : Colors.white,
+          color: isSelected
+              ? AppTheme.primaryGreen.withOpacity(0.04)
+              : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? AppTheme.primaryGreen : Colors.grey[200]!,

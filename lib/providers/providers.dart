@@ -165,23 +165,26 @@ class NotificationsNotifier
     await SupabaseService.markNotificationRead(id);
     state.whenData((list) {
       state = AsyncValue.data(
-        list.map((n) => n.id == id
-            ? AppNotification(
-                id: n.id,
-                userId: n.userId,
-                title: n.title,
-                body: n.body,
-                type: n.type,
-                isRead: true,
-                createdAt: n.createdAt,
-              )
-            : n).toList(),
+        list
+            .map((n) => n.id == id
+                ? AppNotification(
+                    id: n.id,
+                    userId: n.userId,
+                    title: n.title,
+                    body: n.body,
+                    type: n.type,
+                    isRead: true,
+                    createdAt: n.createdAt,
+                  )
+                : n)
+            .toList(),
       );
     });
   }
 
   int get unreadCount =>
-      state.whenOrNull(data: (list) => list.where((n) => !n.isRead).length) ?? 0;
+      state.whenOrNull(data: (list) => list.where((n) => !n.isRead).length) ??
+      0;
 }
 
 final notificationsProvider = StateNotifierProvider<NotificationsNotifier,

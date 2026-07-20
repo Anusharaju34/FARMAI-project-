@@ -7,7 +7,8 @@ class CreateMarketListingScreen extends StatefulWidget {
   const CreateMarketListingScreen({super.key});
 
   @override
-  State<CreateMarketListingScreen> createState() => _CreateMarketListingScreenState();
+  State<CreateMarketListingScreen> createState() =>
+      _CreateMarketListingScreenState();
 }
 
 class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
@@ -79,10 +80,13 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                   prefixIcon: Icon(Icons.category_rounded),
                 ),
                 items: const [
-                  DropdownMenuItem(value: 'Crops', child: Text('Crops / Harvest')),
+                  DropdownMenuItem(
+                      value: 'Crops', child: Text('Crops / Harvest')),
                   DropdownMenuItem(value: 'Seeds', child: Text('Seeds')),
-                  DropdownMenuItem(value: 'Fertilizers', child: Text('Fertilizers')),
-                  DropdownMenuItem(value: 'Machinery', child: Text('Machinery Rental')),
+                  DropdownMenuItem(
+                      value: 'Fertilizers', child: Text('Fertilizers')),
+                  DropdownMenuItem(
+                      value: 'Machinery', child: Text('Machinery Rental')),
                 ],
                 onChanged: (v) => setState(() => _category = v!),
               ).animate().fadeIn(delay: 50.ms),
@@ -95,7 +99,8 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                 label: 'Listing Title',
                 hint: 'e.g. Sonalika Wheat Grain / Mini Tractor',
                 prefixIcon: Icons.shopping_bag_outlined,
-                validator: (val) => val == null || val.isEmpty ? 'Please enter a title' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Please enter a title' : null,
               ).animate().fadeIn(delay: 100.ms),
 
               const SizedBox(height: 16),
@@ -111,7 +116,8 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                       hint: 'e.g. 1800',
                       keyboardType: TextInputType.number,
                       prefixIcon: Icons.currency_rupee_rounded,
-                      validator: (val) => val == null || val.isEmpty ? 'Enter price' : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? 'Enter price' : null,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -122,10 +128,12 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                         labelText: 'Per Unit',
                       ),
                       items: const [
-                        DropdownMenuItem(value: 'quintal', child: Text('/ quintal')),
+                        DropdownMenuItem(
+                            value: 'quintal', child: Text('/ quintal')),
                         DropdownMenuItem(value: 'kg', child: Text('/ kg')),
                         DropdownMenuItem(value: 'ton', child: Text('/ ton')),
-                        DropdownMenuItem(value: 'day', child: Text('/ day (Rent)')),
+                        DropdownMenuItem(
+                            value: 'day', child: Text('/ day (Rent)')),
                       ],
                       onChanged: (v) => setState(() => _unit = v!),
                     ),
@@ -142,7 +150,8 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                 hint: 'e.g. 25',
                 keyboardType: TextInputType.number,
                 prefixIcon: Icons.production_quantity_limits_rounded,
-                validator: (val) => val == null || val.isEmpty ? 'Enter quantity' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Enter quantity' : null,
               ).animate().fadeIn(delay: 200.ms),
 
               const SizedBox(height: 16),
@@ -153,7 +162,8 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                 label: 'Pick-up Location / Market',
                 hint: 'e.g. Salem Market, Tamil Nadu',
                 prefixIcon: Icons.location_on_outlined,
-                validator: (val) => val == null || val.isEmpty ? 'Enter location' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Enter location' : null,
               ).animate().fadeIn(delay: 250.ms),
 
               const SizedBox(height: 16),
@@ -162,7 +172,8 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
               FarmTextField(
                 controller: _descriptionCtrl,
                 label: 'Product Details / Quality Description',
-                hint: 'Provide details about grain moisture, seed certification, machinery age, etc.',
+                hint:
+                    'Provide details about grain moisture, seed certification, machinery age, etc.',
                 maxLines: 4,
                 prefixIcon: Icons.description_outlined,
               ).animate().fadeIn(delay: 300.ms),
@@ -178,16 +189,22 @@ class _CreateMarketListingScreenState extends State<CreateMarketListingScreen> {
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceLight,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3), style: BorderStyle.solid),
+                    border: Border.all(
+                        color: AppTheme.primaryGreen.withOpacity(0.3),
+                        style: BorderStyle.solid),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.add_a_photo_rounded, color: AppTheme.primaryGreen, size: 32),
+                      const Icon(Icons.add_a_photo_rounded,
+                          color: AppTheme.primaryGreen, size: 32),
                       const SizedBox(height: 8),
                       Text(
                         'Upload Image (Optional)',
-                        style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.w600, fontSize: 13),
+                        style: TextStyle(
+                            color: AppTheme.primaryGreen,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13),
                       ),
                     ],
                   ),

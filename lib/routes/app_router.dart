@@ -78,8 +78,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final session = Supabase.instance.client.auth.currentSession;
       final isLoggedIn = session != null;
 
-      final isAuthRoute =
-          state.matchedLocation == AppRoutes.splash ||
+      final isAuthRoute = state.matchedLocation == AppRoutes.splash ||
           state.matchedLocation == AppRoutes.onboarding ||
           state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register ||

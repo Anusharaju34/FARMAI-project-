@@ -20,17 +20,20 @@ class _ExpertChatScreenState extends State<ExpertChatScreen> {
     },
     {
       'isMe': false,
-      'text': 'This is typical of Brown Spot infection, usually caused by Bipolaris oryzae. Have you applied any fertilizer recently?',
+      'text':
+          'This is typical of Brown Spot infection, usually caused by Bipolaris oryzae. Have you applied any fertilizer recently?',
       'time': '10:06 AM',
     },
     {
       'isMe': true,
-      'text': 'Yes, I added urea last week. Water level is about 3 cm in the field.',
+      'text':
+          'Yes, I added urea last week. Water level is about 3 cm in the field.',
       'time': '10:08 AM',
     },
     {
       'isMe': false,
-      'text': 'Got it. High nitrogen levels can sometimes accelerate fungal growth if drainage is poor. I recommend reducing watering slightly to let the soil breathe, and spraying Hexaconazole 5% EC at 2ml/L.',
+      'text':
+          'Got it. High nitrogen levels can sometimes accelerate fungal growth if drainage is poor. I recommend reducing watering slightly to let the soil breathe, and spraying Hexaconazole 5% EC at 2ml/L.',
       'time': '10:10 AM',
     },
   ];
@@ -85,7 +88,8 @@ class _ExpertChatScreenState extends State<ExpertChatScreen> {
             icon: const Icon(Icons.call_rounded, color: AppTheme.primaryGreen),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Starting voice call connection...')),
+                const SnackBar(
+                    content: Text('Starting voice call connection...')),
               );
             },
           ),
@@ -103,18 +107,23 @@ class _ExpertChatScreenState extends State<ExpertChatScreen> {
                 final isMe = m['isMe'] as bool;
 
                 return Align(
-                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment:
+                      isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(12),
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.75),
                     decoration: BoxDecoration(
-                      color: isMe ? AppTheme.primaryGreen : AppTheme.surfaceLight,
+                      color:
+                          isMe ? AppTheme.primaryGreen : AppTheme.surfaceLight,
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(16),
                         topRight: const Radius.circular(16),
-                        bottomLeft: isMe ? const Radius.circular(16) : Radius.zero,
-                        bottomRight: isMe ? Radius.zero : const Radius.circular(16),
+                        bottomLeft:
+                            isMe ? const Radius.circular(16) : Radius.zero,
+                        bottomRight:
+                            isMe ? Radius.zero : const Radius.circular(16),
                       ),
                     ),
                     child: Column(
@@ -164,7 +173,8 @@ class _ExpertChatScreenState extends State<ExpertChatScreen> {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.add_photo_alternate_rounded, color: Colors.grey),
+                  icon: const Icon(Icons.add_photo_alternate_rounded,
+                      color: Colors.grey),
                 ),
                 Expanded(
                   child: TextField(
@@ -173,14 +183,16 @@ class _ExpertChatScreenState extends State<ExpertChatScreen> {
                       hintText: 'Type your message...',
                       filled: true,
                       fillColor: AppTheme.surfaceLight,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
                   onPressed: _sendMessage,
-                  icon: const Icon(Icons.send_rounded, color: AppTheme.primaryGreen),
+                  icon: const Icon(Icons.send_rounded,
+                      color: AppTheme.primaryGreen),
                 ),
               ],
             ),

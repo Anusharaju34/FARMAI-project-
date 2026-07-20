@@ -41,7 +41,10 @@ class MarketProductDetailScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     Text(
                       'Premium Hybrid Seed Co.',
-                      style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -57,7 +60,8 @@ class MarketProductDetailScreen extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppTheme.primaryGreen.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
@@ -72,11 +76,13 @@ class MarketProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      const Icon(Icons.star_rounded, color: AppTheme.sunYellow, size: 18),
+                      const Icon(Icons.star_rounded,
+                          color: AppTheme.sunYellow, size: 18),
                       const SizedBox(width: 4),
                       const Text(
                         '4.8 (85 reviews)',
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 13),
                       ),
                     ],
                   ),
@@ -108,8 +114,11 @@ class MarketProductDetailScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   const _SpecRow(label: 'Germination Rate', value: 'Min. 92%'),
                   const _SpecRow(label: 'Purity Level', value: '98.5%'),
-                  const _SpecRow(label: 'Maturity Period', value: '115 - 125 Days'),
-                  const _SpecRow(label: 'Yield Potential', value: '6.5 - 7.2 Tons / Hectare'),
+                  const _SpecRow(
+                      label: 'Maturity Period', value: '115 - 125 Days'),
+                  const _SpecRow(
+                      label: 'Yield Potential',
+                      value: '6.5 - 7.2 Tons / Hectare'),
                   const Divider(height: 24),
 
                   // Description
@@ -120,7 +129,8 @@ class MarketProductDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Specifically bred for high resistance to Leaf Blast and Brown Spot. Yields long grain aromatic rice suitable for varying soil conditions. Requires less water compared to traditional varieties, making it ideal for the upcoming season.',
-                    style: TextStyle(fontSize: 13, height: 1.5, color: Colors.grey[700]),
+                    style: TextStyle(
+                        fontSize: 13, height: 1.5, color: Colors.grey[700]),
                   ),
                   const Divider(height: 24),
 
@@ -136,7 +146,8 @@ class MarketProductDetailScreen extends StatelessWidget {
                       children: [
                         const CircleAvatar(
                           backgroundColor: AppTheme.primaryGreen,
-                          child: Icon(Icons.storefront_rounded, color: Colors.white),
+                          child: Icon(Icons.storefront_rounded,
+                              color: Colors.white),
                         ),
                         const SizedBox(width: 12),
                         const Expanded(
@@ -145,11 +156,13 @@ class MarketProductDetailScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Astro Agri Solutions Ltd.',
-                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 13),
                               ),
                               Text(
                                 'Verified Supplier · Salem APMC',
-                                style: TextStyle(fontSize: 11, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 11, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -157,7 +170,8 @@ class MarketProductDetailScreen extends StatelessWidget {
                         OutlinedButton(
                           onPressed: () {},
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
                             textStyle: const TextStyle(fontSize: 12),
                           ),
                           child: const Text('Contact'),
@@ -173,7 +187,9 @@ class MarketProductDetailScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Order request submitted successfully!')),
+                          const SnackBar(
+                              content: Text(
+                                  'Order request submitted successfully!')),
                         );
                       },
                       child: const Text('Order Seed Bag'),
@@ -204,7 +220,9 @@ class _SpecRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          Text(value,
+              style:
+                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
         ],
       ),
     );
