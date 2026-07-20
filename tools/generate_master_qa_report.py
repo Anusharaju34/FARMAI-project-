@@ -425,7 +425,33 @@ def append_sheet_data(ws, cases, headers, fill_zebra, font_row, passed_fill, pas
     ws.column_dimensions['J'].width = 22
     ws.column_dimensions['K'].width = 24
 
+def clean_old_duplicate_reports(reports_dir="reports"):
+    """Automatically removes old duplicate, versioned (_v2), lock (~$), or obsolete report files."""
+    if not os.path.exists(reports_dir):
+        return
+    valid_exact_files = {
+        "FARMAI_Selenium_Web_E2E_Report.xlsx",
+        "FARMAI_Appium_Mobile_E2E_Report.xlsx",
+        "FARMAI_Security_Vulnerability_Report.xlsx",
+        "FARMAI_Load_Performance_SLA_Report.xlsx",
+        "FARMAI_Core_Modules_QA_Report.xlsx",
+        "FARMAI_Master_QA_Execution_Report.xlsx",
+        "FARMAI_Master_QA_Execution_Report.html",
+        "test_case_template.csv",
+        "selenium_error.png"
+    }
+    for filename in os.listdir(reports_dir):
+        file_path = os.path.join(reports_dir, filename)
+        if os.path.isfile(file_path):
+            if filename.startswith("~$") or "_v2" in filename or filename.endswith(".tmp") or (filename not in valid_exact_files and not filename.endswith(".png")):
+                try:
+                    os.remove(file_path)
+                    print(f"Cleaned up duplicate/obsolete file: {filename}")
+                except Exception:
+                    pass
+
 def generate_master_qa_report(outpath):
+    clean_old_duplicate_reports(os.path.dirname(outpath) or "reports")
     print("Generating Self-Contained Master QA Execution Report...")
     
     sel_cases = build_category_cases(SELENIUM_CATEGORIES, "SEL", "Selenium Web E2E", "Selenium WebDriver")
@@ -433,6 +459,7 @@ def generate_master_qa_report(outpath):
     sec_cases = build_category_cases(SECURITY_CATEGORIES, "SEC", "Security / RLS Audit", "Supabase Rest / http")
     load_cases = build_category_cases(LOAD_CATEGORIES, "LOAD", "Load / SLA Performance", "k6 Performance Engine")
     mod_cases = build_category_cases(MODULE_CATEGORIES, "MOD", "Functional / Widget", "Flutter Test")
+
     
     total_tcs = len(sel_cases) + len(app_cases) + len(sec_cases) + len(load_cases) + len(mod_cases)
     print(f"Total Master Passing Test Cases: {total_tcs} across 6 tabs.")
