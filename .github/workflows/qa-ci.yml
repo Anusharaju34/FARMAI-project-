@@ -54,10 +54,21 @@ jobs:
           path: build/web/
           retention-days: 1
 
+      - name: Build Flutter Android APK
+        run: flutter build apk --release || true
+
+      - name: Upload Android APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: farmai-android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
+
       - name: Upload code coverage reports
         uses: actions/upload-artifact@v4
         with:
           name: flutter-coverage
+
           path: coverage/
           retention-days: 7
 
