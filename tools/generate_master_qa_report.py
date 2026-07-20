@@ -619,6 +619,39 @@ def generate_master_qa_report(outpath):
     df.to_html(html_out, index=False)
     print(f"Master HTML Execution Report exported successfully to: {html_out}")
 
+    # ==============================================================================
+    # EXPORT 5 SEPARATE DEDICATED EXCEL FILES
+    # ==============================================================================
+    def export_separate_sheet(sheet_title, cases_list, file_path):
+        wb_sep = Workbook()
+        ws_sep = wb_sep.active
+        ws_sep.title = sheet_title
+        ws_sep.views.sheetView[0].showGridLines = True
+        ws_sep.merge_cells("A1:K1")
+        t_sep = ws_sep["A1"]
+        t_sep.value = f"FARMAI - {sheet_title.upper()} ({len(cases_list)} PASSED TEST CASES)"
+        t_sep.font = font_title
+        t_sep.fill = fill_title
+        t_sep.alignment = Alignment(horizontal="center", vertical="center")
+        ws_sep.row_dimensions[1].height = 38
+        style_header_row(ws_sep, headers, fill_header, font_header, border_thin)
+        append_sheet_data(ws_sep, cases_list, headers, fill_zebra, font_row, passed_fill, passed_font, border_thin)
+        
+        try:
+            wb_sep.save(file_path)
+            print(f"Exported separate Excel report: {file_path}")
+        except PermissionError:
+            alt = file_path.replace('.xlsx', '_v2.xlsx')
+            wb_sep.save(alt)
+            print(f"Saved fallback separate report: {alt}")
+
+    export_separate_sheet("Selenium Web E2E", sel_cases, "reports/FARMAI_Selenium_Web_E2E_Report.xlsx")
+    export_separate_sheet("Appium Mobile E2E", app_cases, "reports/FARMAI_Appium_Mobile_E2E_Report.xlsx")
+    export_separate_sheet("Security Vulnerability Audit", sec_cases, "reports/FARMAI_Security_Vulnerability_Report.xlsx")
+    export_separate_sheet("Load Performance SLA", load_cases, "reports/FARMAI_Load_Performance_SLA_Report.xlsx")
+    export_separate_sheet("Core App Modules QA", mod_cases, "reports/FARMAI_Core_Modules_QA_Report.xlsx")
+
 if __name__ == "__main__":
     out_master = "reports/FARMAI_Master_QA_Execution_Report.xlsx"
     generate_master_qa_report(out_master)
+

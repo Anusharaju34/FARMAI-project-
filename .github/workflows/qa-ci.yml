@@ -104,14 +104,20 @@ jobs:
         run: |
           python tools/generate_master_qa_report.py
 
-      - name: Upload Master QA Execution Report Artifact
+      - name: Upload Separate Excel Reports & Master Report Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: farmai-master-qa-execution-report
+          name: farmai-qa-excel-reports
           path: |
+            reports/FARMAI_Selenium_Web_E2E_Report.xlsx
+            reports/FARMAI_Appium_Mobile_E2E_Report.xlsx
+            reports/FARMAI_Security_Vulnerability_Report.xlsx
+            reports/FARMAI_Load_Performance_SLA_Report.xlsx
+            reports/FARMAI_Core_Modules_QA_Report.xlsx
             reports/FARMAI_Master_QA_Execution_Report.xlsx
             reports/FARMAI_Master_QA_Execution_Report.html
           retention-days: 14
+
 
 
   deploy-github-pages:
