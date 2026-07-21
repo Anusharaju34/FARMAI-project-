@@ -46,13 +46,6 @@ python3 selenium_tests/selenium_login_test.py
 python tools/export_reports.py reports/test_report.json reports/output.xlsx
 ```
 
-- Export load test report:
-
-```bash
-python tools/export_load_test_report.py reports/load_test_report.xlsx
-```
-
-
 - Run upload validation test (writes base64 asset to temp and validates PNG header):
 
 ```bash

@@ -100,14 +100,14 @@ class _DiseaseDetectionScreenState
       // Save to Supabase (skip during tests if requested)
       if (!widget.testDisableSave) {
         await SupabaseService.saveDiseasePrediction({
-          'user_id': userId,
-          'image_url': imageUrl,
-          'disease_name': mockResult['disease_name'],
-          'confidence_score': mockResult['confidence_score'],
-          'crop_type': mockResult['crop_type'],
-          'severity': mockResult['severity'],
-          'treatment_suggestions': mockResult['treatment_suggestions'],
-          'created_at': DateTime.now().toIso8601String(),
+        'user_id': userId,
+        'image_url': imageUrl,
+        'disease_name': mockResult['disease_name'],
+        'confidence_score': mockResult['confidence_score'],
+        'crop_type': mockResult['crop_type'],
+        'severity': mockResult['severity'],
+        'treatment_suggestions': mockResult['treatment_suggestions'],
+        'created_at': DateTime.now().toIso8601String(),
         });
       }
 
@@ -128,8 +128,7 @@ class _DiseaseDetectionScreenState
         title: 'Disease Detection',
         actions: [
           IconButton(
-            icon:
-                const Icon(Icons.history_rounded, color: AppTheme.primaryGreen),
+            icon: const Icon(Icons.history_rounded, color: AppTheme.primaryGreen),
             onPressed: () => context.push(AppRoutes.diseaseHistory),
           ),
         ],
@@ -252,17 +251,16 @@ class _DiseaseDetectionScreenState
                           fit: StackFit.expand,
                           children: [
                             kIsWeb
-                                ? Image.network(
-                                    _selectedImage!.path,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Platform.environment
-                                        .containsKey('FLUTTER_TEST')
-                                    ? const Placeholder(color: Colors.grey)
-                                    : Image.file(
-                                        _selectedImage!,
-                                        fit: BoxFit.cover,
-                                      ),
+                             ? Image.network(
+                             _selectedImage!.path,
+                              fit: BoxFit.cover,
+                               )
+                              : Platform.environment.containsKey('FLUTTER_TEST')
+                               ? const Placeholder(color: Colors.grey)
+                               : Image.file(
+                               _selectedImage!,
+                                fit: BoxFit.cover,
+                                ),
                             Positioned(
                               top: 8,
                               right: 8,

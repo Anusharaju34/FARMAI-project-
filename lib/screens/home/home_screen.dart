@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../core/theme/app_theme.dart';
 import '../../providers/providers.dart';
 import '../../routes/app_router.dart';
+import '../../services/supabase_service.dart';
 import '../../widgets/common/common_widgets.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -15,26 +17,72 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  String _currentUserName = 'Farmer';
+
   @override
   void initState() {
     super.initState();
-    final userId = ref.read(currentUserProvider)?.id;
+
+    _loadCurrentUser();
+
+    final userId = SupabaseService.currentUser?.id;
+
     if (userId != null) {
-      ref.read(notificationsProvider.notifier).loadNotifications(userId);
+      ref
+          .read(notificationsProvider.notifier)
+          .loadNotifications(userId);
+    }
+  }
+
+  /// Changes the greeting according to the phone time.
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+
+    if (hour < 12) {
+      return 'Good morning';
+    } else if (hour < 17) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  }
+
+  /// Loads the currently authenticated Supabase user's email.
+  ///
+  /// Example:
+  /// yuvan12345@gmail.com becomes yuvan12345.
+  void _loadCurrentUser() {
+    final authUser = SupabaseService.currentUser;
+    final email = authUser?.email;
+
+    if (email != null && email.isNotEmpty) {
+      _currentUserName = email.split('@').first;
+    } else {
+      _currentUserName = 'Farmer';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider);
     final weather = ref.watch(weatherProvider('Chennai, India'));
     final unread = ref.watch(unreadNotificationsCountProvider);
 
+    // Read the current authenticated account whenever the screen rebuilds.
+    final currentAuthUser = SupabaseService.currentUser;
+    final currentEmail = currentAuthUser?.email;
+
+    final displayedUserName =
+        currentEmail != null && currentEmail.isNotEmpty
+            ? currentEmail.split('@').first
+            : _currentUserName;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: CustomScrollView(
         slivers: [
-          // App Bar
+          // ==================================================
+          // APP BAR
+          // ==================================================
           SliverAppBar(
             expandedHeight: 160,
             pinned: true,
@@ -43,7 +91,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppTheme.darkGreen, AppTheme.primaryGreen],
+                    colors: [
+                      AppTheme.darkGreen,
+                      AppTheme.primaryGreen,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -64,7 +115,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               padding: const EdgeInsets.all(6),
-                              child: Image.asset('assets/images/logo.png'),
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                              ),
                             ),
                             const SizedBox(width: 8),
                             const Text(
@@ -77,6 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             const Spacer(),
+
                             // Notifications
                             Stack(
                               children: [
@@ -85,8 +139,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     Icons.notifications_rounded,
                                     color: Colors.white,
                                   ),
-                                  onPressed: () =>
-                                      context.push(AppRoutes.notifications),
+                                  onPressed: () {
+                                    context.push(
+                                      AppRoutes.notifications,
+                                    );
+                                  },
                                 ),
                                 if (unread > 0)
                                   Positioned(
@@ -103,24 +160,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                               ],
                             ),
+
                             // Settings
                             IconButton(
-                              icon: const Icon(Icons.settings_rounded,
-                                  color: Colors.white),
-                              onPressed: () => context.push(AppRoutes.settings),
+                              icon: const Icon(
+                                Icons.settings_rounded,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                context.push(AppRoutes.settings);
+                              },
                             ),
                           ],
                         ),
+
                         const SizedBox(height: 12),
+
+                        // Automatic greeting
                         Text(
-                          'Good morning,',
+                          '${_getGreeting()},',
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.8),
                             fontSize: 14,
                           ),
                         ),
+
+                        // Current logged-in user email name
                         Text(
-                          user?.email?.split('@')[0] ?? 'Farmer',
+                          displayedUserName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -143,11 +212,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // Weather Card
                   weather
                       .when(
-                        data: (w) => w != null
-                            ? _WeatherCard(weather: w)
-                            : const SizedBox.shrink(),
-                        loading: () => _ShimmerCard(height: 100),
-                        error: (_, __) => const SizedBox.shrink(),
+                        data: (weatherData) {
+                          if (weatherData == null) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return _WeatherCard(
+                            weather: weatherData,
+                          );
+                        },
+                        loading: () {
+                          return const _ShimmerCard(height: 100);
+                        },
+                        error: (error, stackTrace) {
+                          return const SizedBox.shrink();
+                        },
                       )
                       .animate()
                       .fadeIn(delay: 100.ms)
@@ -164,16 +243,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   const SizedBox(height: 12),
 
-                  _QuickActionsGrid().animate().fadeIn(delay: 300.ms),
+                  _QuickActionsGrid()
+                      .animate()
+                      .fadeIn(delay: 300.ms),
 
                   const SizedBox(height: 20),
 
-                  // Disease & Pest Alerts
-                  SectionHeader(title: 'Recent Alerts')
-                      .animate()
-                      .fadeIn(delay: 400.ms),
+                  // Disease and Pest Alerts
+                  SectionHeader(
+                    title: 'Recent Alerts',
+                  ).animate().fadeIn(delay: 400.ms),
+
                   const SizedBox(height: 12),
-                  _AlertsSection().animate().fadeIn(delay: 500.ms),
+
+                  _AlertsSection()
+                      .animate()
+                      .fadeIn(delay: 500.ms),
 
                   const SizedBox(height: 20),
 
@@ -181,10 +266,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   SectionHeader(
                     title: 'Market Snapshot',
                     actionLabel: 'Full Market',
-                    onAction: () => context.push(AppRoutes.marketPrice),
+                    onAction: () {
+                      context.push(AppRoutes.marketPrice);
+                    },
                   ).animate().fadeIn(delay: 600.ms),
+
                   const SizedBox(height: 12),
-                  _MarketSnapshot().animate().fadeIn(delay: 700.ms),
+
+                  _MarketSnapshot()
+                      .animate()
+                      .fadeIn(delay: 700.ms),
 
                   const SizedBox(height: 100),
                 ],
@@ -203,7 +294,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class _WeatherCard extends StatelessWidget {
   final dynamic weather;
-  const _WeatherCard({required this.weather});
+
+  const _WeatherCard({
+    required this.weather,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +305,10 @@ class _WeatherCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppTheme.skyBlue, Color(0xFF0288D1)],
+          colors: [
+            AppTheme.skyBlue,
+            Color(0xFF0288D1),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -288,18 +385,28 @@ class _WeatherStat extends StatelessWidget {
   final String value;
   final String label;
 
-  const _WeatherStat(
-      {required this.icon, required this.value, required this.label});
+  const _WeatherStat({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: Colors.white70, size: 14),
+        Icon(
+          icon,
+          color: Colors.white70,
+          size: 14,
+        ),
         const SizedBox(width: 4),
         Text(
           '$label: $value',
-          style: const TextStyle(color: Colors.white, fontSize: 12),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -311,7 +418,9 @@ class _WeatherStat extends StatelessWidget {
 // ============================================================
 
 class _QuickActionsGrid extends StatelessWidget {
-  final List<_QuickAction> actions = [
+  _QuickActionsGrid();
+
+  final List<_QuickAction> actions = const [
     _QuickAction(
       icon: Icons.biotech_rounded,
       label: 'Disease\nDetection',
@@ -355,22 +464,28 @@ class _QuickActionsGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: 1.1,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
       itemCount: actions.length,
-      itemBuilder: (context, i) {
-        final a = actions[i];
+      itemBuilder: (context, index) {
+        final action = actions[index];
+
         return GestureDetector(
-          onTap: () => context.push(a.route),
+          onTap: () {
+            context.push(action.route);
+          },
           child: Container(
             decoration: BoxDecoration(
-              color: a.color.withOpacity(0.08),
+              color: action.color.withOpacity(0.08),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: a.color.withOpacity(0.2)),
+              border: Border.all(
+                color: action.color.withOpacity(0.2),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -378,18 +493,22 @@ class _QuickActionsGrid extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: a.color.withOpacity(0.15),
+                    color: action.color.withOpacity(0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(a.icon, color: a.color, size: 24),
+                  child: Icon(
+                    action.icon,
+                    color: action.color,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  a.label,
+                  action.label,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    color: a.color,
+                    color: action.color,
                     height: 1.3,
                   ),
                   textAlign: TextAlign.center,
@@ -422,78 +541,90 @@ class _QuickAction {
 // ============================================================
 
 class _AlertsSection extends StatelessWidget {
+  _AlertsSection();
+
+  final List<_AlertItem> alerts = const [
+    _AlertItem(
+      icon: Icons.warning_rounded,
+      title: 'Leaf Blight Detected',
+      subtitle:
+          'Your Rice crop shows early signs of leaf blight',
+      color: AppTheme.alertRed,
+      time: '2h ago',
+    ),
+    _AlertItem(
+      icon: Icons.bug_report_rounded,
+      title: 'Aphid Infestation Alert',
+      subtitle:
+          'High aphid activity reported in your region',
+      color: AppTheme.warningOrange,
+      time: '5h ago',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final alerts = [
-      _AlertItem(
-        icon: Icons.warning_rounded,
-        title: 'Leaf Blight Detected',
-        subtitle: 'Your Rice crop shows early signs of leaf blight',
-        color: AppTheme.alertRed,
-        time: '2h ago',
-      ),
-      _AlertItem(
-        icon: Icons.bug_report_rounded,
-        title: 'Aphid Infestation Alert',
-        subtitle: 'High aphid activity reported in your region',
-        color: AppTheme.warningOrange,
-        time: '5h ago',
-      ),
-    ];
-
     return Column(
-      children: alerts
-          .map(
-            (a) => Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: a.color.withOpacity(0.06),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: a.color.withOpacity(0.2)),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: a.color.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(a.icon, color: a.color, size: 20),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          a.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
-                            color: a.color,
-                          ),
-                        ),
-                        Text(
-                          a.subtitle,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    a.time,
-                    style: TextStyle(fontSize: 11, color: Colors.grey[400]),
-                  ),
-                ],
-              ),
+      children: alerts.map((alert) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: alert.color.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: alert.color.withOpacity(0.2),
             ),
-          )
-          .toList(),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: alert.color.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  alert.icon,
+                  color: alert.color,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      alert.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                        color: alert.color,
+                      ),
+                    ),
+                    Text(
+                      alert.subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                alert.time,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey[400],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -519,26 +650,55 @@ class _AlertItem {
 // ============================================================
 
 class _MarketSnapshot extends StatelessWidget {
+  _MarketSnapshot();
+
   final List<Map<String, dynamic>> crops = const [
-    {'name': 'Rice', 'price': '₹2,340', 'change': '+2.3%', 'up': true},
-    {'name': 'Wheat', 'price': '₹1,890', 'change': '-0.8%', 'up': false},
-    {'name': 'Tomato', 'price': '₹890', 'change': '+5.1%', 'up': true},
-    {'name': 'Cotton', 'price': '₹6,450', 'change': '+1.2%', 'up': true},
+    {
+      'name': 'Rice',
+      'price': '₹2,340',
+      'change': '+2.3%',
+      'up': true,
+    },
+    {
+      'name': 'Wheat',
+      'price': '₹1,890',
+      'change': '-0.8%',
+      'up': false,
+    },
+    {
+      'name': 'Tomato',
+      'price': '₹890',
+      'change': '+5.1%',
+      'up': true,
+    },
+    {
+      'name': 'Cotton',
+      'price': '₹6,450',
+      'change': '+1.2%',
+      'up': true,
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: crops.map((c) {
-        final isUp = c['up'] as bool;
+      children: crops.map((crop) {
+        final isUp = crop['up'] as bool;
+
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              color: Theme.of(context)
+                  .colorScheme
+                  .outline
+                  .withOpacity(0.1),
             ),
           ),
           child: Row(
@@ -558,12 +718,14 @@ class _MarketSnapshot extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                c['name'] as String,
-                style: const TextStyle(fontWeight: FontWeight.w600),
+                crop['name'] as String,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const Spacer(),
               Text(
-                c['price'] as String,
+                crop['price'] as String,
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 15,
@@ -571,10 +733,16 @@ class _MarketSnapshot extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 3,
+                ),
                 decoration: BoxDecoration(
-                  color: (isUp ? AppTheme.primaryGreen : AppTheme.alertRed)
-                      .withOpacity(0.1),
+                  color: (
+                    isUp
+                        ? AppTheme.primaryGreen
+                        : AppTheme.alertRed
+                  ).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Row(
@@ -584,14 +752,18 @@ class _MarketSnapshot extends StatelessWidget {
                           ? Icons.arrow_upward_rounded
                           : Icons.arrow_downward_rounded,
                       size: 10,
-                      color: isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
+                      color: isUp
+                          ? AppTheme.primaryGreen
+                          : AppTheme.alertRed,
                     ),
                     Text(
-                      c['change'] as String,
+                      crop['change'] as String,
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: isUp ? AppTheme.primaryGreen : AppTheme.alertRed,
+                        color: isUp
+                            ? AppTheme.primaryGreen
+                            : AppTheme.alertRed,
                       ),
                     ),
                   ],
@@ -605,9 +777,16 @@ class _MarketSnapshot extends StatelessWidget {
   }
 }
 
+// ============================================================
+// SHIMMER CARD
+// ============================================================
+
 class _ShimmerCard extends StatelessWidget {
   final double height;
-  const _ShimmerCard({required this.height});
+
+  const _ShimmerCard({
+    required this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
