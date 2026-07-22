@@ -29,6 +29,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create environment configuration for tests
+        run: |
+          echo "SUPABASE_URL=https://dummy.supabase.co" > .env
+          echo "SUPABASE_ANON_KEY=dummy_anon_key_for_ci" >> .env
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
         continue-on-error: true
@@ -169,11 +174,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up k6
-        run: |
-          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17DEC7E8E011C6E3ECE4759A4E0B44C10E80
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install k6
+        uses: grafana/setup-k6-action@v1.1.0
 
       - name: Run k6 load test
         run: |
