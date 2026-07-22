@@ -50,21 +50,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
             // Skip Button
             Align(
               alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: _complete,
-                child: Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w600,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: _complete,
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(
+                      color: isDark ? Colors.white60 : Colors.grey[600],
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -94,12 +99,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       (i) => AnimatedContainer(
                         duration: 300.ms,
                         margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: _currentPage == i ? 24 : 8,
+                        width: _currentPage == i ? 28 : 8,
                         height: 8,
                         decoration: BoxDecoration(
                           color: _currentPage == i
                               ? AppTheme.primaryGreen
-                              : Colors.grey[300],
+                              : (isDark ? Colors.grey[800] : Colors.grey[300]),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -111,6 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   // Next/Get Started Button
                   SizedBox(
                     width: double.infinity,
+                    height: 56,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_currentPage < _items.length - 1) {
@@ -122,6 +128,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           _complete();
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
                       child: Text(
                         _currentPage < _items.length - 1
                             ? 'Next'
@@ -130,13 +141,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
 
                   if (_currentPage == _items.length - 1)
                     TextButton(
                       onPressed: () => context.go(AppRoutes.login),
-                      child: const Text('Already have an account? Sign In'),
-                    ),
+                      child: Text(
+                        'Already have an account? Sign In',
+                        style: TextStyle(
+                          color: isDark ? AppTheme.accentGreen : AppTheme.primaryGreen,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    )
+                  else
+                    const SizedBox(height: 48), // Maintain visual height spacing
                 ],
               ),
             ),
@@ -162,17 +181,23 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
-      padding: const EdgeInsets.all(AppConstants.paddingXL),
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.paddingXL),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 200,
-            height: 200,
+            width: 220,
+            height: 220,
             decoration: BoxDecoration(
-              color: item.color.withOpacity(0.1),
+              color: item.color.withOpacity(0.08),
               shape: BoxShape.circle,
+              border: Border.all(
+                color: item.color.withOpacity(0.15),
+                width: 1.5,
+              ),
             ),
             child: Icon(
               item.icon,
@@ -182,7 +207,7 @@ class _OnboardingPage extends StatelessWidget {
           )
               .animate(key: ValueKey('icon_$index'))
               .scale(
-                begin: const Offset(0.6, 0.6),
+                begin: const Offset(0.7, 0.7),
                 duration: 500.ms,
                 curve: Curves.elasticOut,
               )
@@ -191,26 +216,28 @@ class _OnboardingPage extends StatelessWidget {
           Text(
             item.title,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black87,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? Colors.white : Colors.black87,
+                  letterSpacing: -0.5,
                 ),
             textAlign: TextAlign.center,
           )
-              .animate(key: ValueKey('title_$index'), delay: 200.ms)
+              .animate(key: ValueKey('title_$index'), delay: 150.ms)
               .fadeIn()
-              .slideY(begin: 0.2, end: 0),
+              .slideY(begin: 0.15, end: 0),
           const SizedBox(height: 16),
           Text(
             item.subtitle,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge
-                ?.copyWith(color: Colors.grey[600], height: 1.6),
+            style: TextStyle(
+              color: isDark ? Colors.white60 : Colors.grey[600],
+              height: 1.5,
+              fontSize: 14.5,
+            ),
             textAlign: TextAlign.center,
           )
-              .animate(key: ValueKey('subtitle_$index'), delay: 400.ms)
+              .animate(key: ValueKey('subtitle_$index'), delay: 300.ms)
               .fadeIn()
-              .slideY(begin: 0.2, end: 0),
+              .slideY(begin: 0.15, end: 0),
         ],
       ),
     );

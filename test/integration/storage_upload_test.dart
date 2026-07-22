@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:farmai/services/supabase_service.dart';
 import '../helpers/asset_helper.dart';
 import '../mocks/mock_storage_adapter.dart';
@@ -11,7 +11,7 @@ void main() {
     SupabaseService.storageAdapter = mock;
 
     final path = await writeTestPngToTemp();
-    final file = File(path);
+    final file = XFile(path);
 
     final url = await SupabaseService.uploadImage(file: file, bucket: 'test-bucket', path: 'uploads/white1.png');
 

@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 // Simple Supabase auth check using REST
 // Set SUPABASE_URL and SERVICE_ROLE_KEY in environment when running tests

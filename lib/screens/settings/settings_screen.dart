@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/providers.dart';
 import '../../routes/app_router.dart';
+import '../../widgets/common/common_widgets.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -31,21 +32,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
-          onPressed: () => context.pop(),
-        ),
+      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      appBar: FarmAIAppBar(
+        title: 'Settings',
+        showBack: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         children: [
-          // Notifications
+          // Notifications Settings
           _SettingsSection(
             title: 'Notifications',
-            icon: Icons.notifications_rounded,
+            icon: Icons.notifications_active_rounded,
             color: const Color(0xFF7B1FA2),
             children: [
               _SwitchTile(
@@ -54,30 +56,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 value: _diseaseAlerts,
                 onChanged: (v) => setState(() => _diseaseAlerts = v),
               ),
+              _divider(),
               _SwitchTile(
                 label: 'Pest Alerts',
                 subtitle: 'Alerts about pest activity in your area',
                 value: _pestAlerts,
                 onChanged: (v) => setState(() => _pestAlerts = v),
               ),
+              _divider(),
               _SwitchTile(
                 label: 'Weather Alerts',
                 subtitle: 'Severe weather and farming advisories',
                 value: _weatherAlerts,
                 onChanged: (v) => setState(() => _weatherAlerts = v),
               ),
+              _divider(),
               _SwitchTile(
                 label: 'Market Price Alerts',
                 subtitle: 'Price changes for your crops',
                 value: _marketAlerts,
                 onChanged: (v) => setState(() => _marketAlerts = v),
               ),
+              _divider(),
               _SwitchTile(
                 label: 'Irrigation Reminders',
                 subtitle: 'Daily irrigation schedule reminders',
                 value: _irrigationReminders,
                 onChanged: (v) => setState(() => _irrigationReminders = v),
               ),
+              _divider(),
               _SwitchTile(
                 label: 'Expert Replies',
                 subtitle: 'When experts answer your questions',
@@ -85,11 +92,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onChanged: (v) => setState(() => _expertReplies = v),
               ),
             ],
-          ).animate().fadeIn(delay: 100.ms),
+          ).animate().fadeIn(duration: 400.ms),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // Appearance & Preferences
+          // Preferences Settings
           _SettingsSection(
             title: 'Preferences',
             icon: Icons.palette_rounded,
@@ -101,39 +108,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 value: _darkMode,
                 onChanged: (v) => setState(() => _darkMode = v),
               ),
+              _divider(),
               _NavTile(
                 label: 'Language Selection',
                 icon: Icons.language_rounded,
                 onTap: () => context.push(AppRoutes.languageSelection),
               ),
+              _divider(),
               _NavTile(
-                label: 'Custom Alerts',
-                icon: Icons.notifications_active_rounded,
+                label: 'Custom Alerts Settings',
+                icon: Icons.notifications_active_outlined,
                 onTap: () => context.push(AppRoutes.notificationSettings),
               ),
             ],
-          ).animate(delay: 200.ms).fadeIn(),
+          ).animate(delay: 150.ms).fadeIn(),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // Location
+          // Location settings
           _SettingsSection(
-            title: 'Location',
+            title: 'Location Settings',
             icon: Icons.location_on_rounded,
             color: AppTheme.alertRed,
             children: [
               _InfoTile(
-                label: 'Current Location',
+                label: 'Current Farm Location',
                 value: _location,
                 icon: Icons.edit_location_alt_rounded,
                 onTap: () => _editLocation(context),
               ),
             ],
-          ).animate(delay: 300.ms).fadeIn(),
+          ).animate(delay: 250.ms).fadeIn(),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // Data & Privacy
+          // Data & Privacy Settings
           _SettingsSection(
             title: 'Data & Privacy',
             icon: Icons.security_rounded,
@@ -144,16 +153,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 icon: Icons.privacy_tip_outlined,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
                 label: 'Terms of Service',
                 icon: Icons.article_outlined,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
-                label: 'Data Export',
+                label: 'Export My Farming Data',
                 icon: Icons.download_rounded,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
                 label: 'Delete Account',
                 icon: Icons.delete_forever_rounded,
@@ -161,13 +173,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onTap: () => _confirmDeleteAccount(context),
               ),
             ],
-          ).animate(delay: 400.ms).fadeIn(),
+          ).animate(delay: 350.ms).fadeIn(),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // About
+          // About App Settings
           _SettingsSection(
-            title: 'About',
+            title: 'About Assist',
             icon: Icons.info_rounded,
             color: AppTheme.skyBlue,
             children: [
@@ -177,41 +189,56 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 icon: Icons.smartphone_rounded,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
-                label: 'Rate App',
+                label: 'Rate FARMAI',
                 icon: Icons.star_rounded,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
-                label: 'Share App',
+                label: 'Share App with Farmers',
                 icon: Icons.share_rounded,
                 onTap: () {},
               ),
+              _divider(),
               _NavTile(
-                label: 'Contact Support',
+                label: 'Contact Helpline Support',
                 icon: Icons.support_agent_rounded,
                 onTap: () => context.push(AppRoutes.helpSupport),
               ),
             ],
-          ).animate(delay: 500.ms).fadeIn(),
+          ).animate(delay: 450.ms).fadeIn(),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 28),
 
-          // Logout
+          // Logout Button
           OutlinedButton.icon(
             onPressed: () => _logout(context),
             icon: const Icon(Icons.logout_rounded),
-            label: const Text('Sign Out'),
+            label: const Text('Sign Out Account'),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppTheme.alertRed,
-              side: const BorderSide(color: AppTheme.alertRed),
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              side: const BorderSide(color: AppTheme.alertRed, width: 1.5),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             ),
-          ).animate(delay: 600.ms).fadeIn(),
+          ).animate(delay: 550.ms).fadeIn(),
 
-          const SizedBox(height: 80),
+          const SizedBox(height: 100),
         ],
       ),
+    );
+  }
+
+  Widget _divider() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Divider(
+      height: 1,
+      thickness: 1.0,
+      indent: 16,
+      endIndent: 16,
+      color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
     );
   }
 
@@ -220,7 +247,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Update Location'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Update Location', style: TextStyle(fontWeight: FontWeight.w800)),
         content: TextField(
           controller: ctrl,
           decoration: const InputDecoration(
@@ -230,8 +258,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+          ),
           ElevatedButton(
             onPressed: () {
               setState(() => _location = ctrl.text);
@@ -248,16 +277,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Account'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Delete Account', style: TextStyle(fontWeight: FontWeight.w800)),
         content: const Text(
-            'This will permanently delete your account and all data. This action cannot be undone.'),
+          'This will permanently delete your account and all data. This action cannot be undone.',
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+          ),
           ElevatedButton(
-            style:
-                ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Delete'),
           ),
@@ -270,12 +301,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Sign Out'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Sign Out', style: TextStyle(fontWeight: FontWeight.w800)),
         content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+          ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(ctx);
@@ -305,35 +338,44 @@ class _SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
-      color: Theme.of(context).colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      color: isDark ? AppTheme.cardDark : Colors.white,
+      borderRadius: BorderRadius.circular(24),
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
-            child: Row(
-              children: [
-                Icon(icon, size: 16, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: color,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+            width: 1.2,
           ),
-          ...children,
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 16, 18, 6),
+              child: Row(
+                children: [
+                  Icon(icon, size: 18, color: color),
+                  const SizedBox(width: 8),
+                  Text(
+                    title.toUpperCase(),
+                    style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 11,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ...children,
+          ],
+        ),
       ),
     );
   }
@@ -355,15 +397,13 @@ class _SwitchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text(label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle,
-          style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+      title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w500)),
       value: value,
       onChanged: onChanged,
       activeColor: AppTheme.primaryGreen,
       dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
     );
   }
 }
@@ -388,15 +428,15 @@ class _NavTile extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           color: color,
         ),
       ),
-      leading: Icon(icon, size: 18, color: color ?? Colors.grey[600]),
+      leading: Icon(icon, size: 20, color: color ?? Colors.grey[600]),
       trailing: Icon(Icons.chevron_right_rounded, color: Colors.grey[400]),
       onTap: onTap,
       dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
     );
   }
 }
@@ -417,56 +457,12 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-      subtitle: Text(value,
-          style: TextStyle(fontSize: 12, color: Colors.grey[500])),
-      trailing: Icon(icon, size: 18, color: Colors.grey[400]),
+      title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      subtitle: Text(value, style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w500)),
+      trailing: Icon(icon, size: 20, color: Colors.grey[400]),
       onTap: onTap,
       dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-    );
-  }
-}
-
-class _DropdownTile extends StatelessWidget {
-  final String label;
-  final String value;
-  final List<String> items;
-  final void Function(String?) onChanged;
-
-  const _DropdownTile({
-    required this.label,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w600)),
-          DropdownButton<String>(
-            value: value,
-            underline: const SizedBox.shrink(),
-            style: TextStyle(
-              color: AppTheme.primaryGreen,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-            items: items
-                .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                .toList(),
-            onChanged: onChanged,
-          ),
-        ],
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 2),
     );
   }
 }

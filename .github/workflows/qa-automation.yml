@@ -1,0 +1,290 @@
+name: QA Framework Automation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  flutter-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+        continue-on-error: true
+
+      - name: Analyze code static checks
+        run: flutter analyze
+        continue-on-error: true
+
+      - name: Run unit & widget tests
+        run: |
+          mkdir -p qa/reports
+          flutter test --coverage test/unit/qa_unit_tests.dart test/widget/qa_widget_tests.dart > qa/reports/flutter_test_output.txt
+        continue-on-error: true
+
+      - name: Build Web Application
+        run: flutter build web --release
+
+      - name: Build Android APK
+        run: flutter build apk --release --no-pub
+        continue-on-error: true
+
+      - name: Upload Web Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web-build
+          path: build/web
+          retention-days: 1
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: farmai-apk
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 1
+          if-no-files-found: ignore
+
+      - name: Upload Flutter raw report
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-flutter-reports
+          path: qa/reports/flutter_test_output.txt
+          retention-days: 1
+
+  selenium-web-tests:
+    needs: flutter-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Chrome & Webdriver Manager
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          pip install selenium webdriver-manager pytest
+
+      - name: Download Web Build
+        uses: actions/download-artifact@v4
+        with:
+          name: flutter-web-build
+          path: build/web
+
+      - name: Start local Web Server
+        run: |
+          python -m http.server 8085 --directory build/web &
+          sleep 3
+
+      - name: Execute Selenium tests
+        run: |
+          mkdir -p qa/reports
+          pytest qa/selenium/test_web_ui.py --junitxml=qa/reports/selenium_junit.xml || true
+
+      - name: Upload Selenium raw report
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-selenium-reports
+          path: |
+            qa/reports/selenium_junit.xml
+            qa/reports/selenium_failure.png
+          retention-days: 1
+          if-no-files-found: ignore
+
+  appium-android-tests:
+    needs: flutter-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Appium & UiAutomator2 driver
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+          pip install Appium-Python-Client pytest
+
+      - name: Start Appium Server
+        run: appium --port 4723 &
+
+      - name: Mark Appium Environment Unavailable (Default for CI VM without KVM)
+        run: |
+          mkdir -p qa/reports
+          echo "EMULATOR_FAILED" > qa/reports/appium_status.txt
+
+      - name: Execute Appium tests
+        run: |
+          pytest qa/appium/test_mobile_ui.py --junitxml=qa/reports/appium_junit.xml || true
+
+      - name: Upload Appium raw report
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-appium-reports
+          path: |
+            qa/reports/appium_junit.xml
+            qa/reports/appium_status.txt
+            qa/reports/appium_failure.png
+          retention-days: 1
+          if-no-files-found: ignore
+
+  load-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up k6
+        run: |
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17DEC7E8E011C6E3ECE4759A4E0B44C10E80
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Run k6 load test
+        run: |
+          mkdir -p qa/reports
+          k6 run qa/load/k6_load_test.js
+        continue-on-error: true
+
+      - name: Upload k6 raw report
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-load-reports
+          path: qa/reports/k6_summary.json
+          retention-days: 1
+
+  security-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run security checks
+        run: |
+          mkdir -p qa/reports
+          python qa/security/security_audit.py
+        continue-on-error: true
+
+      - name: Upload security raw reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-security-reports
+          path: |
+            qa/reports/security_report.json
+            qa/reports/zap_report.html
+          retention-days: 1
+
+  generate-final-excel:
+    if: always()
+    needs: [flutter-tests, selenium-web-tests, appium-android-tests, load-tests, security-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install openpyxl & pandas
+        run: pip install openpyxl pandas
+
+      - name: Download all raw reports
+        uses: actions/download-artifact@v4
+        with:
+          path: qa/reports/downloaded
+
+      - name: Consolidate and merge downloaded reports
+        run: |
+          mkdir -p qa/reports
+          # Copy all downloaded artifacts back into the qa/reports folder
+          cp -r qa/reports/downloaded/*/* qa/reports/ || true
+          # Run Python merge and report generation
+          python qa/scripts/merge_reports.py
+
+      - name: Upload final Excel report
+        uses: actions/upload-artifact@v4
+        with:
+          name: FARMAI-QA-Excel-Report
+          path: |
+            qa/reports/FARMAI_QA_300_Test_Cases.xlsx
+            FARMAI_QA_300_Test_Cases.xlsx
+          retention-days: 14
+
+      - name: Upload raw consolidated reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: FARMAI-QA-Raw-Reports
+          path: |
+            qa/reports/*.xml
+            qa/reports/*.json
+            qa/reports/*.txt
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload failure screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: FARMAI-Failure-Screenshots
+          path: qa/reports/*.png
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v4
+        with:
+          name: FARMAI-Security-Report
+          path: |
+            qa/reports/security_report.json
+            qa/reports/zap_report.html
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload load test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: FARMAI-Load-Test-Report
+          path: qa/reports/k6_summary.json
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,18 +1,66 @@
-import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class StorageAdapter {
-  Future<String> uploadImage({required File file, required String bucket, required String path});
+  Future<String> uploadImage({
+    required XFile file,
+    required String bucket,
+    required String path,
+  });
 }
 
 class SupabaseStorageAdapter implements StorageAdapter {
+  SupabaseStorageAdapter({
+    SupabaseClient? client,
+  }) : _client = client ?? Supabase.instance.client;
+
+  final SupabaseClient _client;
+
   @override
-  Future<String> uploadImage({required File file, required String bucket, required String path}) async {
-    // Default implementation uses Supabase.instance.client. Kept here to avoid
-    // circular imports; SupabaseService will call this adapter only when set.
-    // Implement a direct call to Supabase.instance.client to perform the upload.
-    // Note: importing supabase here would create circular dependency, so keep
-    // implementation minimal and prefer SupabaseService._storageAdapter to be
-    // replaced with a test double in tests.
-    throw UnimplementedError('Use SupabaseService.storageAdapter override in tests');
+  Future<String> uploadImage({
+    required XFile file,
+    required String bucket,
+    required String path,
+  }) async {
+    try {
+      final bytes = await file.readAsBytes();
+
+      await _client.storage.from(bucket).uploadBinary(
+        path,
+        bytes,
+        fileOptions: FileOptions(
+          upsert: true,
+          contentType: _getContentType(file.name),
+        ),
+      );
+
+      return _client.storage.from(bucket).getPublicUrl(path);
+    } on StorageException catch (error) {
+      throw Exception(
+        'Supabase image upload failed: ${error.message}',
+      );
+    } catch (error) {
+      throw Exception(
+        'Image upload failed: $error',
+      );
+    }
+  }
+
+  String _getContentType(String fileName) {
+    final name = fileName.toLowerCase();
+
+    if (name.endsWith('.png')) {
+      return 'image/png';
+    }
+
+    if (name.endsWith('.webp')) {
+      return 'image/webp';
+    }
+
+    if (name.endsWith('.gif')) {
+      return 'image/gif';
+    }
+
+    return 'image/jpeg';
   }
 }

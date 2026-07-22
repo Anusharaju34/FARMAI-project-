@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MarketService {
   MarketService._internal();
@@ -14,6 +16,7 @@ class MarketService {
   String? _lastError;
 
   final Random _random = Random();
+  final Dio _dio = Dio();
 
   final StreamController<Map<String, Map<String, dynamic>>>
       _marketDataController =
@@ -245,12 +248,10 @@ class MarketService {
       commodity: commodity,
     );
 
-    // Simulates market-price changes every 15 seconds.
+    // Simulates or polls market-price changes every 15 seconds.
     _refreshTimer = Timer.periodic(
       const Duration(seconds: 15),
       (_) {
-        _updateStaticPrices();
-
         fetchLiveMarketPrices(
           state: state,
           district: district,
@@ -270,8 +271,6 @@ class MarketService {
     String? district,
     String? commodity,
   }) async {
-    _updateStaticPrices();
-
     await fetchLiveMarketPrices(
       state: state,
       district: district,
@@ -287,13 +286,128 @@ class MarketService {
   }) async {
     _lastError = null;
 
-    // Small loading delay for a natural refresh effect.
-    await Future<void>.delayed(
-      const Duration(milliseconds: 500),
-    );
+    final apiKey = dotenv.env['DATA_GOV_IN_API_KEY'] ?? '';
+    if (apiKey.isEmpty) {
+      // Simulate live price updates locally if no API key is provided
+      _updateStaticPrices();
+      _lastUpdated = DateTime.now();
 
+      final filteredData = _getLocalFilteredData(state, district, commodity);
+      if (!_marketDataController.isClosed) {
+        _marketDataController.add(filteredData);
+      }
+      return;
+    }
+
+    try {
+      final Map<String, dynamic> queryParameters = {
+        'api-key': apiKey,
+        'format': 'json',
+        'limit': limit,
+      };
+
+      if (state.trim().isNotEmpty) {
+        queryParameters['filters[state]'] = state.trim();
+      }
+      if (district != null && district.trim().isNotEmpty) {
+        queryParameters['filters[district]'] = district.trim();
+      }
+      if (commodity != null && commodity.trim().isNotEmpty) {
+        queryParameters['filters[commodity]'] = commodity.trim();
+      }
+
+      final response = await _dio.get(
+        'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a86454359444',
+        queryParameters: queryParameters,
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        final records = response.data['records'] as List?;
+        if (records != null && records.isNotEmpty) {
+          final liveData = <String, Map<String, dynamic>>{};
+
+          for (final record in records) {
+            final rawCrop = record['commodity']?.toString() ?? 'Unknown';
+            // Capitalize commodity name
+            final cropName = rawCrop.substring(0, 1).toUpperCase() + rawCrop.substring(1).toLowerCase();
+
+            final currentVal = _toDouble(record['modal_price']);
+            final minVal = _toDouble(record['min_price']);
+            final maxVal = _toDouble(record['max_price']);
+
+            final existingCrop = _marketData[cropName];
+            final history = existingCrop != null
+                ? List<double>.from(existingCrop['history'] as List)
+                : <double>[minVal, (minVal + maxVal) / 2, maxVal];
+
+            if (history.isEmpty || history.last != currentVal) {
+              history.add(currentVal);
+              if (history.length > 7) {
+                history.removeAt(0);
+              }
+            }
+
+            final double change = existingCrop != null && _toDouble(existingCrop['current']) > 0
+                ? ((currentVal - _toDouble(existingCrop['current'])) / _toDouble(existingCrop['current']) * 100)
+                : 0.0;
+
+            final isUp = change >= 0;
+
+            liveData[cropName] = {
+              'current': currentVal,
+              'minPrice': minVal,
+              'maxPrice': maxVal,
+              'predicted': currentVal * 1.02,
+              'unit': '₹/quintal',
+              'change': double.parse(change.toStringAsFixed(1)),
+              'isUp': isUp,
+              'market': record['market']?.toString() ?? 'Mandi',
+              'district': record['district']?.toString() ?? '',
+              'state': record['state']?.toString() ?? '',
+              'variety': record['variety']?.toString() ?? 'Common',
+              'grade': record['grade']?.toString() ?? 'A',
+              'arrivalDate': record['arrival_date']?.toString() ?? 'Today',
+              'history': history,
+              'prediction': <double>[
+                currentVal,
+                currentVal * 1.01,
+                currentVal * 1.02,
+                currentVal * 1.03,
+              ],
+              'advice': 'Real-time market price loaded via Agmarknet API.',
+              'source': 'data.gov.in / AGMARKNET',
+            };
+
+            // Update local memory map
+            _marketData[cropName] = liveData[cropName]!;
+          }
+
+          _lastUpdated = DateTime.now();
+          if (!_marketDataController.isClosed) {
+            _marketDataController.add(liveData);
+          }
+          return;
+        }
+      }
+      throw Exception('Empty response or invalid data format from APMC API.');
+    } catch (error) {
+      _lastError = 'API Error: $error. Running in simulation mode.';
+      _updateStaticPrices();
+      _lastUpdated = DateTime.now();
+
+      final filteredData = _getLocalFilteredData(state, district, commodity);
+      if (!_marketDataController.isClosed) {
+        _marketDataController.add(filteredData);
+      }
+    }
+  }
+
+  Map<String, Map<String, dynamic>> _getLocalFilteredData(
+    String state,
+    String? district,
+    String? commodity,
+  ) {
     final filteredData = <String, Map<String, dynamic>>{};
-
     for (final entry in _marketData.entries) {
       final cropName = entry.key;
       final data = entry.value;
@@ -317,19 +431,11 @@ class MarketService {
               .toLowerCase()
               .contains(commodity.trim().toLowerCase());
 
-      if (matchesState &&
-          matchesDistrict &&
-          matchesCommodity) {
-        filteredData[cropName] =
-            Map<String, dynamic>.from(data);
+      if (matchesState && matchesDistrict && matchesCommodity) {
+        filteredData[cropName] = Map<String, dynamic>.from(data);
       }
     }
-
-    _lastUpdated = DateTime.now();
-
-    if (!_marketDataController.isClosed) {
-      _marketDataController.add(filteredData);
-    }
+    return filteredData;
   }
 
   void _updateStaticPrices() {

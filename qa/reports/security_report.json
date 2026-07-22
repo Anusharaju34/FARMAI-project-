@@ -1,0 +1,13 @@
+{
+  "findings": [
+    {
+      "id": "SEC-020",
+      "type": "Missing Security Header",
+      "file": "Web Config",
+      "line": 0,
+      "severity": "Medium",
+      "details": "HSTS header is missing."
+    }
+  ],
+  "scanned_files_count": 42
+}

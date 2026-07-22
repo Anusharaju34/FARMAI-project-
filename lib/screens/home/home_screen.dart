@@ -22,22 +22,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
     _loadCurrentUser();
 
     final userId = SupabaseService.currentUser?.id;
-
     if (userId != null) {
-      ref
-          .read(notificationsProvider.notifier)
-          .loadNotifications(userId);
+      ref.read(notificationsProvider.notifier).loadNotifications(userId);
     }
   }
 
-  /// Changes the greeting according to the phone time.
   String _getGreeting() {
     final hour = DateTime.now().hour;
-
     if (hour < 12) {
       return 'Good morning';
     } else if (hour < 17) {
@@ -47,14 +41,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  /// Loads the currently authenticated Supabase user's email.
-  ///
-  /// Example:
-  /// yuvan12345@gmail.com becomes yuvan12345.
   void _loadCurrentUser() {
     final authUser = SupabaseService.currentUser;
     final email = authUser?.email;
-
     if (email != null && email.isNotEmpty) {
       _currentUserName = email.split('@').first;
     } else {
@@ -66,37 +55,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final weather = ref.watch(weatherProvider('Chennai, India'));
     final unread = ref.watch(unreadNotificationsCountProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Read the current authenticated account whenever the screen rebuilds.
     final currentAuthUser = SupabaseService.currentUser;
     final currentEmail = currentAuthUser?.email;
-
-    final displayedUserName =
-        currentEmail != null && currentEmail.isNotEmpty
-            ? currentEmail.split('@').first
-            : _currentUserName;
+    final displayedUserName = currentEmail != null && currentEmail.isNotEmpty
+        ? currentEmail.split('@').first
+        : _currentUserName;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           // ==================================================
-          // APP BAR
+          // GLASSMORPHIC APP BAR & GREETING HEADER
           // ==================================================
           SliverAppBar(
-            expandedHeight: 160,
+            expandedHeight: 210,
             pinned: true,
-            backgroundColor: AppTheme.darkGreen,
+            stretch: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      AppTheme.darkGreen,
-                      AppTheme.primaryGreen,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    colors: isDark 
+                        ? [const Color(0xFF0F2620), const Color(0xFF0A0F0D)]
+                        : [const Color(0xFFE0F2F1), AppTheme.backgroundLight],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                 ),
                 child: SafeArea(
@@ -108,25 +98,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Row(
                           children: [
                             Container(
-                              width: 36,
-                              height: 36,
+                              width: 42,
+                              height: 42,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(10),
+                                color: AppTheme.primaryGreen.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: AppTheme.primaryGreen.withOpacity(0.2),
+                                  width: 1.5,
+                                ),
                               ),
                               padding: const EdgeInsets.all(6),
                               child: Image.asset(
                                 'assets/images/logo.png',
+                                errorBuilder: (context, _, __) => const Icon(
+                                  Icons.eco_rounded,
+                                  color: AppTheme.primaryGreen,
+                                  size: 24,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 10),
                             const Text(
                               'FARMAI',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 2,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.5,
+                                color: AppTheme.darkGreen,
                               ),
                             ),
                             const Spacer(),
@@ -134,16 +133,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             // Notifications
                             Stack(
                               children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.notifications_rounded,
-                                    color: Colors.white,
+                                ClipOval(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.notifications_rounded,
+                                        color: isDark ? Colors.white : AppTheme.darkGreen,
+                                      ),
+                                      onPressed: () => context.push(AppRoutes.notifications),
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    context.push(
-                                      AppRoutes.notifications,
-                                    );
-                                  },
                                 ),
                                 if (unread > 0)
                                   Positioned(
@@ -152,9 +152,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     child: Container(
                                       width: 10,
                                       height: 10,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppTheme.alertRed,
                                         shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: isDark ? AppTheme.backgroundDark : Colors.white,
+                                          width: 1.5,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -162,38 +166,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
 
                             // Settings
-                            IconButton(
-                              icon: const Icon(
-                                Icons.settings_rounded,
-                                color: Colors.white,
+                            ClipOval(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.settings_rounded,
+                                    color: isDark ? Colors.white : AppTheme.darkGreen,
+                                  ),
+                                  onPressed: () => context.push(AppRoutes.settings),
+                                ),
                               ),
-                              onPressed: () {
-                                context.push(AppRoutes.settings);
-                              },
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 12),
-
-                        // Automatic greeting
+                        const Text(
+                          '🌾',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                        const SizedBox(height: 4),
                         Text(
                           '${_getGreeting()},',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 14,
+                            color: isDark ? Colors.white70 : Colors.grey[700],
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-
-                        // Current logged-in user email name
                         Text(
                           displayedUserName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -1.0,
+                            color: isDark ? Colors.white : AppTheme.darkGreen,
                           ),
                         ),
                       ],
@@ -204,80 +213,113 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
 
+          // ==================================================
+          // DASHBOARD CONTENT
+          // ==================================================
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  // Weather Card
-                  weather
-                      .when(
-                        data: (weatherData) {
-                          if (weatherData == null) {
-                            return const SizedBox.shrink();
-                          }
+                  const SizedBox(height: 8),
 
-                          return _WeatherCard(
-                            weather: weatherData,
-                          );
-                        },
-                        loading: () {
-                          return const _ShimmerCard(height: 100);
-                        },
-                        error: (error, stackTrace) {
-                          return const SizedBox.shrink();
-                        },
-                      )
-                      .animate()
-                      .fadeIn(delay: 100.ms)
-                      .slideY(begin: 0.2),
+                  // Gemini-style Premium AI Assist Banner
+                  PremiumGlassCard(
+                    padding: const EdgeInsets.all(18),
+                    color: isDark ? const Color(0xFF16221E) : const Color(0xFFE8F5E9),
+                    borderOpacity: 0.15,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF00BFA5), Color(0xFF00796B)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.auto_awesome_rounded,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'AI Crop Assistant Active',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                  color: isDark ? Colors.white : AppTheme.darkGreen,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Detect leaf blight risk & check recommendations.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: isDark ? Colors.white70 : Colors.grey[700],
+                                  height: 1.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                          color: isDark ? Colors.white60 : AppTheme.darkGreen,
+                        ),
+                      ],
+                    ),
+                  ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
 
                   const SizedBox(height: 20),
 
-                  // Quick Actions
-                  SectionHeader(
-                    title: 'Quick Actions',
-                    actionLabel: 'See All',
-                    onAction: () {},
-                  ).animate().fadeIn(delay: 200.ms),
-
-                  const SizedBox(height: 12),
-
-                  _QuickActionsGrid()
-                      .animate()
-                      .fadeIn(delay: 300.ms),
-
-                  const SizedBox(height: 20),
-
-                  // Disease and Pest Alerts
-                  SectionHeader(
-                    title: 'Recent Alerts',
-                  ).animate().fadeIn(delay: 400.ms),
-
-                  const SizedBox(height: 12),
-
-                  _AlertsSection()
-                      .animate()
-                      .fadeIn(delay: 500.ms),
-
-                  const SizedBox(height: 20),
-
-                  // Market Snapshot
-                  SectionHeader(
-                    title: 'Market Snapshot',
-                    actionLabel: 'Full Market',
-                    onAction: () {
-                      context.push(AppRoutes.marketPrice);
+                  // Weather Summary Card
+                  weather.when(
+                    data: (weatherData) {
+                      if (weatherData == null) return const SizedBox.shrink();
+                      return _WeatherCard(weather: weatherData);
                     },
-                  ).animate().fadeIn(delay: 600.ms),
+                    loading: () => const SkeletonLoader(width: double.infinity, height: 140),
+                    error: (_, __) => const SizedBox.shrink(),
+                  ).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
-                  _MarketSnapshot()
-                      .animate()
-                      .fadeIn(delay: 700.ms),
+                  // Quick Actions Grid Title
+                  const SectionHeader(title: 'Farming Services'),
+                  const SizedBox(height: 8),
 
-                  const SizedBox(height: 100),
+                  // Premium Actions Grid
+                  const _QuickActionsGrid(),
+
+                  const SizedBox(height: 24),
+
+                  // Disease detection and forum shortcuts
+                  const SectionHeader(title: 'Recent Activity Alerts'),
+                  const SizedBox(height: 8),
+                  const _AlertsSection(),
+
+                  const SizedBox(height: 24),
+
+                  // Market snapshot overview
+                  SectionHeader(
+                    title: 'Live Market snapshot',
+                    actionLabel: 'Market Feed',
+                    onAction: () => context.push(AppRoutes.marketPrice),
+                  ),
+                  const SizedBox(height: 8),
+                  const _MarketSnapshot(),
+
+                  const SizedBox(height: 100), // Spacing for floating navigation bar
                 ],
               ),
             ),
@@ -294,30 +336,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class _WeatherCard extends StatelessWidget {
   final dynamic weather;
-
-  const _WeatherCard({
-    required this.weather,
-  });
+  const _WeatherCard({required this.weather});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            AppTheme.skyBlue,
-            Color(0xFF0288D1),
-          ],
+          colors: [Color(0xFF0288D1), Color(0xFF00B0FF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.skyBlue.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: const Color(0xFF0288D1).withOpacity(0.3),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -330,24 +366,32 @@ class _WeatherCard extends StatelessWidget {
                 '${weather.temperature.round()}°C',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 44,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 46,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -1,
                 ),
               ),
               Text(
                 weather.condition,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                weather.location,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 12,
-                ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  const Icon(Icons.location_on_rounded, color: Colors.white70, size: 14),
+                  const SizedBox(width: 4),
+                  Text(
+                    weather.location,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -355,19 +399,19 @@ class _WeatherCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              _WeatherStat(
+              _WeatherStatItem(
                 icon: Icons.water_drop_rounded,
                 value: '${weather.humidity}%',
                 label: 'Humidity',
               ),
               const SizedBox(height: 8),
-              _WeatherStat(
+              _WeatherStatItem(
                 icon: Icons.air_rounded,
                 value: '${weather.windSpeed} km/h',
                 label: 'Wind',
               ),
               const SizedBox(height: 8),
-              _WeatherStat(
+              _WeatherStatItem(
                 icon: Icons.wb_sunny_rounded,
                 value: 'UV ${weather.uvIndex}',
                 label: 'UV Index',
@@ -380,12 +424,12 @@ class _WeatherCard extends StatelessWidget {
   }
 }
 
-class _WeatherStat extends StatelessWidget {
+class _WeatherStatItem extends StatelessWidget {
   final IconData icon;
   final String value;
   final String label;
 
-  const _WeatherStat({
+  const _WeatherStatItem({
     required this.icon,
     required this.value,
     required this.label,
@@ -394,19 +438,17 @@ class _WeatherStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          color: Colors.white70,
-          size: 14,
-        ),
-        const SizedBox(width: 4),
+        Icon(icon, color: Colors.white70, size: 14),
+        const SizedBox(width: 6),
         Text(
-          '$label: $value',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
+          '$label: ',
+          style: const TextStyle(color: Colors.white70, fontSize: 11),
+        ),
+        Text(
+          value,
+          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -418,13 +460,13 @@ class _WeatherStat extends StatelessWidget {
 // ============================================================
 
 class _QuickActionsGrid extends StatelessWidget {
-  _QuickActionsGrid();
+  const _QuickActionsGrid();
 
   final List<_QuickAction> actions = const [
     _QuickAction(
       icon: Icons.biotech_rounded,
       label: 'Disease\nDetection',
-      color: Color(0xFF388E3C),
+      color: Color(0xFF00796B),
       route: AppRoutes.diseaseDetection,
     ),
     _QuickAction(
@@ -434,15 +476,15 @@ class _QuickActionsGrid extends StatelessWidget {
       route: AppRoutes.pestDetection,
     ),
     _QuickAction(
-      icon: Icons.water_rounded,
-      label: 'Irrigation\nAdvice',
+      icon: Icons.water_drop_rounded,
+      label: 'Smart\nIrrigation',
       color: Color(0xFF0288D1),
       route: AppRoutes.irrigation,
     ),
     _QuickAction(
-      icon: Icons.show_chart_rounded,
+      icon: Icons.trending_up_rounded,
       label: 'Market\nPrices',
-      color: Color(0xFF7B1FA2),
+      color: Color(0xFF6A1B9A),
       route: AppRoutes.marketPrice,
     ),
     _QuickAction(
@@ -464,42 +506,37 @@ class _QuickActionsGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 1.1,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        childAspectRatio: 1.05,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
       ),
       itemCount: actions.length,
       itemBuilder: (context, index) {
         final action = actions[index];
+        final isDark = Theme.of(context).brightness == Brightness.dark;
 
         return GestureDetector(
-          onTap: () {
-            context.push(action.route);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: action.color.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: action.color.withOpacity(0.2),
-              ),
-            ),
+          onTap: () => context.push(action.route),
+          child: PremiumGlassCard(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            color: isDark ? AppTheme.cardDark : Colors.white,
+            borderRadius: 20,
+            borderOpacity: 0.05,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: action.color.withOpacity(0.15),
+                    color: action.color.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     action.icon,
                     color: action.color,
-                    size: 24,
+                    size: 22,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -507,9 +544,9 @@ class _QuickActionsGrid extends StatelessWidget {
                   action.label,
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: action.color,
-                    height: 1.3,
+                    fontWeight: FontWeight.w700,
+                    color: isDark ? Colors.white.withOpacity(0.9) : AppTheme.darkGreen,
+                    height: 1.2,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -541,22 +578,20 @@ class _QuickAction {
 // ============================================================
 
 class _AlertsSection extends StatelessWidget {
-  _AlertsSection();
+  const _AlertsSection();
 
   final List<_AlertItem> alerts = const [
     _AlertItem(
       icon: Icons.warning_rounded,
       title: 'Leaf Blight Detected',
-      subtitle:
-          'Your Rice crop shows early signs of leaf blight',
+      subtitle: 'Your Rice crop diagnosis shows blight risk.',
       color: AppTheme.alertRed,
       time: '2h ago',
     ),
     _AlertItem(
       icon: Icons.bug_report_rounded,
-      title: 'Aphid Infestation Alert',
-      subtitle:
-          'High aphid activity reported in your region',
+      title: 'Aphid Infestation Warning',
+      subtitle: 'Higher aphid activity in Madurai region.',
       color: AppTheme.warningOrange,
       time: '5h ago',
     ),
@@ -564,50 +599,49 @@ class _AlertsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: alerts.map((alert) {
         return Container(
           margin: const EdgeInsets.only(bottom: 10),
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: alert.color.withOpacity(0.06),
-            borderRadius: BorderRadius.circular(14),
+            color: isDark ? AppTheme.cardDark : Colors.white,
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: alert.color.withOpacity(0.2),
+              color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+              width: 1,
             ),
+            boxShadow: AppTheme.premiumShadow,
           ),
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: alert.color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(10),
+                  color: alert.color.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(
-                  alert.icon,
-                  color: alert.color,
-                  size: 20,
-                ),
+                child: Icon(alert.icon, color: alert.color, size: 20),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       alert.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
                         fontSize: 13,
-                        color: alert.color,
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       alert.subtitle,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.grey[600],
                       ),
                     ),
@@ -617,8 +651,9 @@ class _AlertsSection extends StatelessWidget {
               Text(
                 alert.time,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 10,
                   color: Colors.grey[400],
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -650,25 +685,19 @@ class _AlertItem {
 // ============================================================
 
 class _MarketSnapshot extends StatelessWidget {
-  _MarketSnapshot();
+  const _MarketSnapshot();
 
   final List<Map<String, dynamic>> crops = const [
     {
-      'name': 'Rice',
-      'price': '₹2,340',
-      'change': '+2.3%',
+      'name': 'Rice (Paddy)',
+      'price': '₹2,450',
+      'change': '+2.0%',
       'up': true,
     },
     {
-      'name': 'Wheat',
-      'price': '₹1,890',
-      'change': '-0.8%',
-      'up': false,
-    },
-    {
       'name': 'Tomato',
-      'price': '₹890',
-      'change': '+5.1%',
+      'price': '₹1,200',
+      'change': '+5.3%',
       'up': true,
     },
     {
@@ -681,25 +710,24 @@ class _MarketSnapshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: crops.map((crop) {
         final isUp = crop['up'] as bool;
+        final color = isUp ? AppTheme.primaryGreen : AppTheme.alertRed;
 
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
+            color: isDark ? AppTheme.cardDark : Colors.white,
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Theme.of(context)
-                  .colorScheme
-                  .outline
-                  .withOpacity(0.1),
+              color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+              width: 1,
             ),
+            boxShadow: AppTheme.premiumShadow,
           ),
           child: Row(
             children: [
@@ -707,11 +735,11 @@ class _MarketSnapshot extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceLight,
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.primaryGreen.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
-                  Icons.grass_rounded,
+                  Icons.eco_rounded,
                   size: 18,
                   color: AppTheme.primaryGreen,
                 ),
@@ -720,50 +748,39 @@ class _MarketSnapshot extends StatelessWidget {
               Text(
                 crop['name'] as String,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
                 ),
               ),
               const Spacer(),
               Text(
                 crop['price'] as String,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
                 ),
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6,
-                  vertical: 3,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: (
-                    isUp
-                        ? AppTheme.primaryGreen
-                        : AppTheme.alertRed
-                  ).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(6),
+                  color: color.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      isUp
-                          ? Icons.arrow_upward_rounded
-                          : Icons.arrow_downward_rounded,
+                      isUp ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
                       size: 10,
-                      color: isUp
-                          ? AppTheme.primaryGreen
-                          : AppTheme.alertRed,
+                      color: color,
                     ),
+                    const SizedBox(width: 2),
                     Text(
                       crop['change'] as String,
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: isUp
-                            ? AppTheme.primaryGreen
-                            : AppTheme.alertRed,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: color,
                       ),
                     ),
                   ],
@@ -773,29 +790,6 @@ class _MarketSnapshot extends StatelessWidget {
           ),
         );
       }).toList(),
-    );
-  }
-}
-
-// ============================================================
-// SHIMMER CARD
-// ============================================================
-
-class _ShimmerCard extends StatelessWidget {
-  final double height;
-
-  const _ShimmerCard({
-    required this.height,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(16),
-      ),
     );
   }
 }

@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/providers.dart';
 import '../../routes/app_router.dart';
-import '../../widgets/common/farm_text_field.dart';
-import '../../widgets/common/loading_button.dart';
+import '../../widgets/common/common_widgets.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -63,120 +62,137 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authNotifierProvider).isLoading;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
           onPressed: () => context.pop(),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 10),
                 Text(
                   'Create Account',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.w800,
+                        letterSpacing: -0.5,
                       ),
-                ).animate().fadeIn().slideX(begin: -0.2),
-                const SizedBox(height: 4),
+                ).animate().fadeIn().slideX(begin: -0.1),
+                
+                const SizedBox(height: 6),
+                
                 Text(
-                  'Join FARMAI – your smart farming partner',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Colors.grey[600]),
+                  'Join FARMAI – your intelligent farming partner',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDark ? Colors.white60 : Colors.grey[600],
+                  ),
                 ).animate(delay: 100.ms).fadeIn(),
-                const SizedBox(height: 32),
-                FarmTextField(
-                  controller: _nameCtrl,
-                  label: 'Full Name',
-                  hint: 'Ravi Kumar',
-                  prefixIcon: Icons.person_outline,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Enter your full name' : null,
-                ).animate(delay: 200.ms).fadeIn().slideY(begin: 0.2),
-                const SizedBox(height: 16),
-                FarmTextField(
-                  controller: _emailCtrl,
-                  label: 'Email Address',
-                  hint: 'farmer@example.com',
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: Icons.email_outlined,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Enter your email';
-                    if (!v.contains('@')) return 'Enter a valid email';
-                    return null;
-                  },
-                ).animate(delay: 300.ms).fadeIn().slideY(begin: 0.2),
-                const SizedBox(height: 16),
-                FarmTextField(
-                  controller: _passwordCtrl,
-                  label: 'Password',
-                  hint: 'Min 6 characters',
-                  obscureText: _obscure1,
-                  prefixIcon: Icons.lock_outline,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscure1
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () => setState(() => _obscure1 = !_obscure1),
+                
+                const SizedBox(height: 28),
+
+                PremiumGlassCard(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      FarmTextField(
+                        controller: _nameCtrl,
+                        label: 'Full Name',
+                        hint: 'Ravi Kumar',
+                        prefixIcon: Icons.person_outline_rounded,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Enter your full name' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      FarmTextField(
+                        controller: _emailCtrl,
+                        label: 'Email Address',
+                        hint: 'farmer@example.com',
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: Icons.email_outlined,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter your email';
+                          if (!v.contains('@')) return 'Enter a valid email';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FarmTextField(
+                        controller: _passwordCtrl,
+                        label: 'Password',
+                        hint: 'Min 6 characters',
+                        obscureText: _obscure1,
+                        prefixIcon: Icons.lock_outline_rounded,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscure1
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () => setState(() => _obscure1 = !_obscure1),
+                        ),
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Enter a password';
+                          if (v.length < 6) return 'Minimum 6 characters required';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FarmTextField(
+                        controller: _confirmCtrl,
+                        label: 'Confirm Password',
+                        hint: 'Repeat your password',
+                        obscureText: _obscure2,
+                        prefixIcon: Icons.lock_outline_rounded,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscure2
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () => setState(() => _obscure2 = !_obscure2),
+                        ),
+                        validator: (v) {
+                          if (v != _passwordCtrl.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Enter a password';
-                    if (v.length < 6) return 'Minimum 6 characters required';
-                    return null;
-                  },
-                ).animate(delay: 400.ms).fadeIn().slideY(begin: 0.2),
-                const SizedBox(height: 16),
-                FarmTextField(
-                  controller: _confirmCtrl,
-                  label: 'Confirm Password',
-                  hint: 'Repeat your password',
-                  obscureText: _obscure2,
-                  prefixIcon: Icons.lock_outline,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscure2
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () => setState(() => _obscure2 = !_obscure2),
-                  ),
-                  validator: (v) {
-                    if (v != _passwordCtrl.text)
-                      return 'Passwords do not match';
-                    return null;
-                  },
-                ).animate(delay: 500.ms).fadeIn().slideY(begin: 0.2),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: LoadingButton(
-                    isLoading: isLoading,
-                    onPressed: _register,
-                    label: 'Create Account',
-                  ),
-                ).animate(delay: 600.ms).fadeIn().slideY(begin: 0.3),
-                const SizedBox(height: 24),
+                ).animate(delay: 200.ms).fadeIn().slideY(begin: 0.1),
+
+                const SizedBox(height: 28),
+
+                LoadingButton(
+                  isLoading: isLoading,
+                  onPressed: _register,
+                  label: 'Create Account',
+                ).animate(delay: 300.ms).fadeIn().slideY(begin: 0.15),
+
+                const SizedBox(height: 28),
+
                 Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'Already have an account? ',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: isDark ? Colors.white60 : Colors.grey[600]),
                       ),
                       GestureDetector(
                         onTap: () => context.go(AppRoutes.login),
@@ -184,13 +200,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           'Sign In',
                           style: TextStyle(
                             color: AppTheme.primaryGreen,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ).animate(delay: 700.ms).fadeIn(),
+                ).animate(delay: 400.ms).fadeIn(),
+                
+                const SizedBox(height: 36),
               ],
             ),
           ),
