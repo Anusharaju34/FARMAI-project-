@@ -63,3 +63,7 @@ supabase/config.toml
 ~$*
 *.tmp
 
+# Python Pytest & Excel cache files
+__pycache__/
+.pytest_cache/
+FARMAI_QA_300_Test_Cases.xlsx
