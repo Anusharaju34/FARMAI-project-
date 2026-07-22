@@ -27,9 +27,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Future<void> _reset() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final success = await ref
-        .read(authNotifierProvider.notifier)
-        .signIn(_emailCtrl.text.trim(), 'dummy'); // auth service reset trigger or mock helper
+    final success = await ref.read(authNotifierProvider.notifier).signIn(
+        _emailCtrl.text.trim(),
+        'dummy'); // auth service reset trigger or mock helper
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -48,7 +48,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
@@ -72,9 +73,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         letterSpacing: -0.5,
                       ),
                 ).animate().fadeIn().slideX(begin: -0.1),
-                
                 const SizedBox(height: 6),
-                
                 Text(
                   'Enter your email address to receive password recovery instructions',
                   style: TextStyle(
@@ -82,9 +81,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     color: isDark ? Colors.white60 : Colors.grey[600],
                   ),
                 ).animate(delay: 100.ms).fadeIn(),
-                
                 const SizedBox(height: 36),
-
                 PremiumGlassCard(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -104,9 +101,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     ],
                   ),
                 ).animate(delay: 200.ms).fadeIn().slideY(begin: 0.1),
-
                 const SizedBox(height: 32),
-
                 LoadingButton(
                   isLoading: isLoading,
                   onPressed: _reset,

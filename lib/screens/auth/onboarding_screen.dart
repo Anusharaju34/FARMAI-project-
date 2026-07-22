@@ -53,7 +53,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: SafeArea(
         child: Column(
           children: [
@@ -149,13 +150,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Text(
                         'Already have an account? Sign In',
                         style: TextStyle(
-                          color: isDark ? AppTheme.accentGreen : AppTheme.primaryGreen,
+                          color: isDark
+                              ? AppTheme.accentGreen
+                              : AppTheme.primaryGreen,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     )
                   else
-                    const SizedBox(height: 48), // Maintain visual height spacing
+                    const SizedBox(
+                        height: 48), // Maintain visual height spacing
                 ],
               ),
             ),

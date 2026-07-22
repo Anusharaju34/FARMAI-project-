@@ -1,0 +1,6 @@
+Healthy Leaf
+Tomato Early Blight
+Tomato Late Blight
+Rice Blast
+Cotton Leaf Curl
+Invalid / Non-leaf

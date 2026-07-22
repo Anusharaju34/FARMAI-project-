@@ -3,16 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Brand Colors (Smart Farming)
-  static const Color primaryGreen = Color(0xFF2E7D32);   // Forest Green
-  static const Color lightGreen = Color(0xFF4CAF50);     // Mint Green
-  static const Color accentGreen = Color(0xFF8BC34A);    // Lime Green
-  static const Color darkGreen = Color(0xFF1E2A1F);      // Deep Earth Green
-  static const Color warningOrange = Color(0xFFF9A825);  // Warning Yellow/Orange
-  static const Color alertRed = Color(0xFFE53935);       // Danger Red
-  
-  static const Color waterBlue = Color(0xFF29B6F6);      // Water
-  static const Color earthBrown = Color(0xFF8D6E63);     // Earth
-  static const Color skyBlue = Color(0xFF81D4FA);        // Sky
+  static const Color primaryGreen = Color(0xFF2E7D32); // Forest Green
+  static const Color lightGreen = Color(0xFF4CAF50); // Mint Green
+  static const Color accentGreen = Color(0xFF8BC34A); // Lime Green
+  static const Color darkGreen = Color(0xFF1E2A1F); // Deep Earth Green
+  static const Color warningOrange = Color(0xFFF9A825); // Warning Yellow/Orange
+  static const Color alertRed = Color(0xFFE53935); // Danger Red
+
+  static const Color waterBlue = Color(0xFF29B6F6); // Water
+  static const Color earthBrown = Color(0xFF8D6E63); // Earth
+  static const Color skyBlue = Color(0xFF81D4FA); // Sky
 
   static const Color sunYellow = Color(0xFFFFB300);
   static const Color soilBrown = Color(0xFF8D6E63);
@@ -20,13 +20,13 @@ class AppTheme {
 
   // Light Theme Palette
   static const Color backgroundLight = Color(0xFFF7FAF3); // Light Background
-  static const Color surfaceLight = Color(0xFFFFFFFF);    // Cards/Sheets
-  static const Color borderLight = Color(0xFFE2EBE0);     // Soft Border
+  static const Color surfaceLight = Color(0xFFFFFFFF); // Cards/Sheets
+  static const Color borderLight = Color(0xFFE2EBE0); // Soft Border
 
   // Dark Theme Palette
-  static const Color backgroundDark = Color(0xFF1E2A1F);  // Dark Background
-  static const Color surfaceDark = Color(0xFF253426);     // Dark Cards
-  static const Color borderDark = Color(0xFF2D3E2F);      // Dark Border
+  static const Color backgroundDark = Color(0xFF1E2A1F); // Dark Background
+  static const Color surfaceDark = Color(0xFF253426); // Dark Cards
+  static const Color borderDark = Color(0xFF2D3E2F); // Dark Border
 
   static const Color cardLight = surfaceLight;
   static const Color cardDark = surfaceDark;
@@ -246,12 +246,21 @@ class AppTheme {
         brightness == Brightness.light ? Colors.black87 : Colors.white;
     return GoogleFonts.poppinsTextTheme(
       TextTheme(
-        displayLarge:
-            TextStyle(fontSize: 57, fontWeight: FontWeight.w800, color: color, letterSpacing: -1.5),
-        displayMedium:
-            TextStyle(fontSize: 45, fontWeight: FontWeight.w800, color: color, letterSpacing: -1),
-        displaySmall:
-            TextStyle(fontSize: 36, fontWeight: FontWeight.w700, color: color, letterSpacing: -0.5),
+        displayLarge: TextStyle(
+            fontSize: 57,
+            fontWeight: FontWeight.w800,
+            color: color,
+            letterSpacing: -1.5),
+        displayMedium: TextStyle(
+            fontSize: 45,
+            fontWeight: FontWeight.w800,
+            color: color,
+            letterSpacing: -1),
+        displaySmall: TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.w700,
+            color: color,
+            letterSpacing: -0.5),
         headlineLarge:
             TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: color),
         headlineMedium:
@@ -264,10 +273,16 @@ class AppTheme {
             TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
         titleSmall:
             TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
-        bodyLarge:
-            TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: color, height: 1.5),
-        bodyMedium:
-            TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color, height: 1.4),
+        bodyLarge: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: color,
+            height: 1.5),
+        bodyMedium: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: color,
+            height: 1.4),
         bodySmall:
             TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: color),
         labelLarge:

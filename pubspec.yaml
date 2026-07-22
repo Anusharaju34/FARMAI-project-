@@ -45,6 +45,9 @@ dependencies:
   flutter_svg: ^2.0.10+1
   hugeicons: ^0.0.7
 
+  # TFLite
+  tflite_flutter: ^0.12.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -61,3 +64,5 @@ flutter:
     - assets/images/
     - assets/icons/
     - .env
+    - assets/models/disease_model.tflite
+    - assets/models/disease_labels.txt

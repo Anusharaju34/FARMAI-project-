@@ -28,13 +28,14 @@ class PremiumGlassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       margin: margin,
       decoration: BoxDecoration(
-        color: color ?? (isDark 
-            ? AppTheme.cardDark.withOpacity(0.85) 
-            : AppTheme.cardLight.withOpacity(0.9)),
+        color: color ??
+            (isDark
+                ? AppTheme.cardDark.withOpacity(0.85)
+                : AppTheme.cardLight.withOpacity(0.9)),
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           color: (isDark ? Colors.white : AppTheme.primaryGreen)
@@ -91,7 +92,8 @@ class FarmTextField extends StatefulWidget {
   State<FarmTextField> createState() => _FarmTextFieldState();
 }
 
-class _FarmTextFieldState extends State<FarmTextField> with SingleTickerProviderStateMixin {
+class _FarmTextFieldState extends State<FarmTextField>
+    with SingleTickerProviderStateMixin {
   late AnimationController _focusController;
   late Animation<double> _scaleAnimation;
   final FocusNode _focusNode = FocusNode();
@@ -141,8 +143,8 @@ class _FarmTextFieldState extends State<FarmTextField> with SingleTickerProvider
           labelText: widget.label,
           hintText: widget.hint,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          prefixIcon: widget.prefixIcon != null 
-              ? Icon(widget.prefixIcon, size: 20, color: AppTheme.primaryGreen) 
+          prefixIcon: widget.prefixIcon != null
+              ? Icon(widget.prefixIcon, size: 20, color: AppTheme.primaryGreen)
               : null,
           suffixIcon: widget.suffixIcon,
         ),
@@ -175,7 +177,8 @@ class LoadingButton extends StatefulWidget {
   State<LoadingButton> createState() => _LoadingButtonState();
 }
 
-class _LoadingButtonState extends State<LoadingButton> with SingleTickerProviderStateMixin {
+class _LoadingButtonState extends State<LoadingButton>
+    with SingleTickerProviderStateMixin {
   bool _isPressed = false;
 
   @override
@@ -196,7 +199,8 @@ class _LoadingButtonState extends State<LoadingButton> with SingleTickerProvider
               gradient: LinearGradient(
                 colors: [
                   widget.backgroundColor ?? AppTheme.primaryGreen,
-                  (widget.backgroundColor ?? AppTheme.primaryGreen).withOpacity(0.85),
+                  (widget.backgroundColor ?? AppTheme.primaryGreen)
+                      .withOpacity(0.85),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -204,7 +208,8 @@ class _LoadingButtonState extends State<LoadingButton> with SingleTickerProvider
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: (widget.backgroundColor ?? AppTheme.primaryGreen).withOpacity(0.25),
+                  color: (widget.backgroundColor ?? AppTheme.primaryGreen)
+                      .withOpacity(0.25),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -231,7 +236,8 @@ class _LoadingButtonState extends State<LoadingButton> with SingleTickerProvider
                     )
                   : Text(
                       widget.label,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 16),
                     ),
             ),
           ),
@@ -275,7 +281,8 @@ class SectionHeader extends StatelessWidget {
             TextButton(
               onPressed: onAction,
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -380,7 +387,7 @@ class FarmAIAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return AppBar(
       title: Text(
         title,
@@ -403,9 +410,15 @@ class FarmAIAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: isDark 
-                    ? [AppTheme.backgroundDark.withOpacity(0.8), AppTheme.backgroundDark.withOpacity(0.4)]
-                    : [AppTheme.backgroundLight.withOpacity(0.8), AppTheme.backgroundLight.withOpacity(0.4)],
+                colors: isDark
+                    ? [
+                        AppTheme.backgroundDark.withOpacity(0.8),
+                        AppTheme.backgroundDark.withOpacity(0.4)
+                      ]
+                    : [
+                        AppTheme.backgroundLight.withOpacity(0.8),
+                        AppTheme.backgroundLight.withOpacity(0.4)
+                      ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -454,11 +467,7 @@ class EmptyStateWidget extends StatelessWidget {
                 color: AppTheme.primaryGreen.withOpacity(0.08),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon, 
-                size: 54, 
-                color: AppTheme.primaryGreen
-              ),
+              child: Icon(icon, size: 54, color: AppTheme.primaryGreen),
             ),
             const SizedBox(height: 24),
             Text(
@@ -472,7 +481,7 @@ class EmptyStateWidget extends StatelessWidget {
               subtitle,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey[500], 
+                color: Colors.grey[500],
                 fontSize: 14,
                 height: 1.4,
               ),
@@ -482,7 +491,8 @@ class EmptyStateWidget extends StatelessWidget {
               ElevatedButton(
                 onPressed: onButton,
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 ),
                 child: Text(buttonLabel!),
               ),

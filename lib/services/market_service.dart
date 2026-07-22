@@ -85,8 +85,7 @@ class MarketService {
         2340,
         2350,
       ],
-      'advice':
-          'Wheat prices are stable. Check local demand before selling.',
+      'advice': 'Wheat prices are stable. Check local demand before selling.',
       'source': 'FARMAI Sample Market Data',
     },
     'Tomato': {
@@ -217,8 +216,7 @@ class MarketService {
         2280,
         2290,
       ],
-      'advice':
-          'Maize prices are stable with a small increase expected.',
+      'advice': 'Maize prices are stable with a small increase expected.',
       'source': 'FARMAI Sample Market Data',
     },
   };
@@ -226,8 +224,7 @@ class MarketService {
   Stream<Map<String, Map<String, dynamic>>> get marketDataStream =>
       _marketDataController.stream;
 
-  Map<String, Map<String, dynamic>> get currentMarketData =>
-      _copyMarketData();
+  Map<String, Map<String, dynamic>> get currentMarketData => _copyMarketData();
 
   DateTime? get lastUpdated => _lastUpdated;
 
@@ -329,7 +326,8 @@ class MarketService {
           for (final record in records) {
             final rawCrop = record['commodity']?.toString() ?? 'Unknown';
             // Capitalize commodity name
-            final cropName = rawCrop.substring(0, 1).toUpperCase() + rawCrop.substring(1).toLowerCase();
+            final cropName = rawCrop.substring(0, 1).toUpperCase() +
+                rawCrop.substring(1).toLowerCase();
 
             final currentVal = _toDouble(record['modal_price']);
             final minVal = _toDouble(record['min_price']);
@@ -347,9 +345,12 @@ class MarketService {
               }
             }
 
-            final double change = existingCrop != null && _toDouble(existingCrop['current']) > 0
-                ? ((currentVal - _toDouble(existingCrop['current'])) / _toDouble(existingCrop['current']) * 100)
-                : 0.0;
+            final double change =
+                existingCrop != null && _toDouble(existingCrop['current']) > 0
+                    ? ((currentVal - _toDouble(existingCrop['current'])) /
+                        _toDouble(existingCrop['current']) *
+                        100)
+                    : 0.0;
 
             final isUp = change >= 0;
 
@@ -427,9 +428,7 @@ class MarketService {
 
       final matchesCommodity = commodity == null ||
           commodity.trim().isEmpty ||
-          cropName
-              .toLowerCase()
-              .contains(commodity.trim().toLowerCase());
+          cropName.toLowerCase().contains(commodity.trim().toLowerCase());
 
       if (matchesState && matchesDistrict && matchesCommodity) {
         filteredData[cropName] = Map<String, dynamic>.from(data);
@@ -445,14 +444,11 @@ class MarketService {
       final oldPrice = _toDouble(data['current']);
 
       // Creates a small price movement between -2% and +2%.
-      final percentageChange =
-          (_random.nextDouble() * 4) - 2;
+      final percentageChange = (_random.nextDouble() * 4) - 2;
 
-      final newPrice =
-          oldPrice + (oldPrice * percentageChange / 100);
+      final newPrice = oldPrice + (oldPrice * percentageChange / 100);
 
-      final roundedPrice =
-          double.parse(newPrice.toStringAsFixed(0));
+      final roundedPrice = double.parse(newPrice.toStringAsFixed(0));
 
       final history = List<double>.from(
         data['history'] as List,
@@ -464,14 +460,11 @@ class MarketService {
         history.removeAt(0);
       }
 
-      final predictedPrice =
-          roundedPrice * (1 + (_random.nextDouble() * 0.03));
+      final predictedPrice = roundedPrice * (1 + (_random.nextDouble() * 0.03));
 
       data['current'] = roundedPrice;
-      data['predicted'] =
-          double.parse(predictedPrice.toStringAsFixed(0));
-      data['change'] =
-          double.parse(percentageChange.toStringAsFixed(1));
+      data['predicted'] = double.parse(predictedPrice.toStringAsFixed(0));
+      data['change'] = double.parse(percentageChange.toStringAsFixed(1));
       data['isUp'] = percentageChange >= 0;
       data['history'] = history;
       data['prediction'] = <double>[

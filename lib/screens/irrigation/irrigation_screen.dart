@@ -28,7 +28,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     setState(() => _isCalculating = true);
     await Future.delayed(const Duration(milliseconds: 1200));
 
-    final advice = _getIrrigationAdvice(_selectedCrop, _selectedSoil, _farmArea);
+    final advice =
+        _getIrrigationAdvice(_selectedCrop, _selectedSoil, _farmArea);
     final userId = Supabase.instance.client.auth.currentUser?.id;
 
     if (userId != null) {
@@ -51,7 +52,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     }
   }
 
-  Map<String, dynamic> _getIrrigationAdvice(String crop, String soil, double area) {
+  Map<String, dynamic> _getIrrigationAdvice(
+      String crop, String soil, double area) {
     final cropWater = {
       'Rice': 8.0,
       'Wheat': 5.5,
@@ -104,9 +106,12 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
         'Mulch the soil to retain moisture for longer periods',
         'Monitor leaf color – pale yellow indicates water stress',
         'Check soil at 10 cm depth – irrigate when dry to touch',
-        if (soil == 'Sandy') 'Sandy soil drains fast – increase irrigation frequency',
-        if (soil == 'Clay') 'Clay soil retains water – avoid overwatering to prevent root rot',
-        if (crop == 'Rice') 'Maintain 5 cm standing water during critical growth stages',
+        if (soil == 'Sandy')
+          'Sandy soil drains fast – increase irrigation frequency',
+        if (soil == 'Clay')
+          'Clay soil retains water – avoid overwatering to prevent root rot',
+        if (crop == 'Rice')
+          'Maintain 5 cm standing water during critical growth stages',
       ],
       'weeklySchedule': _getWeeklySchedule(crop),
     };
@@ -130,7 +135,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     final highWater = ['Rice', 'Sugarcane', 'Cotton'];
     return days.asMap().entries.map((e) {
-      final irrigate = highWater.contains(crop) ? e.key % 2 == 0 : e.key % 3 == 0;
+      final irrigate =
+          highWater.contains(crop) ? e.key % 2 == 0 : e.key % 3 == 0;
       return {'day': e.value, 'irrigate': irrigate};
     }).toList();
   }
@@ -140,12 +146,14 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: FarmAIAppBar(
         title: 'Irrigation Advisor',
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month_rounded, color: AppTheme.waterBlue),
+            icon: const Icon(Icons.calendar_month_rounded,
+                color: AppTheme.waterBlue),
             onPressed: () => context.push(AppRoutes.irrigationSchedule),
           ),
         ],
@@ -201,7 +209,8 @@ class _IrrigationScreenState extends ConsumerState<IrrigationScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Icon(Icons.water_rounded, color: Colors.white, size: 36),
+                  const Icon(Icons.water_rounded,
+                      color: Colors.white, size: 36),
                 ],
               ),
             ).animate().fadeIn().slideY(begin: -0.1),
@@ -286,28 +295,34 @@ class _InputCard extends StatelessWidget {
           const SizedBox(height: 18),
 
           // Crop selector
-          const Text('Crop Type', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+          const Text('Crop Type',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(
             value: selectedCrop,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.grass_rounded, size: 18),
             ),
-            items: AppConstants.cropTypes.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+            items: AppConstants.cropTypes
+                .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                .toList(),
             onChanged: onCropChanged,
           ),
 
           const SizedBox(height: 18),
 
           // Soil selector
-          const Text('Soil Type', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+          const Text('Soil Type',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(
             value: selectedSoil,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.layers_rounded, size: 18),
             ),
-            items: AppConstants.soilTypes.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+            items: AppConstants.soilTypes
+                .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                .toList(),
             onChanged: onSoilChanged,
           ),
 
@@ -317,9 +332,11 @@ class _InputCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Farm Area', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+              const Text('Farm Area',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0288D1).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -381,14 +398,20 @@ class _IrrigationResult extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.cardDark : Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      width: 1.2),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'SOIL MOISTURE',
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey),
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey),
                     ),
                     const SizedBox(height: 12),
                     Stack(
@@ -401,19 +424,22 @@ class _IrrigationResult extends StatelessWidget {
                             value: moisture,
                             strokeWidth: 8,
                             backgroundColor: Colors.grey[200],
-                            valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.waterBlue),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                AppTheme.waterBlue),
                           ),
                         ),
                         Text(
                           '${(moisture * 100).round()}%',
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 18),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       soil,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 12),
                     ),
                   ],
                 ),
@@ -429,14 +455,20 @@ class _IrrigationResult extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.cardDark : Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      width: 1.2),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'DAILY WATER TANK',
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey),
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey),
                     ),
                     const SizedBox(height: 12),
                     Expanded(
@@ -445,7 +477,8 @@ class _IrrigationResult extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isDark ? Colors.grey[800] : Colors.grey[100],
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey[400]!, width: 1),
+                          border:
+                              Border.all(color: Colors.grey[400]!, width: 1),
                         ),
                         clipBehavior: Clip.antiAlias,
                         child: Stack(
@@ -456,7 +489,10 @@ class _IrrigationResult extends StatelessWidget {
                               child: Container(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Color(0xFF0288D1), Color(0xFF29B6F6)],
+                                    colors: [
+                                      Color(0xFF0288D1),
+                                      Color(0xFF29B6F6)
+                                    ],
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
                                   ),
@@ -470,7 +506,8 @@ class _IrrigationResult extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       '${waterReq.toStringAsFixed(1)} m³ / day',
-                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w800, fontSize: 12),
                     ),
                   ],
                 ),
@@ -494,7 +531,8 @@ class _IrrigationResult extends StatelessWidget {
             children: [
               _StatBox(
                 label: 'Weekly Vol',
-                value: '${(schedule['weeklyTotal'] as double).toStringAsFixed(0)} m³',
+                value:
+                    '${(schedule['weeklyTotal'] as double).toStringAsFixed(0)} m³',
                 icon: Icons.local_drink_rounded,
               ),
               _vDivider(),
@@ -521,7 +559,9 @@ class _IrrigationResult extends StatelessWidget {
           decoration: BoxDecoration(
             color: isDark ? AppTheme.cardDark : const Color(0xFFE3F2FD),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: isDark ? AppTheme.borderDark : const Color(0xFFB3E5FC), width: 1.2),
+            border: Border.all(
+                color: isDark ? AppTheme.borderDark : const Color(0xFFB3E5FC),
+                width: 1.2),
           ),
           child: Column(
             children: [
@@ -544,7 +584,8 @@ class _IrrigationResult extends StatelessWidget {
 
         // Weekly Grid Schedule Planner
         _WeeklyScheduleWidget(
-          days: (schedule['weeklySchedule'] as List).cast<Map<String, dynamic>>(),
+          days:
+              (schedule['weeklySchedule'] as List).cast<Map<String, dynamic>>(),
         ),
 
         const SizedBox(height: 16),
@@ -556,7 +597,9 @@ class _IrrigationResult extends StatelessWidget {
             color: isDark ? AppTheme.cardDark : const Color(0xFFE8F5E9),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isDark ? AppTheme.borderDark : AppTheme.primaryGreen.withOpacity(0.15),
+              color: isDark
+                  ? AppTheme.borderDark
+                  : AppTheme.primaryGreen.withOpacity(0.15),
               width: 1.2,
             ),
           ),
@@ -565,11 +608,14 @@ class _IrrigationResult extends StatelessWidget {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.eco_rounded, color: AppTheme.primaryGreen, size: 20),
+                  Icon(Icons.eco_rounded,
+                      color: AppTheme.primaryGreen, size: 20),
                   SizedBox(width: 8),
                   Text(
                     'Advisor Recommendations',
-                    style: TextStyle(fontWeight: FontWeight.w800, color: AppTheme.primaryGreen),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.primaryGreen),
                   ),
                 ],
               ),
@@ -580,12 +626,16 @@ class _IrrigationResult extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.check_circle_outline_rounded, size: 16, color: AppTheme.primaryGreen),
+                      const Icon(Icons.check_circle_outline_rounded,
+                          size: 16, color: AppTheme.primaryGreen),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           r,
-                          style: const TextStyle(fontSize: 13, height: 1.4, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 13,
+                              height: 1.4,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                     ],
@@ -627,13 +677,17 @@ class _StatBox extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 2),
           Text(
             label,
-            style: TextStyle(color: Colors.white.withOpacity(0.75), fontSize: 10, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                color: Colors.white.withOpacity(0.75),
+                fontSize: 10,
+                fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
         ],
@@ -661,7 +715,10 @@ class _InfoRow extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '$label: ',
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Color(0xFF0288D1)),
+          style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+              color: Color(0xFF0288D1)),
         ),
         Expanded(
           child: Text(
@@ -687,7 +744,9 @@ class _WeeklyScheduleWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.cardDark : Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+        border: Border.all(
+            color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+            width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -707,11 +766,15 @@ class _WeeklyScheduleWidget extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: irrigate ? const Color(0xFF0288D1) : (isDark ? AppTheme.surfaceDark : Colors.grey[200]),
+                      color: irrigate
+                          ? const Color(0xFF0288D1)
+                          : (isDark ? AppTheme.surfaceDark : Colors.grey[200]),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      irrigate ? Icons.water_drop_rounded : Icons.do_not_disturb_rounded,
+                      irrigate
+                          ? Icons.water_drop_rounded
+                          : Icons.do_not_disturb_rounded,
                       color: irrigate ? Colors.white : Colors.grey[400],
                       size: 16,
                     ),

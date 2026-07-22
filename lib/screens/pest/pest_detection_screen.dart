@@ -12,7 +12,8 @@ class PestDetectionScreen extends ConsumerStatefulWidget {
   const PestDetectionScreen({super.key});
 
   @override
-  ConsumerState<PestDetectionScreen> createState() => _PestDetectionScreenState();
+  ConsumerState<PestDetectionScreen> createState() =>
+      _PestDetectionScreenState();
 }
 
 class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
@@ -59,7 +60,9 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
   bool _isPestImage(String name) {
     final lowerName = name.toLowerCase();
     // Allow test assets so automated tests continue to function
-    if (lowerName.contains('white1') || lowerName.contains('test') || lowerName.contains('farmai_test')) {
+    if (lowerName.contains('white1') ||
+        lowerName.contains('test') ||
+        lowerName.contains('farmai_test')) {
       return true;
     }
     return lowerName.contains('pest') ||
@@ -86,7 +89,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
     // Strict validation check for pest/insect images
     if (!_isPestImage(_selectedImage!.name)) {
       setState(() {
-        _validationError = "Invalid image. We couldn't identify a pest or insect in the photo. Please upload a clear pest image.";
+        _validationError =
+            "Invalid image. We couldn't identify a pest or insect in the photo. Please upload a clear pest image.";
         _result = null;
       });
       return;
@@ -114,7 +118,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
 
     try {
       await Future.delayed(const Duration(milliseconds: 2500));
-      final Map<String, dynamic> mockResult = _getDynamicPestResult(_selectedImage!.name);
+      final Map<String, dynamic> mockResult =
+          _getDynamicPestResult(_selectedImage!.name);
       if (!mounted) return;
       setState(() {
         _result = mockResult;
@@ -123,7 +128,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("We couldn't identify the crop clearly. Please take another photo in good sunlight."),
+          content: const Text(
+              "We couldn't identify the crop clearly. Please take another photo in good sunlight."),
           backgroundColor: AppTheme.alertRed,
         ),
       );
@@ -141,12 +147,15 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
     final lower = fileName.toLowerCase();
     final random = Random();
 
-    if (lower.contains('corn') || lower.contains('maize') || lower.contains('armyworm')) {
+    if (lower.contains('corn') ||
+        lower.contains('maize') ||
+        lower.contains('armyworm')) {
       return {
         'pest_name': 'Fall Armyworm (Spodoptera frugiperda)',
         'confidence_score': 0.90 + (random.nextDouble() * 0.08),
         'severity_level': 'High',
-        'description': 'A highly destructive caterpillar feeding on maize whorls. Larvae feed aggressively on leaves, creating large holes and sawdust-like waste.',
+        'description':
+            'A highly destructive caterpillar feeding on maize whorls. Larvae feed aggressively on leaves, creating large holes and sawdust-like waste.',
         'lifecycle': '30-40 days cycle',
         'active_season': 'June - September (Monsoon)',
         'prevention_recommendations': [
@@ -158,12 +167,15 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
       };
     }
 
-    if (lower.contains('tomato') || lower.contains('borer') || lower.contains('fruit')) {
+    if (lower.contains('tomato') ||
+        lower.contains('borer') ||
+        lower.contains('fruit')) {
       return {
         'pest_name': 'Tomato Fruit Borer (Helicoverpa armigera)',
         'confidence_score': 0.87 + (random.nextDouble() * 0.09),
         'severity_level': 'Medium',
-        'description': 'Larvae bore into tomato fruits, rendering them unfit for sale and consumption. Causes heavy economic losses.',
+        'description':
+            'Larvae bore into tomato fruits, rendering them unfit for sale and consumption. Causes heavy economic losses.',
         'lifecycle': '28-35 days cycle',
         'active_season': 'October - February (Winter)',
         'prevention_recommendations': [
@@ -175,12 +187,15 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
       };
     }
 
-    if (lower.contains('aphid') || lower.contains('cotton') || lower.contains('bug')) {
+    if (lower.contains('aphid') ||
+        lower.contains('cotton') ||
+        lower.contains('bug')) {
       return {
         'pest_name': 'Cotton Aphid (Aphis gossypii)',
         'confidence_score': 0.83 + (random.nextDouble() * 0.12),
         'severity_level': 'Low',
-        'description': 'Small green-black insects sucking sap from the underside of leaves, causing curling, yellowing, and sticky soot mold.',
+        'description':
+            'Small green-black insects sucking sap from the underside of leaves, causing curling, yellowing, and sticky soot mold.',
         'lifecycle': '7-14 days cycle',
         'active_season': 'Year-round in humid conditions',
         'prevention_recommendations': [
@@ -197,7 +212,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
         'pest_name': 'Brown Planthopper (Nilaparvata lugens)',
         'confidence_score': 0.88,
         'severity_level': 'High',
-        'description': 'Brown Planthopper is a major pest of rice. Both nymphs and adults suck sap from the base of rice tillers causing hopperburn.',
+        'description':
+            'Brown Planthopper is a major pest of rice. Both nymphs and adults suck sap from the base of rice tillers causing hopperburn.',
         'lifecycle': '15-25 days cycle',
         'active_season': 'July - October (Kharif)',
         'prevention_recommendations': [
@@ -211,7 +227,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
         'pest_name': 'Yellow Stem Borer (Scirpophaga incertulas)',
         'confidence_score': 0.91,
         'severity_level': 'High',
-        'description': 'Larvae bore into the central leaf sheath of rice, causing "dead heart" in vegetative stages and "whiteheads" in flowering stages.',
+        'description':
+            'Larvae bore into the central leaf sheath of rice, causing "dead heart" in vegetative stages and "whiteheads" in flowering stages.',
         'lifecycle': '35-50 days cycle',
         'active_season': 'August - October',
         'prevention_recommendations': [
@@ -231,7 +248,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: const FarmAIAppBar(title: 'Pest Detection'),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -290,7 +308,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                       color: Colors.white.withOpacity(0.18),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.bug_report_rounded, color: Colors.white, size: 28),
+                    child: const Icon(Icons.bug_report_rounded,
+                        color: Colors.white, size: 28),
                   ),
                 ],
               ),
@@ -303,7 +322,8 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
               GestureDetector(
                 onTap: _isAnalyzing ? null : _showPicker,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.cardDark : Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -395,9 +415,12 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                           fit: StackFit.expand,
                           children: [
                             if (_selectedImageBytes != null)
-                              Image.memory(_selectedImageBytes!, fit: BoxFit.cover)
+                              Image.memory(_selectedImageBytes!,
+                                  fit: BoxFit.cover)
                             else
-                              const Center(child: CircularProgressIndicator(color: Color(0xFFFF8F00))),
+                              const Center(
+                                  child: CircularProgressIndicator(
+                                      color: Color(0xFFFF8F00))),
 
                             // Continuous green laser scan line overlay when analyzing
                             if (_isAnalyzing)
@@ -412,12 +435,20 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                                         decoration: const BoxDecoration(
                                           color: Colors.greenAccent,
                                           boxShadow: [
-                                            BoxShadow(color: Colors.greenAccent, blurRadius: 16, spreadRadius: 4),
+                                            BoxShadow(
+                                                color: Colors.greenAccent,
+                                                blurRadius: 16,
+                                                spreadRadius: 4),
                                           ],
                                         ),
                                       )
-                                          .animate(onPlay: (c) => c.repeat(reverse: true))
-                                          .slideY(begin: 0, end: 42, duration: 1500.ms),
+                                          .animate(
+                                              onPlay: (c) =>
+                                                  c.repeat(reverse: true))
+                                          .slideY(
+                                              begin: 0,
+                                              end: 42,
+                                              duration: 1500.ms),
                                     ],
                                   ),
                                 ),
@@ -439,13 +470,15 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFE65100).withOpacity(0.3),
+                                  color:
+                                      const Color(0xFFE65100).withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.edit_rounded, color: Colors.white, size: 18),
+                            child: const Icon(Icons.edit_rounded,
+                                color: Colors.white, size: 18),
                           ),
                         ),
                       ),
@@ -511,11 +544,15 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
             if (_isAnalyzing)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.cardDark : Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      width: 1.2),
                 ),
                 child: Column(
                   children: [
@@ -526,18 +563,24 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
                           Icons.sync_rounded,
                           color: Color(0xFFE65100),
                           size: 24,
-                        ).animate(onPlay: (c) => c.repeat()).rotate(duration: 2.seconds),
+                        )
+                            .animate(onPlay: (c) => c.repeat())
+                            .rotate(duration: 2.seconds),
                         const SizedBox(width: 12),
                         const Text(
                           'Analyzing insect details...',
-                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'Estimated time: $_analysisCountdown seconds remaining',
-                      style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -555,7 +598,10 @@ class _PestDetectionScreenState extends ConsumerState<PestDetectionScreen> {
               ).animate().fadeIn().slideY(begin: 0.1),
 
             if (_result != null && !_isAnalyzing)
-              _PestResultCard(result: _result!).animate().fadeIn(duration: 500.ms).slideY(begin: 0.15),
+              _PestResultCard(result: _result!)
+                  .animate()
+                  .fadeIn(duration: 500.ms)
+                  .slideY(begin: 0.15),
 
             const SizedBox(height: 80),
           ],
@@ -646,16 +692,21 @@ class _PestResultCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppTheme.primaryGreen.withOpacity(0.08),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.2), width: 1.2),
+            border: Border.all(
+                color: AppTheme.primaryGreen.withOpacity(0.2), width: 1.2),
           ),
           child: const Row(
             children: [
-              Icon(Icons.check_circle_rounded, color: AppTheme.primaryGreen, size: 20),
+              Icon(Icons.check_circle_rounded,
+                  color: AppTheme.primaryGreen, size: 20),
               SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Your crop has been analyzed successfully.',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.primaryGreen),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: AppTheme.primaryGreen),
                 ),
               ),
             ],
@@ -679,7 +730,8 @@ class _PestResultCard extends StatelessWidget {
                       color: severityColor.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.bug_report_rounded, color: severityColor, size: 24),
+                    child: Icon(Icons.bug_report_rounded,
+                        color: severityColor, size: 24),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -698,7 +750,8 @@ class _PestResultCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           info['friendly_name'] as String,
-                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                       ],
                     ),
@@ -716,13 +769,17 @@ class _PestResultCard extends StatelessWidget {
                       children: [
                         Text(
                           info['friendly_confidence'] as String,
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppTheme.primaryGreen),
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.primaryGreen),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 12),
-                  StatusBadge(label: severity.toUpperCase(), color: severityColor),
+                  StatusBadge(
+                      label: severity.toUpperCase(), color: severityColor),
                 ],
               ),
               const Divider(height: 28),
@@ -730,12 +787,17 @@ class _PestResultCard extends StatelessWidget {
               // Farmer-friendly plain text symptom description
               const Text(
                 'PEST DESCRIPTION',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey, letterSpacing: 0.5),
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey,
+                    letterSpacing: 0.5),
               ),
               const SizedBox(height: 6),
               Text(
                 info['description'] as String,
-                style: const TextStyle(fontSize: 13, height: 1.5, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                    fontSize: 13, height: 1.5, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
               Row(
@@ -764,7 +826,11 @@ class _PestResultCard extends StatelessWidget {
         // Action details
         const Text(
           'RECOMMENDED ACTIONS',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.grey, letterSpacing: 0.5),
+          style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              color: Colors.grey,
+              letterSpacing: 0.5),
         ),
         const SizedBox(height: 10),
 
@@ -804,7 +870,9 @@ class _PestResultCard extends StatelessWidget {
             color: isDark ? AppTheme.cardDark : const Color(0xFFFFF9C4),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isDark ? AppTheme.borderDark : const Color(0xFFFBC02D).withOpacity(0.3),
+              color: isDark
+                  ? AppTheme.borderDark
+                  : const Color(0xFFFBC02D).withOpacity(0.3),
               width: 1.2,
             ),
           ),
@@ -817,7 +885,8 @@ class _PestResultCard extends StatelessWidget {
                   color: const Color(0xFFFBC02D).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFF57F17), size: 20),
+                child: const Icon(Icons.warning_amber_rounded,
+                    color: Color(0xFFF57F17), size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -826,12 +895,18 @@ class _PestResultCard extends StatelessWidget {
                   children: [
                     const Text(
                       'Economic Threshold Warning',
-                      style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFF57F17), fontSize: 12),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF57F17),
+                          fontSize: 12),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Start chemical treatment only if pest activity exceeds standard limit: ${result['economic_threshold'] as String}',
-                      style: const TextStyle(fontSize: 12, height: 1.4, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 12,
+                          height: 1.4,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -843,7 +918,8 @@ class _PestResultCard extends StatelessWidget {
     );
   }
 
-  Map<String, dynamic> _translatePestToFarmerFriendly(Map<String, dynamic> rawResult) {
+  Map<String, dynamic> _translatePestToFarmerFriendly(
+      Map<String, dynamic> rawResult) {
     final pestName = rawResult['pest_name'] as String;
     final severity = rawResult['severity_level'] as String;
     final confidenceScore = rawResult['confidence_score'] as double;
@@ -870,29 +946,37 @@ class _PestResultCard extends StatelessWidget {
 
     final rawDesc = rawResult['description'] as String? ?? '';
     String friendlyDescription = rawDesc
-        .replaceAll('destructive caterpillar feeding', 'hungry caterpillars eating')
+        .replaceAll(
+            'destructive caterpillar feeding', 'hungry caterpillars eating')
         .replaceAll('whorls', 'leaves and shoots')
         .replaceAll('larvae feed aggressively', 'worms eat very fast')
         .replaceAll('sawdust-like waste', 'frass/waste spots')
         .replaceAll('bore into', 'make holes and eat inside')
         .replaceAll('rendering them unfit for sale', 'destroying them')
         .replaceAll('sucking sap', 'drinking the leaf juice')
-        .replaceAll('nymphs and adults suck sap', 'young and adult insects drink juice')
+        .replaceAll(
+            'nymphs and adults suck sap', 'young and adult insects drink juice')
         .replaceAll('dead heart', 'drying plant shoots')
         .replaceAll('whiteheads', 'white dried grains');
 
-    String organicTreatment = 'Spray neem oil mixture (5ml per liter) or apply wood ash on leaves.';
+    String organicTreatment =
+        'Spray neem oil mixture (5ml per liter) or apply wood ash on leaves.';
     if (pestName.contains('Armyworm')) {
-      organicTreatment = 'Apply sand, neem seed powder, or ash in crop center shoots to suffocate larvae.';
+      organicTreatment =
+          'Apply sand, neem seed powder, or ash in crop center shoots to suffocate larvae.';
     } else if (pestName.contains('Borer')) {
-      organicTreatment = 'Set up pheromone traps to trap adult moths, or release egg-eating beneficial insects.';
+      organicTreatment =
+          'Set up pheromone traps to trap adult moths, or release egg-eating beneficial insects.';
     }
 
-    String chemicalTreatment = 'Spray Cartap Hydrochloride or Imidacloprid as recommended by local guidelines.';
+    String chemicalTreatment =
+        'Spray Cartap Hydrochloride or Imidacloprid as recommended by local guidelines.';
     if (pestName.contains('Armyworm')) {
-      chemicalTreatment = 'Spray Spinetoram 11.7 SC @ 0.5ml per liter of water.';
+      chemicalTreatment =
+          'Spray Spinetoram 11.7 SC @ 0.5ml per liter of water.';
     } else if (pestName.contains('Borer')) {
-      chemicalTreatment = 'Spray Bacillus thuringiensis (Bt) @ 2g per liter of water.';
+      chemicalTreatment =
+          'Spray Bacillus thuringiensis (Bt) @ 2g per liter of water.';
     } else if (pestName.contains('Aphid')) {
       chemicalTreatment = 'Spray Dimethoate 30% EC @ 1ml per liter of water.';
     }
@@ -904,7 +988,8 @@ class _PestResultCard extends StatelessWidget {
       dangerLevel = 'This pest is easily controlled and causes minor damage.';
     }
 
-    String protectNeighbors = 'Uproot severely damaged plants and clear weed boundaries to stop pests from moving.';
+    String protectNeighbors =
+        'Uproot severely damaged plants and clear weed boundaries to stop pests from moving.';
 
     return {
       'friendly_name': friendlyName,
@@ -976,7 +1061,9 @@ class _TreatmentStepCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.cardDark : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+        border: Border.all(
+            color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+            width: 1.2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -996,12 +1083,14 @@ class _TreatmentStepCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: color),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800, fontSize: 13, color: color),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   content,
-                  style: const TextStyle(fontSize: 13, height: 1.4, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 13, height: 1.4, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

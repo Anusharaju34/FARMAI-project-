@@ -26,13 +26,13 @@ class SupabaseStorageAdapter implements StorageAdapter {
       final bytes = await file.readAsBytes();
 
       await _client.storage.from(bucket).uploadBinary(
-        path,
-        bytes,
-        fileOptions: FileOptions(
-          upsert: true,
-          contentType: _getContentType(file.name),
-        ),
-      );
+            path,
+            bytes,
+            fileOptions: FileOptions(
+              upsert: true,
+              contentType: _getContentType(file.name),
+            ),
+          );
 
       return _client.storage.from(bucket).getPublicUrl(path);
     } on StorageException catch (error) {

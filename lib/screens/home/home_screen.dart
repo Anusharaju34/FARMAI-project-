@@ -64,7 +64,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : _currentUserName;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -82,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: isDark 
+                    colors: isDark
                         ? [const Color(0xFF0F2620), const Color(0xFF0A0F0D)]
                         : [const Color(0xFFE0F2F1), AppTheme.backgroundLight],
                     begin: Alignment.topCenter,
@@ -139,9 +140,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     child: IconButton(
                                       icon: Icon(
                                         Icons.notifications_rounded,
-                                        color: isDark ? Colors.white : AppTheme.darkGreen,
+                                        color: isDark
+                                            ? Colors.white
+                                            : AppTheme.darkGreen,
                                       ),
-                                      onPressed: () => context.push(AppRoutes.notifications),
+                                      onPressed: () =>
+                                          context.push(AppRoutes.notifications),
                                     ),
                                   ),
                                 ),
@@ -156,7 +160,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         color: AppTheme.alertRed,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: isDark ? AppTheme.backgroundDark : Colors.white,
+                                          color: isDark
+                                              ? AppTheme.backgroundDark
+                                              : Colors.white,
                                           width: 1.5,
                                         ),
                                       ),
@@ -172,9 +178,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: IconButton(
                                   icon: Icon(
                                     Icons.settings_rounded,
-                                    color: isDark ? Colors.white : AppTheme.darkGreen,
+                                    color: isDark
+                                        ? Colors.white
+                                        : AppTheme.darkGreen,
                                   ),
-                                  onPressed: () => context.push(AppRoutes.settings),
+                                  onPressed: () =>
+                                      context.push(AppRoutes.settings),
                                 ),
                               ),
                             ),
@@ -226,7 +235,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // Gemini-style Premium AI Assist Banner
                   PremiumGlassCard(
                     padding: const EdgeInsets.all(18),
-                    color: isDark ? const Color(0xFF16221E) : const Color(0xFFE8F5E9),
+                    color: isDark
+                        ? const Color(0xFF16221E)
+                        : const Color(0xFFE8F5E9),
                     borderOpacity: 0.15,
                     child: Row(
                       children: [
@@ -256,7 +267,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 15,
-                                  color: isDark ? Colors.white : AppTheme.darkGreen,
+                                  color: isDark
+                                      ? Colors.white
+                                      : AppTheme.darkGreen,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -264,7 +277,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 'Detect leaf blight risk & check recommendations.',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: isDark ? Colors.white70 : Colors.grey[700],
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.grey[700],
                                   height: 1.3,
                                 ),
                               ),
@@ -283,14 +298,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(height: 20),
 
                   // Weather Summary Card
-                  weather.when(
-                    data: (weatherData) {
-                      if (weatherData == null) return const SizedBox.shrink();
-                      return _WeatherCard(weather: weatherData);
-                    },
-                    loading: () => const SkeletonLoader(width: double.infinity, height: 140),
-                    error: (_, __) => const SizedBox.shrink(),
-                  ).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
+                  weather
+                      .when(
+                        data: (weatherData) {
+                          if (weatherData == null)
+                            return const SizedBox.shrink();
+                          return _WeatherCard(weather: weatherData);
+                        },
+                        loading: () => const SkeletonLoader(
+                            width: double.infinity, height: 140),
+                        error: (_, __) => const SizedBox.shrink(),
+                      )
+                      .animate()
+                      .fadeIn(delay: 150.ms)
+                      .slideY(begin: 0.1),
 
                   const SizedBox(height: 20),
 
@@ -319,7 +340,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(height: 8),
                   const _MarketSnapshot(),
 
-                  const SizedBox(height: 100), // Spacing for floating navigation bar
+                  const SizedBox(
+                      height: 100), // Spacing for floating navigation bar
                 ],
               ),
             ),
@@ -382,7 +404,8 @@ class _WeatherCard extends StatelessWidget {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  const Icon(Icons.location_on_rounded, color: Colors.white70, size: 14),
+                  const Icon(Icons.location_on_rounded,
+                      color: Colors.white70, size: 14),
                   const SizedBox(width: 4),
                   Text(
                     weather.location,
@@ -448,7 +471,8 @@ class _WeatherStatItem extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -545,7 +569,9 @@ class _QuickActionsGrid extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: isDark ? Colors.white.withOpacity(0.9) : AppTheme.darkGreen,
+                    color: isDark
+                        ? Colors.white.withOpacity(0.9)
+                        : AppTheme.darkGreen,
                     height: 1.2,
                   ),
                   textAlign: TextAlign.center,
@@ -770,7 +796,9 @@ class _MarketSnapshot extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      isUp ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
+                      isUp
+                          ? Icons.arrow_upward_rounded
+                          : Icons.arrow_downward_rounded,
                       size: 10,
                       color: color,
                     ),

@@ -90,10 +90,7 @@ class SupabaseService {
     String userId,
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.usersTable)
-        .update(data)
-        .eq('id', userId);
+    await _client.from(AppConstants.usersTable).update(data).eq('id', userId);
   }
 
   // ============================================================
@@ -133,9 +130,7 @@ class SupabaseService {
   static Future<void> saveDiseasePrediction(
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.diseasePredictionsTable)
-        .insert(data);
+    await _client.from(AppConstants.diseasePredictionsTable).insert(data);
   }
 
   // ============================================================
@@ -159,9 +154,7 @@ class SupabaseService {
   static Future<void> savePestDetection(
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.pestDetectionsTable)
-        .insert(data);
+    await _client.from(AppConstants.pestDetectionsTable).insert(data);
   }
 
   // ============================================================
@@ -191,17 +184,13 @@ class SupabaseService {
         .select()
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((item) => ForumPost.fromJson(item))
-        .toList();
+    return (response as List).map((item) => ForumPost.fromJson(item)).toList();
   }
 
   static Future<void> createForumPost(
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.forumPostsTable)
-        .insert(data);
+    await _client.from(AppConstants.forumPostsTable).insert(data);
   }
 
   static Future<void> likePost(
@@ -238,9 +227,7 @@ class SupabaseService {
   static Future<void> submitExpertQuery(
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.expertQueriesTable)
-        .insert(data);
+    await _client.from(AppConstants.expertQueriesTable).insert(data);
   }
 
   // ============================================================
@@ -264,12 +251,9 @@ class SupabaseService {
   static Future<void> markNotificationRead(
     String notificationId,
   ) async {
-    await _client
-        .from(AppConstants.notificationsTable)
-        .update({
-          'is_read': true,
-        })
-        .eq('id', notificationId);
+    await _client.from(AppConstants.notificationsTable).update({
+      'is_read': true,
+    }).eq('id', notificationId);
   }
 
   static RealtimeChannel subscribeToNotifications(
@@ -301,9 +285,7 @@ class SupabaseService {
   static Future<void> saveIrrigationRecord(
     Map<String, dynamic> data,
   ) async {
-    await _client
-        .from(AppConstants.irrigationRecordsTable)
-        .insert(data);
+    await _client.from(AppConstants.irrigationRecordsTable).insert(data);
   }
 
   static Future<List<IrrigationRecord>> getIrrigationHistory(

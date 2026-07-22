@@ -52,7 +52,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -72,7 +73,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           width: 84,
                           height: 84,
                           decoration: BoxDecoration(
-                            color: isDark ? AppTheme.cardDark : AppTheme.surfaceLight,
+                            color: isDark
+                                ? AppTheme.cardDark
+                                : AppTheme.surfaceLight,
                             borderRadius: BorderRadius.circular(24),
                             border: Border.all(
                               color: AppTheme.primaryGreen.withOpacity(0.15),
@@ -134,7 +137,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: Icons.email_outlined,
                           validator: (v) {
-                            if (v == null || v.isEmpty) return 'Enter your email';
+                            if (v == null || v.isEmpty)
+                              return 'Enter your email';
                             if (!v.contains('@')) return 'Enter a valid email';
                             return null;
                           },
@@ -153,11 +157,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   : Icons.visibility_off_outlined,
                               color: Colors.grey,
                             ),
-                            onPressed: () =>
-                                setState(() => _obscurePassword = !_obscurePassword),
+                            onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword),
                           ),
                           validator: (v) {
-                            if (v == null || v.isEmpty) return 'Enter your password';
+                            if (v == null || v.isEmpty)
+                              return 'Enter your password';
                             if (v.length < 6) return 'Password too short';
                             return null;
                           },
@@ -219,7 +224,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         Text(
                           "Don't have an account? ",
-                          style: TextStyle(color: isDark ? Colors.white60 : Colors.grey[600]),
+                          style: TextStyle(
+                              color:
+                                  isDark ? Colors.white60 : Colors.grey[600]),
                         ),
                         GestureDetector(
                           onTap: () => context.go(AppRoutes.register),

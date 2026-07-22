@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/theme/app_theme.dart';
 import '../../routes/app_router.dart';
 import '../../services/supabase_service.dart';
+import '../../services/tflite/tflite_classifier.dart';
 import '../../widgets/common/common_widgets.dart';
 
 class DiseaseDetectionScreen extends ConsumerStatefulWidget {
@@ -26,10 +27,12 @@ class DiseaseDetectionScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<DiseaseDetectionScreen> createState() => _DiseaseDetectionScreenState();
+  ConsumerState<DiseaseDetectionScreen> createState() =>
+      _DiseaseDetectionScreenState();
 }
 
-class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen> {
+class _DiseaseDetectionScreenState
+    extends ConsumerState<DiseaseDetectionScreen> {
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
   Uint8List? _selectedImageBytes;
@@ -37,11 +40,14 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
   Map<String, dynamic>? _result;
   int _analysisCountdown = 3;
   Timer? _countdownTimer;
-  String? _validationError;
+  TfliteClassifier? _classifier;
+  String? _validationErrorTitle;
+  String? _validationErrorMessage;
 
   @override
   void initState() {
     super.initState();
+    _initClassifier();
     if (widget.testImagePath != null) {
       _loadTestImage(widget.testImagePath!);
     }
@@ -53,6 +59,19 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     super.dispose();
   }
 
+  Future<void> _initClassifier() async {
+    try {
+      final classifier = await TfliteClassifier.create();
+      if (mounted) {
+        setState(() {
+          _classifier = classifier;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize TFLite classifier: $e');
+    }
+  }
+
   Future<void> _loadTestImage(String path) async {
     try {
       final XFile image = XFile(path);
@@ -61,7 +80,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
       setState(() {
         _selectedImage = image;
         _selectedImageBytes = bytes;
-        _validationError = null;
+        _validationErrorTitle = null;
+        _validationErrorMessage = null;
       });
     } catch (error) {
       debugPrint('Unable to load test image: $error');
@@ -82,7 +102,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
         _selectedImage = pickedImage;
         _selectedImageBytes = bytes;
         _result = null;
-        _validationError = null;
+        _validationErrorTitle = null;
+        _validationErrorMessage = null;
       });
     } catch (error) {
       if (!mounted) return;
@@ -92,48 +113,15 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     }
   }
 
-  bool _isLeafImage(String name) {
-    final lowerName = name.toLowerCase();
-    // Allow test assets so automated tests continue to function
-    if (lowerName.contains('white1') || lowerName.contains('test') || lowerName.contains('farmai_test')) {
-      return true;
-    }
-    return lowerName.contains('leaf') ||
-        lowerName.contains('plant') ||
-        lowerName.contains('rust') ||
-        lowerName.contains('blight') ||
-        lowerName.contains('mildew') ||
-        lowerName.contains('spots') ||
-        lowerName.contains('crop') ||
-        lowerName.contains('wheat') ||
-        lowerName.contains('tomato') ||
-        lowerName.contains('potato') ||
-        lowerName.contains('cotton') ||
-        lowerName.contains('rice') ||
-        lowerName.contains('sample');
-  }
-
   Future<void> _analyzeImage() async {
     final XFile? selectedImage = _selectedImage;
     if (selectedImage == null || _isAnalyzing) return;
 
-    // Strict validation check for crop leaf images
-    if (!_isLeafImage(selectedImage.name)) {
-      setState(() {
-        _validationError = "Invalid image. We couldn't identify a crop leaf in the photo. Please upload a clear leaf image.";
-        _result = null;
-      });
-      return;
-    } else {
-      setState(() {
-        _validationError = null;
-      });
-    }
-
     final User? user = Supabase.instance.client.auth.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please log in before analysing an image.')),
+        const SnackBar(
+            content: Text('Please log in before analysing an image.')),
       );
       return;
     }
@@ -141,6 +129,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     setState(() {
       _isAnalyzing = true;
       _analysisCountdown = 3;
+      _validationErrorTitle = null;
+      _validationErrorMessage = null;
     });
 
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -155,6 +145,47 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     });
 
     try {
+      // Load or build classifier instance
+      final classifier = _classifier ?? await TfliteClassifier.create();
+      final Map<String, dynamic> prediction = await classifier.classifyImage(
+          _selectedImageBytes!, selectedImage.name);
+
+      final String label = prediction['label'] as String;
+      final double confidence = prediction['confidence'] as double;
+
+      // 4. Invalid or Non-leaf validation check
+      if (label.toLowerCase().contains('invalid') ||
+          label.toLowerCase().contains('non-leaf')) {
+        _countdownTimer?.cancel();
+        if (!mounted) return;
+        setState(() {
+          _validationErrorTitle = 'Invalid Image';
+          _validationErrorMessage =
+              'No crop leaf was detected. Please upload a clear crop leaf image.';
+          _result = null;
+          _isAnalyzing = false;
+        });
+        return;
+      }
+
+      // 5. Low confidence limit check
+      if (confidence < 0.65) {
+        _countdownTimer?.cancel();
+        if (!mounted) return;
+        setState(() {
+          _validationErrorTitle = 'Unclear Image';
+          _validationErrorMessage =
+              'We could not identify the leaf clearly. Please take another photo in good daylight.';
+          _result = null;
+          _isAnalyzing = false;
+        });
+        return;
+      }
+
+      // Valid crop leaf classification mapping
+      final Map<String, dynamic> finalResult =
+          _buildResultFromModelLabel(label, confidence);
+
       final String extension = _getFileExtension(selectedImage.name);
       final String fileName = '${const Uuid().v4()}.$extension';
 
@@ -164,32 +195,31 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
         path: '${user.id}/$fileName',
       );
 
-      await Future.delayed(const Duration(milliseconds: 2500));
-
-      final Map<String, dynamic> mockResult = _getDynamicDiseaseResult(selectedImage.name);
+      await Future.delayed(const Duration(milliseconds: 1500));
 
       if (!widget.testDisableSave) {
         await SupabaseService.saveDiseasePrediction({
           'user_id': user.id,
           'image_url': imageUrl,
-          'disease_name': mockResult['disease_name'],
-          'confidence_score': mockResult['confidence_score'],
-          'crop_type': mockResult['crop_type'],
-          'severity': mockResult['severity'],
-          'treatment_suggestions': mockResult['treatment_suggestions'],
+          'disease_name': finalResult['disease_name'],
+          'confidence_score': finalResult['confidence_score'],
+          'crop_type': finalResult['crop_type'],
+          'severity': finalResult['severity'],
+          'treatment_suggestions': finalResult['treatment_suggestions'],
           'created_at': DateTime.now().toIso8601String(),
         });
       }
 
       if (!mounted) return;
       setState(() {
-        _result = mockResult;
+        _result = finalResult;
       });
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("We couldn't identify the crop clearly. Please take another photo in good sunlight."),
+          content: const Text(
+              "We couldn't identify the crop clearly. Please take another photo in good sunlight."),
           backgroundColor: AppTheme.alertRed,
           duration: const Duration(seconds: 5),
         ),
@@ -204,103 +234,107 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     }
   }
 
-  Map<String, dynamic> _getDynamicDiseaseResult(String fileName) {
-    final lower = fileName.toLowerCase();
-    final random = Random();
-
-    if (lower.contains('wheat') || lower.contains('rust')) {
+  Map<String, dynamic> _buildResultFromModelLabel(
+      String label, double confidence) {
+    if (label == 'Healthy Leaf') {
       return {
-        'disease_name': 'Black Stem Rust (Puccinia graminis)',
-        'confidence_score': 0.89 + (random.nextDouble() * 0.08),
-        'severity': 'Severe',
-        'crop_type': 'Wheat',
-        'description': 'A devastating fungal disease affecting wheat. Causes reddish-brown pustules on stems and leaves, leading to lodging and reduced grain fill.',
+        'disease_name': 'Healthy Leaf',
+        'confidence_score': confidence,
+        'severity': 'Mild',
+        'crop_type': 'Plant',
+        'description':
+            'No symptoms of disease detected on the leaf. The crop appears healthy.',
         'treatment_suggestions': [
-          'Apply Propiconazole 25% EC @ 2ml/L of water',
-          'Use rust-resistant wheat varieties (e.g., HD 2967)',
-          'Avoid late sowing to minimize disease exposure'
+          'Continue standard watering and crop monitoring.',
+          'Ensure balanced soil NPK application.'
         ],
         'prevention': [
-          'Rotate crops with non-cereal options',
-          'Eliminate barberry plants (alternate host)'
+          'Maintain field sanitation.',
+          'Ensure proper crop spacing.'
         ]
       };
     }
-
-    if (lower.contains('tomato') || lower.contains('potato') || lower.contains('blight')) {
+    if (label == 'Tomato Early Blight') {
+      return {
+        'disease_name': 'Tomato Early Blight (Alternaria solani)',
+        'confidence_score': confidence,
+        'severity': 'Moderate',
+        'crop_type': 'Tomato',
+        'description':
+            'Alternaria solani is a fungal pathogen that causes early blight in tomato plants. Symptoms include concentric brown rings on older leaves.',
+        'treatment_suggestions': [
+          'Spray Mancozeb or Copper-based fungicides.',
+          'Prune lower leaves to improve soil air circulation.'
+        ],
+        'prevention': ['Avoid overhead irrigation.', 'Rotate crops annually.']
+      };
+    }
+    if (label == 'Tomato Late Blight') {
       return {
         'disease_name': 'Late Blight (Phytophthora infestans)',
-        'confidence_score': 0.91 + (random.nextDouble() * 0.06),
+        'confidence_score': confidence,
         'severity': 'Severe',
-        'crop_type': 'Tomato / Potato',
-        'description': 'A highly destructive disease showing dark water-soaked lesions on leaves and white cottony growth on the underside during humid weather.',
+        'crop_type': 'Tomato',
+        'description':
+            'Phytophthora infestans is a water mold causing late blight. Dark water-soaked lesions appear on leaves, with white cottony growth underneath.',
         'treatment_suggestions': [
-          'Spray Mancozeb @ 2.5g/L or Metalaxyl + Mancozeb @ 2g/L',
-          'Ensure wide spacing for foliage dry-off',
-          'Promptly harvest and destroy infected plants'
+          'Apply Metalaxyl + Mancozeb immediately.',
+          'Harvest healthy fruit early and discard infected vines.'
         ],
         'prevention': [
-          'Avoid overhead sprinkler irrigation',
-          'Apply preventive copper sprays early in the season'
+          'Use certified blight-free seeds.',
+          'Keep foliage dry using drip irrigation.'
         ]
       };
     }
-
-    if (lower.contains('mildew') || lower.contains('leaf') || lower.contains('spots')) {
+    if (label == 'Rice Blast') {
       return {
-        'disease_name': 'Powdery Mildew (Podosphaera)',
-        'confidence_score': 0.85 + (random.nextDouble() * 0.1),
-        'severity': 'Mild',
-        'crop_type': 'Vegetables / Grains',
-        'description': 'Fungal infection forming white, powdery spots on leaves, stems, and fruits, leading to premature leaf drop.',
+        'disease_name': 'Rice Blast (Magnaporthe oryzae)',
+        'confidence_score': confidence,
+        'severity': 'Severe',
+        'crop_type': 'Rice',
+        'description':
+            'A destructive fungal infection producing diamond-shaped lesions with gray centers on rice leaves, necks, and panicles.',
         'treatment_suggestions': [
-          'Spray Wettable Sulfur 80% WP @ 2g/L of water',
-          'Use Neem oil sprays as organic alternative',
-          'Prune inner branches to improve sun penetration'
+          'Spray Tricyclazole 75% WP @ 0.6g/L.',
+          'Avoid excess nitrogen fertilizer application.'
         ],
         'prevention': [
-          'Grow crops in full sunlight',
-          'Maintain clean field borders'
+          'Plant blast-resistant cultivars.',
+          'Maintain clean field borders.'
         ]
       };
     }
-
-    final list = [
-      {
-        'disease_name': 'Bacterial Leaf Blight (Xanthomonas oryzae)',
-        'confidence_score': 0.92,
-        'severity': 'Moderate',
-        'crop_type': 'Rice',
-        'description': 'Causes dry straw-colored stripes on leaves, leading to wilting of the tillers in young rice crops.',
-        'treatment_suggestions': [
-          'Apply Copper Oxychloride @ 3g/L + Streptocycline @ 0.1g/L',
-          'Avoid excess nitrogenous fertilizers',
-          'Drain field immediately to lower relative humidity'
-        ],
-        'prevention': [
-          'Treat seeds with hot water at 52°C',
-          'Maintain balanced soil NPK levels'
-        ]
-      },
-      {
+    if (label == 'Cotton Leaf Curl') {
+      return {
         'disease_name': 'Cotton Leaf Curl Virus (CLCuV)',
-        'confidence_score': 0.88,
+        'confidence_score': confidence,
         'severity': 'Severe',
         'crop_type': 'Cotton',
-        'description': 'Viral disease transmitted by whiteflies. Causes leaf thickening, upward curling, and cup-shaped leaf growth.',
+        'description':
+            'Viral infection spread by whiteflies. Causes upward curling, thickening, and prominent cup-shaped growths on leaves.',
         'treatment_suggestions': [
-          'Control vector whitefly using Imidacloprid 17.8% SL @ 0.5ml/L',
-          'Uproot and destroy infected weed hosts',
-          'Foliar spray of Potassium nitrate to improve vigor'
+          'Control whiteflies with Imidacloprid spray.',
+          'Uproot and bury infected weeds immediately.'
         ],
         'prevention': [
-          'Sow crop early to avoid high whitefly pressure',
-          'Use resistant cultivars'
+          'Sow crop early to avoid peak whitefly cycles.',
+          'Maintain clean weed boundaries.'
         ]
-      }
-    ];
-
-    return list[random.nextInt(list.length)];
+      };
+    }
+    return {
+      'disease_name': label,
+      'confidence_score': confidence,
+      'severity': 'Moderate',
+      'crop_type': 'Crop',
+      'description': 'Fungal or bacterial spot pattern observed on leaf.',
+      'treatment_suggestions': [
+        'Apply general copper fungicide sprays.',
+        'Prune dead/diseased leaves.'
+      ],
+      'prevention': ['Ensure proper sun exposure.', 'Keep plants clean.']
+    };
   }
 
   String _getFileExtension(String fileName) {
@@ -316,12 +350,14 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: FarmAIAppBar(
         title: 'Disease Detection',
         actions: [
           IconButton(
-            icon: const Icon(Icons.history_rounded, color: AppTheme.primaryGreen),
+            icon:
+                const Icon(Icons.history_rounded, color: AppTheme.primaryGreen),
             onPressed: () => context.push(AppRoutes.diseaseHistory),
           ),
         ],
@@ -383,7 +419,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                       color: Colors.white.withOpacity(0.18),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 28),
+                    child: const Icon(Icons.auto_awesome_rounded,
+                        color: Colors.white, size: 28),
                   ),
                 ],
               ),
@@ -396,7 +433,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
               GestureDetector(
                 onTap: _isAnalyzing ? null : _showImageSourceDialog,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
                     color: isDark ? AppTheme.cardDark : Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -488,9 +526,12 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                           fit: StackFit.expand,
                           children: [
                             if (_selectedImageBytes != null)
-                              Image.memory(_selectedImageBytes!, fit: BoxFit.cover)
+                              Image.memory(_selectedImageBytes!,
+                                  fit: BoxFit.cover)
                             else
-                              const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen)),
+                              const Center(
+                                  child: CircularProgressIndicator(
+                                      color: AppTheme.primaryGreen)),
 
                             // Continuous laser scan line overlay when analyzing
                             if (_isAnalyzing)
@@ -505,12 +546,20 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                                         decoration: const BoxDecoration(
                                           color: Colors.greenAccent,
                                           boxShadow: [
-                                            BoxShadow(color: Colors.greenAccent, blurRadius: 16, spreadRadius: 4),
+                                            BoxShadow(
+                                                color: Colors.greenAccent,
+                                                blurRadius: 16,
+                                                spreadRadius: 4),
                                           ],
                                         ),
                                       )
-                                          .animate(onPlay: (c) => c.repeat(reverse: true))
-                                          .slideY(begin: 0, end: 42, duration: 1500.ms),
+                                          .animate(
+                                              onPlay: (c) =>
+                                                  c.repeat(reverse: true))
+                                          .slideY(
+                                              begin: 0,
+                                              end: 42,
+                                              duration: 1500.ms),
                                     ],
                                   ),
                                 ),
@@ -538,7 +587,8 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                                 ),
                               ],
                             ),
-                            child: const Icon(Icons.edit_rounded, color: Colors.white, size: 18),
+                            child: const Icon(Icons.edit_rounded,
+                                color: Colors.white, size: 18),
                           ),
                         ),
                       ),
@@ -547,7 +597,7 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
               ).animate().fadeIn(delay: 150.ms),
 
             // Validation Error Alert banner (Shakes dynamically on load)
-            if (_validationError != null) ...[
+            if (_validationErrorMessage != null) ...[
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -573,9 +623,9 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Invalid Image Uploaded',
-                            style: TextStyle(
+                          Text(
+                            _validationErrorTitle ?? 'Invalid Image',
+                            style: const TextStyle(
                               color: AppTheme.alertRed,
                               fontWeight: FontWeight.w800,
                               fontSize: 13,
@@ -583,7 +633,7 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            _validationError!,
+                            _validationErrorMessage!,
                             style: const TextStyle(
                               fontSize: 12,
                               height: 1.4,
@@ -604,11 +654,15 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
             if (_isAnalyzing)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.cardDark : Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      width: 1.2),
                 ),
                 child: Column(
                   children: [
@@ -619,18 +673,24 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
                           Icons.sync_rounded,
                           color: AppTheme.primaryGreen,
                           size: 24,
-                        ).animate(onPlay: (c) => c.repeat()).rotate(duration: 2.seconds),
+                        )
+                            .animate(onPlay: (c) => c.repeat())
+                            .rotate(duration: 2.seconds),
                         const SizedBox(width: 12),
                         const Text(
                           'Analyzing your crop...',
-                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'Estimated time: $_analysisCountdown seconds remaining',
-                      style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -647,7 +707,10 @@ class _DiseaseDetectionScreenState extends ConsumerState<DiseaseDetectionScreen>
               ).animate().fadeIn().slideY(begin: 0.1),
 
             if (_result != null && !_isAnalyzing)
-              _ResultCard(result: _result!).animate().fadeIn(duration: 500.ms).slideY(begin: 0.15),
+              _ResultCard(result: _result!)
+                  .animate()
+                  .fadeIn(duration: 500.ms)
+                  .slideY(begin: 0.15),
 
             const SizedBox(height: 80),
           ],
@@ -781,16 +844,21 @@ class _ResultCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppTheme.primaryGreen.withOpacity(0.08),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.2), width: 1.2),
+            border: Border.all(
+                color: AppTheme.primaryGreen.withOpacity(0.2), width: 1.2),
           ),
           child: const Row(
             children: [
-              Icon(Icons.check_circle_rounded, color: AppTheme.primaryGreen, size: 20),
+              Icon(Icons.check_circle_rounded,
+                  color: AppTheme.primaryGreen, size: 20),
               SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Your crop has been analyzed successfully.',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.primaryGreen),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                      color: AppTheme.primaryGreen),
                 ),
               ),
             ],
@@ -814,7 +882,8 @@ class _ResultCard extends StatelessWidget {
                       color: severityColor.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.coronavirus_rounded, color: severityColor, size: 24),
+                    child: Icon(Icons.coronavirus_rounded,
+                        color: severityColor, size: 24),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -833,7 +902,8 @@ class _ResultCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           info['friendly_name'] as String,
-                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 16),
                         ),
                       ],
                     ),
@@ -851,13 +921,17 @@ class _ResultCard extends StatelessWidget {
                       children: [
                         Text(
                           info['friendly_confidence'] as String,
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppTheme.primaryGreen),
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.primaryGreen),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 12),
-                  StatusBadge(label: severity.toUpperCase(), color: severityColor),
+                  StatusBadge(
+                      label: severity.toUpperCase(), color: severityColor),
                 ],
               ),
               const Divider(height: 28),
@@ -865,12 +939,17 @@ class _ResultCard extends StatelessWidget {
               // Farmer-friendly plain text symptom description
               const Text(
                 'WHAT WE DETECTED',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey, letterSpacing: 0.5),
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey,
+                    letterSpacing: 0.5),
               ),
               const SizedBox(height: 6),
               Text(
                 info['description'] as String,
-                style: const TextStyle(fontSize: 13, height: 1.5, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                    fontSize: 13, height: 1.5, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -881,7 +960,11 @@ class _ResultCard extends StatelessWidget {
         // Farmer Treatment Steps (Cards Grid)
         const Text(
           'RECOMMENDED TREATMENTS',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.grey, letterSpacing: 0.5),
+          style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              color: Colors.grey,
+              letterSpacing: 0.5),
         ),
         const SizedBox(height: 10),
 
@@ -937,7 +1020,9 @@ class _ResultCard extends StatelessWidget {
             color: isDark ? AppTheme.cardDark : const Color(0xFFFFF9C4),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isDark ? AppTheme.borderDark : const Color(0xFFFBC02D).withOpacity(0.3),
+              color: isDark
+                  ? AppTheme.borderDark
+                  : const Color(0xFFFBC02D).withOpacity(0.3),
               width: 1.2,
             ),
           ),
@@ -950,7 +1035,8 @@ class _ResultCard extends StatelessWidget {
                   color: const Color(0xFFFBC02D).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.gavel_rounded, color: Color(0xFFF57F17), size: 20),
+                child: const Icon(Icons.gavel_rounded,
+                    color: Color(0xFFF57F17), size: 20),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -959,12 +1045,18 @@ class _ResultCard extends StatelessWidget {
                   children: [
                     Text(
                       'Govt Agriculture Extension Office Recommendation',
-                      style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFF57F17), fontSize: 12),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF57F17),
+                          fontSize: 12),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Contact Tamil Nadu Agri Dept helpline or visit nearest block development agency for subsidized fungicides.',
-                      style: TextStyle(fontSize: 12, height: 1.4, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 12,
+                          height: 1.4,
+                          fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -976,7 +1068,8 @@ class _ResultCard extends StatelessWidget {
     );
   }
 
-  Map<String, dynamic> _translateToFarmerFriendly(Map<String, dynamic> rawResult) {
+  Map<String, dynamic> _translateToFarmerFriendly(
+      Map<String, dynamic> rawResult) {
     final diseaseName = rawResult['disease_name'] as String;
     final cropType = rawResult['crop_type'] as String;
     final severity = rawResult['severity'] as String;
@@ -1004,7 +1097,8 @@ class _ResultCard extends StatelessWidget {
 
     final rawDesc = rawResult['description'] as String? ?? '';
     String friendlyDescription = rawDesc
-        .replaceAll('Necrotic lesions observed', 'Brown spots are spreading on the leaves')
+        .replaceAll('Necrotic lesions observed',
+            'Brown spots are spreading on the leaves')
         .replaceAll('necrotic lesions', 'brown spots')
         .replaceAll('Chlorosis', 'The leaves are turning yellow')
         .replaceAll('chlorosis', 'leaves turning yellow')
@@ -1014,7 +1108,8 @@ class _ResultCard extends StatelessWidget {
         .replaceAll('fungal infection', 'fungus infection')
         .replaceAll('viral disease', 'virus disease')
         .replaceAll('Viral disease', 'A virus has infected the plant')
-        .replaceAll('transmitted by whiteflies', 'spread by tiny insects (whiteflies)')
+        .replaceAll(
+            'transmitted by whiteflies', 'spread by tiny insects (whiteflies)')
         .replaceAll('infected weed hosts', 'nearby infected weeds')
         .replaceAll('foliar spray', 'spraying on leaves')
         .replaceAll('fungal disease', 'fungus disease')
@@ -1031,7 +1126,8 @@ class _ResultCard extends StatelessWidget {
     if (diseaseName.contains('Virus') || diseaseName.contains('Curl')) {
       reason = 'This usually happens because of a virus spread by whiteflies.';
     } else if (diseaseName.contains('Bacterial')) {
-      reason = 'This usually happens because of a bacterial infection in warm, humid weather.';
+      reason =
+          'This usually happens because of a bacterial infection in warm, humid weather.';
     }
 
     String medicine = 'Spray Mancozeb @ 2.5g/L or Copper Oxychloride @ 3g/L.';
@@ -1041,7 +1137,8 @@ class _ResultCard extends StatelessWidget {
       medicine = 'Spray Wettable Sulfur 80% WP @ 2g/L of water.';
     }
 
-    String organic = 'Spray Neem oil mixture (5ml per liter of water) or biological extract.';
+    String organic =
+        'Spray Neem oil mixture (5ml per liter of water) or biological extract.';
     String waterAdvice = 'Do not water the leaves directly.';
     String recoveryOutlook = 'The crop may recover in about 7–10 days.';
 
@@ -1084,7 +1181,9 @@ class _TreatmentStepCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppTheme.cardDark : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+        border: Border.all(
+            color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+            width: 1.2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1104,12 +1203,14 @@ class _TreatmentStepCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: color),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800, fontSize: 13, color: color),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   content,
-                  style: const TextStyle(fontSize: 13, height: 1.4, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 13, height: 1.4, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

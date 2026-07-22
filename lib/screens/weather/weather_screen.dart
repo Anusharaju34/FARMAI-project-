@@ -18,7 +18,8 @@ class WeatherScreen extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       body: weather.when(
         data: (w) => w != null ? _WeatherContent(weather: w) : _ErrorView(),
         loading: () => const Center(
@@ -47,9 +48,11 @@ class _WeatherContent extends StatelessWidget {
           expandedHeight: 300,
           pinned: true,
           stretch: true,
-          backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.primaryGreen,
+          backgroundColor:
+              isDark ? AppTheme.backgroundDark : AppTheme.primaryGreen,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: Colors.white),
             onPressed: () => Navigator.maybePop(context),
           ),
           flexibleSpace: FlexibleSpaceBar(
@@ -93,7 +96,9 @@ class _WeatherContent extends StatelessWidget {
                         fontWeight: FontWeight.w200,
                         letterSpacing: -2.0,
                       ),
-                    ).animate().scale(duration: 500.ms, curve: Curves.easeOutBack),
+                    )
+                        .animate()
+                        .scale(duration: 500.ms, curve: Curves.easeOutBack),
                     Text(
                       weather.condition,
                       style: const TextStyle(
@@ -154,7 +159,7 @@ class _WeatherContent extends StatelessWidget {
                   ],
                 ).animate().fadeIn(delay: 150.ms),
                 const SizedBox(height: 12),
-                
+
                 // Forecast Items
                 _ForecastList(forecast: weather.forecast)
                     .animate()
@@ -262,7 +267,10 @@ class _StatItem extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           label,
-          style: TextStyle(color: Colors.grey[500], fontSize: 11, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              color: Colors.grey[500],
+              fontSize: 11,
+              fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -277,11 +285,41 @@ class _ForecastList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (forecast.isEmpty) {
       final mockForecast = [
-        {'day': 'Mon', 'max': 32, 'min': 24, 'icon': Icons.wb_sunny_rounded, 'rain': '10%'},
-        {'day': 'Tue', 'max': 29, 'min': 22, 'icon': Icons.cloud_rounded, 'rain': '40%'},
-        {'day': 'Wed', 'max': 27, 'min': 21, 'icon': Icons.water_rounded, 'rain': '80%'},
-        {'day': 'Thu', 'max': 30, 'min': 23, 'icon': Icons.wb_cloudy_rounded, 'rain': '20%'},
-        {'day': 'Fri', 'max': 33, 'min': 25, 'icon': Icons.wb_sunny_rounded, 'rain': '5%'},
+        {
+          'day': 'Mon',
+          'max': 32,
+          'min': 24,
+          'icon': Icons.wb_sunny_rounded,
+          'rain': '10%'
+        },
+        {
+          'day': 'Tue',
+          'max': 29,
+          'min': 22,
+          'icon': Icons.cloud_rounded,
+          'rain': '40%'
+        },
+        {
+          'day': 'Wed',
+          'max': 27,
+          'min': 21,
+          'icon': Icons.water_rounded,
+          'rain': '80%'
+        },
+        {
+          'day': 'Thu',
+          'max': 30,
+          'min': 23,
+          'icon': Icons.wb_cloudy_rounded,
+          'rain': '20%'
+        },
+        {
+          'day': 'Fri',
+          'max': 33,
+          'min': 25,
+          'icon': Icons.wb_sunny_rounded,
+          'rain': '5%'
+        },
       ];
       return Column(
         children: mockForecast
@@ -303,7 +341,9 @@ class _ForecastList extends StatelessWidget {
                 day: DateFormat('EEE').format(f.date),
                 max: f.maxTemp.round(),
                 min: f.minTemp.round(),
-                icon: f.chanceOfRain > 50 ? Icons.water_drop_rounded : Icons.wb_sunny_rounded,
+                icon: f.chanceOfRain > 50
+                    ? Icons.water_drop_rounded
+                    : Icons.wb_sunny_rounded,
                 rain: '${f.chanceOfRain.round()}%',
               ))
           .toList(),
@@ -352,24 +392,33 @@ class _ForecastItem extends StatelessWidget {
           ),
           Icon(
             icon,
-            color: icon == Icons.wb_sunny_rounded ? AppTheme.warningOrange : AppTheme.waterBlue,
+            color: icon == Icons.wb_sunny_rounded
+                ? AppTheme.warningOrange
+                : AppTheme.waterBlue,
             size: 24,
           ),
           const Spacer(),
           Row(
             children: [
-              const Icon(Icons.water_drop_rounded, color: AppTheme.waterBlue, size: 14),
+              const Icon(Icons.water_drop_rounded,
+                  color: AppTheme.waterBlue, size: 14),
               const SizedBox(width: 2),
               Text(
                 rain,
-                style: const TextStyle(fontSize: 12, color: AppTheme.waterBlue, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.waterBlue,
+                    fontWeight: FontWeight.w600),
               ),
             ],
           ),
           const SizedBox(width: 24),
           Text(
             '$min°',
-            style: TextStyle(color: Colors.grey[500], fontSize: 14, fontWeight: FontWeight.w600),
+            style: TextStyle(
+                color: Colors.grey[500],
+                fontSize: 14,
+                fontWeight: FontWeight.w600),
           ),
           const SizedBox(width: 12),
           Text(
@@ -397,7 +446,9 @@ class _FarmingAdvisory extends StatelessWidget {
         color: isDark ? AppTheme.cardDark : const Color(0xFFE8F5E9),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark ? AppTheme.borderDark : AppTheme.primaryGreen.withOpacity(0.15),
+          color: isDark
+              ? AppTheme.borderDark
+              : AppTheme.primaryGreen.withOpacity(0.15),
           width: 1.2,
         ),
       ),
@@ -425,12 +476,16 @@ class _FarmingAdvisory extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.check_circle_rounded, color: AppTheme.primaryGreen, size: 16),
+                  const Icon(Icons.check_circle_rounded,
+                      color: AppTheme.primaryGreen, size: 16),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       a,
-                      style: const TextStyle(fontSize: 13, height: 1.5, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 13,
+                          height: 1.5,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ],

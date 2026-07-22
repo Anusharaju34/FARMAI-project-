@@ -26,8 +26,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   String _location = 'Chennai, Tamil Nadu';
 
   final List<String> _languages = [
-    'English', 'Tamil', 'Telugu', 'Hindi', 'Kannada',
-    'Malayalam', 'Marathi', 'Gujarati', 'Bengali', 'Punjabi',
+    'English',
+    'Tamil',
+    'Telugu',
+    'Hindi',
+    'Kannada',
+    'Malayalam',
+    'Marathi',
+    'Gujarati',
+    'Bengali',
+    'Punjabi',
   ];
 
   @override
@@ -35,7 +43,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: FarmAIAppBar(
         title: 'Settings',
         showBack: true,
@@ -221,7 +230,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               foregroundColor: AppTheme.alertRed,
               side: const BorderSide(color: AppTheme.alertRed, width: 1.5),
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ).animate(delay: 550.ms).fadeIn(),
 
@@ -248,7 +258,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Update Location', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text('Update Location',
+            style: TextStyle(fontWeight: FontWeight.w800)),
         content: TextField(
           controller: ctrl,
           decoration: const InputDecoration(
@@ -259,7 +270,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+            child: const Text('Cancel',
+                style: TextStyle(fontWeight: FontWeight.w700)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -278,14 +290,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Delete Account', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text('Delete Account',
+            style: TextStyle(fontWeight: FontWeight.w800)),
         content: const Text(
           'This will permanently delete your account and all data. This action cannot be undone.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+            child: const Text('Cancel',
+                style: TextStyle(fontWeight: FontWeight.w700)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
@@ -302,12 +316,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Sign Out', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text('Sign Out',
+            style: TextStyle(fontWeight: FontWeight.w800)),
         content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+            child: const Text('Cancel',
+                style: TextStyle(fontWeight: FontWeight.w700)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -397,8 +413,13 @@ class _SwitchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-      subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w500)),
+      title: Text(label,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      subtitle: Text(subtitle,
+          style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w500)),
       value: value,
       onChanged: onChanged,
       activeColor: AppTheme.primaryGreen,
@@ -457,8 +478,13 @@ class _InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-      subtitle: Text(value, style: TextStyle(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w500)),
+      title: Text(label,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+      subtitle: Text(value,
+          style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w500)),
       trailing: Icon(icon, size: 20, color: Colors.grey[400]),
       onTap: onTap,
       dense: true,

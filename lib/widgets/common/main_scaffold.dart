@@ -46,7 +46,8 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      extendBody: true, // Allow scaffold body to extend behind floating navigation bar
+      extendBody:
+          true, // Allow scaffold body to extend behind floating navigation bar
       body: widget.child,
       bottomNavigationBar: SafeArea(
         child: Padding(
@@ -54,8 +55,8 @@ class _MainScaffoldState extends ConsumerState<MainScaffold> {
           child: Container(
             height: 72,
             decoration: BoxDecoration(
-              color: isDark 
-                  ? AppTheme.cardDark.withOpacity(0.85) 
+              color: isDark
+                  ? AppTheme.cardDark.withOpacity(0.85)
                   : AppTheme.cardLight.withOpacity(0.9),
               borderRadius: BorderRadius.circular(28),
               border: Border.all(
@@ -119,7 +120,7 @@ class _NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -133,7 +134,9 @@ class _NavBarItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
               color: isSelected
-                  ? (isDark ? AppTheme.lightGreen.withOpacity(0.15) : AppTheme.primaryGreen.withOpacity(0.12))
+                  ? (isDark
+                      ? AppTheme.lightGreen.withOpacity(0.15)
+                      : AppTheme.primaryGreen.withOpacity(0.12))
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(20),
             ),
@@ -145,8 +148,10 @@ class _NavBarItem extends StatelessWidget {
                 children: [
                   Icon(
                     item.icon,
-                    color: isSelected 
-                        ? (isDark ? AppTheme.accentGreen : AppTheme.primaryGreen) 
+                    color: isSelected
+                        ? (isDark
+                            ? AppTheme.accentGreen
+                            : AppTheme.primaryGreen)
                         : Colors.grey[500],
                     size: 22,
                   ),
@@ -178,8 +183,8 @@ class _NavBarItem extends StatelessWidget {
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 150),
             style: TextStyle(
-              color: isSelected 
-                  ? (isDark ? AppTheme.accentGreen : AppTheme.primaryGreen) 
+              color: isSelected
+                  ? (isDark ? AppTheme.accentGreen : AppTheme.primaryGreen)
                   : Colors.grey[400],
               fontSize: 10,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,

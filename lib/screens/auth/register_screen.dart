@@ -65,7 +65,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
@@ -89,9 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         letterSpacing: -0.5,
                       ),
                 ).animate().fadeIn().slideX(begin: -0.1),
-                
                 const SizedBox(height: 6),
-                
                 Text(
                   'Join FARMAI – your intelligent farming partner',
                   style: TextStyle(
@@ -99,9 +98,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     color: isDark ? Colors.white60 : Colors.grey[600],
                   ),
                 ).animate(delay: 100.ms).fadeIn(),
-                
                 const SizedBox(height: 28),
-
                 PremiumGlassCard(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -111,8 +108,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         label: 'Full Name',
                         hint: 'Ravi Kumar',
                         prefixIcon: Icons.person_outline_rounded,
-                        validator: (v) =>
-                            v == null || v.isEmpty ? 'Enter your full name' : null,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Enter your full name'
+                            : null,
                       ),
                       const SizedBox(height: 16),
                       FarmTextField(
@@ -141,11 +139,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 : Icons.visibility_off_outlined,
                             color: Colors.grey,
                           ),
-                          onPressed: () => setState(() => _obscure1 = !_obscure1),
+                          onPressed: () =>
+                              setState(() => _obscure1 = !_obscure1),
                         ),
                         validator: (v) {
                           if (v == null || v.isEmpty) return 'Enter a password';
-                          if (v.length < 6) return 'Minimum 6 characters required';
+                          if (v.length < 6)
+                            return 'Minimum 6 characters required';
                           return null;
                         },
                       ),
@@ -163,7 +163,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 : Icons.visibility_off_outlined,
                             color: Colors.grey,
                           ),
-                          onPressed: () => setState(() => _obscure2 = !_obscure2),
+                          onPressed: () =>
+                              setState(() => _obscure2 = !_obscure2),
                         ),
                         validator: (v) {
                           if (v != _passwordCtrl.text) {
@@ -175,24 +176,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ],
                   ),
                 ).animate(delay: 200.ms).fadeIn().slideY(begin: 0.1),
-
                 const SizedBox(height: 28),
-
                 LoadingButton(
                   isLoading: isLoading,
                   onPressed: _register,
                   label: 'Create Account',
                 ).animate(delay: 300.ms).fadeIn().slideY(begin: 0.15),
-
                 const SizedBox(height: 28),
-
                 Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'Already have an account? ',
-                        style: TextStyle(color: isDark ? Colors.white60 : Colors.grey[600]),
+                        style: TextStyle(
+                            color: isDark ? Colors.white60 : Colors.grey[600]),
                       ),
                       GestureDetector(
                         onTap: () => context.go(AppRoutes.login),
@@ -207,7 +205,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ],
                   ),
                 ).animate(delay: 400.ms).fadeIn(),
-                
                 const SizedBox(height: 36),
               ],
             ),

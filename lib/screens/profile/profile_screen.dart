@@ -175,7 +175,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
+      backgroundColor:
+          isDark ? AppTheme.backgroundDark : AppTheme.backgroundLight,
       appBar: AppBar(
         title: const Text('My Profile'),
         actions: [
@@ -193,7 +194,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ? const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryGreen),
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: AppTheme.primaryGreen),
                   )
                 : Text(
                     _editing ? 'Save' : 'Edit',
@@ -223,7 +225,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(32)),
                   ),
                 ),
                 Positioned(
@@ -233,12 +236,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: isDark ? AppTheme.backgroundDark : Colors.white, width: 4),
+                          border: Border.all(
+                              color: isDark
+                                  ? AppTheme.backgroundDark
+                                  : Colors.white,
+                              width: 4),
                           boxShadow: AppTheme.premiumShadow,
                         ),
                         child: CircleAvatar(
                           radius: 54,
-                          backgroundColor: AppTheme.primaryGreen.withOpacity(0.12),
+                          backgroundColor:
+                              AppTheme.primaryGreen.withOpacity(0.12),
                           child: Text(
                             (user?.email ?? 'F')[0].toUpperCase(),
                             style: const TextStyle(
@@ -265,14 +273,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   ? const SizedBox(
                                       width: 14,
                                       height: 14,
-                                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2, color: Colors.white),
                                     )
-                                  : const Icon(Icons.camera_alt_rounded, size: 16, color: Colors.white),
+                                  : const Icon(Icons.camera_alt_rounded,
+                                      size: 16, color: Colors.white),
                             ),
                           ),
                         ),
                     ],
-                  ).animate().scale(curve: Curves.easeOutBack, duration: 400.ms),
+                  )
+                      .animate()
+                      .scale(curve: Curves.easeOutBack, duration: 400.ms),
                 ),
               ],
             ),
@@ -281,13 +293,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
             // Profile info header
             Text(
-              _nameCtrl.text.isNotEmpty ? _nameCtrl.text : (user?.email?.split('@')[0] ?? 'Farmer'),
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: -0.5),
+              _nameCtrl.text.isNotEmpty
+                  ? _nameCtrl.text
+                  : (user?.email?.split('@')[0] ?? 'Farmer'),
+              style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.5),
             ),
             const SizedBox(height: 4),
             Text(
               user?.email ?? '',
-              style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
             ),
 
             const SizedBox(height: 24),
@@ -310,7 +330,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ],
                 ),
               ),
-            ).animate().fadeIn(delay: 150.ms).scale(begin: const Offset(0.95, 0.95)),
+            )
+                .animate()
+                .fadeIn(delay: 150.ms)
+                .scale(begin: const Offset(0.95, 0.95)),
 
             const SizedBox(height: 24),
 
@@ -322,14 +345,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 decoration: BoxDecoration(
                   color: isDark ? AppTheme.cardDark : Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+                  border: Border.all(
+                      color:
+                          isDark ? AppTheme.borderDark : AppTheme.borderLight,
+                      width: 1.2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Personal Information',
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                     ),
                     const SizedBox(height: 18),
                     FarmTextField(
@@ -395,9 +422,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ).animate(delay: 300.ms).fadeIn(),
-                  
                   const SizedBox(height: 16),
-
                   _MenuSection(
                     title: 'Account Settings',
                     items: [
@@ -421,11 +446,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ).animate(delay: 400.ms).fadeIn(),
-                  
                   const SizedBox(height: 32),
                   Text(
                     'FARMAI v1.0.0 · Smart Farming Assistant',
-                    style: TextStyle(color: Colors.grey[400], fontSize: 12, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 100),
                 ],
@@ -442,13 +469,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.w800)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: const Text('Logout',
+              style: TextStyle(fontWeight: FontWeight.w800)),
           content: const Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w700)),
+              child: const Text('Cancel',
+                  style: TextStyle(fontWeight: FontWeight.w700)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -458,7 +488,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   context.go(AppRoutes.login);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: AppTheme.alertRed),
               child: const Text('Logout'),
             ),
           ],
@@ -528,7 +559,9 @@ class _MenuSection extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: isDark ? AppTheme.borderDark : AppTheme.borderLight, width: 1.2),
+          border: Border.all(
+              color: isDark ? AppTheme.borderDark : AppTheme.borderLight,
+              width: 1.2),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,7 +628,8 @@ class _MenuItemTile extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
             ),
             const Spacer(),
-            Icon(Icons.chevron_right_rounded, color: Colors.grey[400], size: 20),
+            Icon(Icons.chevron_right_rounded,
+                color: Colors.grey[400], size: 20),
           ],
         ),
       ),
